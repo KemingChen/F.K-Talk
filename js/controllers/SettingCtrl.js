@@ -1,0 +1,2 @@
+app.controller('SettingCtrl', function(){
+});

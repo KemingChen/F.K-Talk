@@ -1,0 +1,2 @@
+app.controller('LoginCtrl', function(){
+});
