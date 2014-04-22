@@ -1,0 +1,26 @@
+<div>
+    <ion-header-bar
+        type="bar-positive"
+        left-buttons="leftButtons"
+        right-buttons="rightButtons" 
+        title="'聊天室'">
+    </ion-header-bar>
+    <ion-content has-header="true" padding="true">
+        <div class="list">
+            <div class="item item-divider item-text-wrap" ng-repeat="chat in friend.chats" style="{{chat.self ? 'text-align: right;' : ''}}">
+                <div>
+                    <img ng-show="!chat.self" ng-src="{{friend.photo}}" style="height: 30px;" />&nbsp;
+                    {{chat.message}}
+                </div>
+            </div>
+        </div>
+    </ion-content>
+    <ion-footer-bar class="bar-positive">
+        <label class="item item-input" style="width: 80%;">
+            <input type="text" placeholder="message"/>
+        </label>
+        <div class="buttons">
+            <button class="button button-dark">送岀</button>
+        </div>
+    </ion-footer-bar>
+</div>

@@ -42,17 +42,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
         })
         .state('Chat', {
             url: '/Chat/:uid',
-            views: {
-                'chat': {
-                    templateUrl: 'templates/chat.html',
-                    controller: 'ChatCtrl'
-                }
-            }
+            templateUrl: 'templates/chat.html',
+            controller: 'ChatCtrl'
         });
 
     $urlRouterProvider.otherwise("/setting");
 });
 
 app.run(function() {
-    console.log("FKTalk")
+    console.log("FKTalk");
 });
