@@ -1,0 +1,46 @@
+<div>
+    <ion-header-bar
+        type="bar-positive"
+        left-buttons="leftButtons"
+        right-buttons="rightButtons"
+        title="'朋友資訊'">
+    </ion-header-bar>
+	<ion-content has-header="true" padding="true">
+		<div class="card">
+            <div class="item row">
+                <div class="col-50">
+                    <div class="item item-image">
+                        <img ng-src="{{friend.photo}}">
+                    </div>
+                </div>
+                <div class="col-50">
+                    <div class="item" style="border: 0;font-weight: bolder">
+                        {{friend.name}}
+                    </div>
+                </div>
+            </div>
+            <div class="item">
+                <h2>Phone: </h2>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{friend.phone}}
+            </div>
+            <div class="item">
+                <h2>Email: </h2>
+                &nbsp;&nbsp;&nbsp;&nbsp;{{friend.email}}
+            </div>
+            <div class="item tabs tabs-secondary tabs-icon-left">
+                <a class="tab-item" href="#">
+                    <i class="icon ion-ios7-telephone"></i>
+                    Call
+                </a>
+                <a class="tab-item" href="#">
+                    <i class="icon ion-chatbox"></i>
+                    Message
+                </a>
+                <a class="tab-item" href="#">
+                    <i class="icon ion-android-mail"></i>
+                    Email
+                </a>
+            </div>
+        </div>
+	</ion-content>
+</div>

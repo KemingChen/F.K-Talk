@@ -1,0 +1,28 @@
+<div>
+    <ion-header-bar
+        type="bar-positive"
+        left-buttons="leftButtons"
+        right-buttons="rightButtons" 
+        title="'我的設定'" ng-init="init()">
+    </ion-header-bar>
+	<ion-content has-header="true" padding="true">
+			<div class="list card">
+				<div class="list">
+					<div class="item item-avatar">
+						<img src="images/myphoto.jpg">
+						<h2>My Photo</h2>
+						<a class="button button-small button-stable">Update</a>
+					    <input type="file" style="display: none;">
+					</div>
+					<label class="item item-input">
+					    <span class="input-label">Name: </span>
+					    <input type="tel" ng-model="host.phone">
+					</label>
+					<label class="item item-input">
+					    <span class="input-label">Email: </span>
+					    <input type="tel" ng-model="host.phone">
+					</label>
+				</div>
+			</div>
+	</ion-content>
+</div>

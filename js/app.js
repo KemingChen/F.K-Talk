@@ -9,21 +9,13 @@ app.config(function($stateProvider, $urlRouterProvider) {
 	    })
         .state('login', {
             url: '/login',
-            views: {
-                'login': {
-                    templateUrl: 'templates/login.html',
-                    controller: 'LoginCtrl'
-                }
-            }
+            templateUrl: 'templates/login.html',
+            controller: 'LoginCtrl'
         })
         .state('setting', {
             url: '/setting',
-            views: {
-                'setting': {
-                    templateUrl: 'templates/setting.html',
-                    controller: 'SettingCtrl'
-                }
-            }
+            templateUrl: 'templates/setting.html',
+            controller: 'SettingCtrl'
         })
         .state('tab.FList', {
             url: '/FList',
@@ -34,14 +26,10 @@ app.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         })
-        .state('tab.Finfo', {
-            url: '/Finfo',
-            views: {
-                'tab-friendInfo': {
-                    templateUrl: 'templates/friendInfo.html',
-                    controller: 'FriendInfoCtrl'
-                }
-            }
+        .state('FInfo', {
+            url: '/FInfo/:uid',
+            templateUrl: 'templates/friendInfo.html',
+            controller: 'FriendInfoCtrl'
         })
         .state('tab.RList', {
             url: '/RList',
@@ -62,7 +50,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         });
 
-    $urlRouterProvider.otherwise("/login");
+    $urlRouterProvider.otherwise("/setting");
 });
 
 app.run(function() {

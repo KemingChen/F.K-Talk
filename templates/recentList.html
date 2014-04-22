@@ -1,0 +1,17 @@
+<div>
+    <ion-header-bar
+        type="bar-positive"
+        left-buttons="leftButtons"
+        right-buttons="rightButtons" 
+        title="'聊天列表'" ng-init="init()">
+    </ion-header-bar>
+	<ion-content has-header="true" padding="true">
+		<div class="list">
+		    <div ng-repeat="friend in friends" class="item item-avatar">
+                <img src="{{friend.photo}}">
+				<h2>{{friend.name}}</h2>
+				<span>{{friend.phone}}</span>
+	        </div>
+        </div>
+	</ion-content>
+</div>

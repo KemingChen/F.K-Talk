@@ -10,3 +10,11 @@ a, abbr, address, article, aside, audio, b, blockquote, body, canvas, caption, c
 	margin: 0 auto;
 	width: 320px;
 }
+
+.fk-bloder {
+	font-weight: bolder;
+}
+
+.fk-black {
+	color: #333333;
+}
