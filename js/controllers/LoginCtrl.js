@@ -19,7 +19,6 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 			timeout: info.timeout,
 		});
 		http.success(function(respnose, status) {
-			//respnose = data;
 			console.log(respnose);
 			if(respnose.token === undefined){
 				Notification.alert(respnose.log, alertCallback, "Error", "確定");

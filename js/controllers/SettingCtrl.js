@@ -1,4 +1,4 @@
-app.controller('SettingCtrl', function($scope, HostManager){
+app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $window){
 	$scope.host = HostManager.getHost();
 	console.log($scope.host);
 	$scope.password = "";
@@ -7,6 +7,7 @@ app.controller('SettingCtrl', function($scope, HostManager){
 	$scope.host.name = "陳科銘";
 	$scope.host.mail = "believe75467@gmail.com";
 	$scope.host.gcmRegId = "12345";
+	// test end
 
 	$scope.save = function(){
 		if(!checkInput())
@@ -24,6 +25,8 @@ app.controller('SettingCtrl', function($scope, HostManager){
 		http.success(function(respnose, status) {
 			//respnose = data;
 			console.log(respnose);
+			HostManager.setHost(respnose);
+			$window.location = "#/tab/Flist";
 		});
 		http.error(function(data, status) {
 			respnose = data || "Request failed";
