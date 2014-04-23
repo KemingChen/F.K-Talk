@@ -3,11 +3,15 @@
         type="bar-positive"
         left-buttons="leftButtons"
         right-buttons="rightButtons" 
-        title="'朋友列表'">
+        title="'朋友列表'" ng-init="filter('')">
     </ion-header-bar>
 	<ion-content has-header="true" padding="true">
 		<div class="list">
-		    <div ng-repeat="friend in friends" class="item item-avatar">
+            <label class="item item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="text" placeholder="Search" ng-model="search" ng-change="filter(search)" />
+            </label>
+		    <div ng-repeat="friend in filterFriends" class="item item-avatar">
                 <img ng-src="{{friend.photo}}">
 				<h2>{{friend.name}}</h2>
 				<span>{{friend.phone}}</span>
