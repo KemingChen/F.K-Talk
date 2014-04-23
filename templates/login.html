@@ -10,18 +10,22 @@
 				<div class="list">
 					<label class="item item-input">
 					    <span class="input-label">電話: </span>
-					    <input type="tel" ng-model="host.phone">
+					    <input type="tel" ng-model="loginForm.phone">
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">密碼: </span>
-					    <input type="tel" ng-model="host.phone">
+					    <input type="password" ng-model="loginForm.password">
 					</label>
 				</div>
 				<div class="list">
-					<a class="item button button-energized button-block fk-bloder">登入</a>
+					<a class="item button button-energized button-block fk-bloder" ng-click="login()">
+						登入
+					</a>
 				<div>
 				<div class="list">
-					<a class="item button button-calm button-block fk-bloder">免費註冊</a>
+					<a class="item button button-calm button-block fk-bloder" ng-click="register()">
+						免費註冊
+					</a>
 				<div>
 			</div>
 	</ion-content>

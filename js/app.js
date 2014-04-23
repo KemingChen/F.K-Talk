@@ -46,9 +46,44 @@ app.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ChatCtrl'
         });
 
-    $urlRouterProvider.otherwise("/setting");
+    $urlRouterProvider.otherwise("/tab/FList");
 });
 
-app.run(function() {
+app.run(function($rootScope, HostManager, $window) {
     console.log("FKTalk");
+    $rootScope.info = {
+        server: "http://127.0.0.1",
+        timeout: 5000,
+    };
 });
+
+app.directive("fileread", [function () {
+    return {
+        scope: {
+            fileread: "="
+        },
+        link: function (scope, element, attributes) {
+            element.bind("change", function (changeEvent) {
+                var reader = new FileReader();
+                reader.onload = function (loadEvent) {
+                    scope.$apply(function () {
+                        var img = document.createElement("img");
+                        img.src = loadEvent.target.result;
+
+                        var cvs = document.createElement('canvas');
+                        var value = 60;
+                        cvs.width = value;
+                        cvs.height = value;
+
+                        var ctx = cvs.getContext("2d");
+                        ctx.scale(value / img.naturalWidth, value / img.naturalHeight);
+                        ctx.drawImage(img, 0, 0);
+
+                        scope.fileread = cvs.toDataURL("image/jpeg", 10);
+                    });
+                }
+                reader.readAsDataURL(changeEvent.target.files[0]);
+            });
+        }
+    }
+}]);

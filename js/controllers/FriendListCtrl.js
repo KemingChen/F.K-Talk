@@ -1,4 +1,5 @@
-app.controller('FriendListCtrl', function($scope){
+app.controller('FriendListCtrl', function($scope, HostManager){
+	HostManager.checkLogin();
 	$scope.friends = [
 		{
 			"name": "陳科銘",

@@ -9,19 +9,31 @@
 			<div class="list card">
 				<div class="list">
 					<div class="item item-avatar">
-						<img src="images/myphoto.jpg">
+						<img id="myPhoto" ng-src="{{host.photo}}">
 						<h2>My Photo</h2>
-						<a class="button button-small button-stable">Update</a>
-					    <input type="file" style="display: none;">
+					    <input type="file" fileread="host.photo" style="width: 75px;" />
 					</div>
 					<label class="item item-input">
-					    <span class="input-label">Name: </span>
+					    <span class="input-label">Phone: </span>
 					    <input type="tel" ng-model="host.phone">
+					</label>
+					<label class="item item-input">
+					    <span class="input-label">Name: </span>
+					    <input type="text" ng-model="host.name">
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">Email: </span>
-					    <input type="tel" ng-model="host.phone">
+					    <input type="email" ng-model="host.email">
 					</label>
+				</div>
+				<div class="list">
+					<label class="item item-input">
+					    <span class="input-label">Passward: </span>
+					    <input type="password" ng-model="password">
+					</label>
+					<button class="item button button-block button-positive">
+						儲存設定
+					</button>
 				</div>
 			</div>
 	</ion-content>
