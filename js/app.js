@@ -52,7 +52,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.run(function($rootScope, HostManager, $window) {
     console.log("FKTalk");
     $rootScope.info = {
-        server: "http://127.0.0.1",
+        server: "http://127.0.0.1:8888",
         timeout: 5000,
     };
 });

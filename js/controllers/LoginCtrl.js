@@ -2,6 +2,7 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 	$scope.loginForm = {
 		phone: "0961276368",
 		password: "12345",
+		photo: "images/NoPhoto.jpg",
 	};
 
 	$scope.login = function(){

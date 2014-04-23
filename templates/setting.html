@@ -15,7 +15,7 @@
 					</div>
 					<label class="item item-input">
 					    <span class="input-label">Phone: </span>
-					    <input type="tel" ng-model="host.phone">
+					    <input type="tel" ng-model="host.phone" disabled>
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">Name: </span>
@@ -23,7 +23,7 @@
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">Email: </span>
-					    <input type="email" ng-model="host.email">
+					    <input type="email" ng-model="host.mail">
 					</label>
 				</div>
 				<div class="list">
@@ -31,7 +31,7 @@
 					    <span class="input-label">Passward: </span>
 					    <input type="password" ng-model="password">
 					</label>
-					<button class="item button button-block button-positive">
+					<button class="item button button-block button-positive" ng-click="save()">
 						儲存設定
 					</button>
 				</div>
