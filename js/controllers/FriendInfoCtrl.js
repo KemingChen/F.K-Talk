@@ -1,4 +1,5 @@
-app.controller('FriendInfoCtrl', function($scope, $stateParams, $window){
+app.controller('FriendInfoCtrl', function($scope, $stateParams, $window, HostManager){
+	HostManager.checkLogin();
 	var phone = $stateParams.phone;
 	$scope.friend = {};
 

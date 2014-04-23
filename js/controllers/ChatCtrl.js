@@ -1,4 +1,5 @@
-app.controller('ChatCtrl', function($scope, $stateParams, $window){
+app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager){
+	HostManager.checkLogin();
 	var phone = $stateParams.phone;
 
 	// test 

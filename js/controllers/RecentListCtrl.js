@@ -1,14 +1,24 @@
-app.controller('RecentListCtrl', function($scope){
-	$scope.friends = [
+app.controller('RecentListCtrl', function($scope, HostManager, $window){
+	HostManager.checkLogin();
+
+	// test
+	$scope.recentFriends = [
 		{
-			"name": "陳科銘",
-			"phone": "0961276368",
-			"photo": "images/0961276368.jpg"
+			name: "謝宗廷",
+			phone: "0987103180",
+			photo: "images/NoPhoto.jpg",
+			mail: "gary62107@gmail.com"
 		},
 		{
-			"name": "謝宗廷",
-			"phone": "0987103180",
-			"photo": "images/0987103180.jpg"
+			name: "陳英一",
+			phone: "0912345678",
+			photo: "images/NoPhoto.jpg",
+			email: "EnglishOne@gmail.com"
 		}
-	]
+	];
+	// test end
+
+	$scope.moveTo = function(phone){
+		$window.location = "#/Chat/" + phone;
+	};
 });
