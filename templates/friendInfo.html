@@ -1,10 +1,7 @@
-<div>
-    <ion-header-bar
-        type="bar-positive"
-        left-buttons="leftButtons"
-        right-buttons="rightButtons"
-        title="'朋友資訊'" ng-init="init()">
-    </ion-header-bar>
+<div ng-init="init()">
+    <div class="bar bar-header bar-positive">
+        <h1 class="title">朋友資訊</h1>
+    </div>
 	<ion-content has-header="true" padding="true">
 		<div class="card">
             <div class="item row">
@@ -30,7 +27,7 @@
                     <i class="icon ion-ios7-telephone"></i>
                     Call
                 </a>
-                <a class="tab-item" href="#">
+                <a class="tab-item" href="#/Chat/{{friend.phone}}">
                     <i class="icon ion-chatbox"></i>
                     Message
                 </a>
@@ -41,7 +38,4 @@
             </div>
         </div>
 	</ion-content>
-    <div class="bar bar-footer bar-positive">
-        <div class="title" ng-click="back()">返回</div>
-    </div>
 </div>

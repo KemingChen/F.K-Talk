@@ -41,7 +41,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('Chat', {
-            url: '/Chat/:uid',
+            url: '/Chat/:phone',
             templateUrl: 'templates/chat.html',
             controller: 'ChatCtrl'
         });

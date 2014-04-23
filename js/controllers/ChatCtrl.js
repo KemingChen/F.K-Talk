@@ -1,7 +1,13 @@
-app.controller('ChatCtrl', function($scope){
+app.controller('ChatCtrl', function($scope, $stateParams, $window){
+	var phone = $stateParams.phone;
+
+	// test 
 	$scope.friend = {
-		name: "Alex",
-		photo: "images/0987103180.jpg",
+		name: "謝宗廷",
+		phone: "0987103180",
+		photo: "images/NoPhoto.jpg",
+		mail: "gary62107@gmail.com",
+		read: 2,
 		chats: [
 			{
 				timestamp: 1,
@@ -28,5 +34,10 @@ app.controller('ChatCtrl', function($scope){
 				read: false,
 			}
 		]
+	};
+	// test end
+
+	$scope.back = function(){
+		$window.history.back();
 	}
 });
