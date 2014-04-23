@@ -1,4 +1,4 @@
-app.controller('FriendListCtrl', function($scope, HostManager){
+app.controller('FriendListCtrl', function($scope, HostManager, $window){
 	HostManager.checkLogin();
 	$scope.filterFriends = [];
 	$scope.search = "";
@@ -32,5 +32,9 @@ app.controller('FriendListCtrl', function($scope, HostManager){
 				$scope.filterFriends.push(obj);
 			}
 		});
+	};
+
+	$scope.moveTo = function(phone){
+		$window.location = "#/FInfo/" + phone;
 	};
 });

@@ -11,7 +11,9 @@
                 <i class="icon ion-search placeholder-icon"></i>
                 <input type="text" placeholder="Search" ng-model="search" ng-change="filter(search)" />
             </label>
-		    <div ng-repeat="friend in filterFriends" class="item item-avatar">
+		    <div ng-repeat="friend in filterFriends" 
+            class="item item-avatar" 
+            ng-click="moveTo(friend.phone)">
                 <img ng-src="{{friend.photo}}">
 				<h2>{{friend.name}}</h2>
 				<span>{{friend.phone}}</span>

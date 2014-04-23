@@ -27,7 +27,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             }
         })
         .state('FInfo', {
-            url: '/FInfo/:uid',
+            url: '/FInfo/:phone',
             templateUrl: 'templates/friendInfo.html',
             controller: 'FriendInfoCtrl'
         })
