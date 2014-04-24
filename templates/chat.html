@@ -4,9 +4,9 @@
     </div>
     <ion-content has-header="true" padding="true">
         <div class="list">
-            <div class="item item-divider item-text-wrap" ng-repeat="chat in friend.chats" style="{{chat.self ? 'text-align: right;' : ''}}">
+            <div class="item item-divider item-text-wrap" ng-repeat="chat in chats | orderBy:predicate:reverse" style="{{chat.phone != friend.phone ? 'text-align: right;' : ''}}">
                 <div>
-                    <img ng-show="!chat.self" ng-src="{{friend.photo}}" style="height: 30px;" />&nbsp;
+                    <img ng-show="chat.phone == friend.phone" ng-src="{{friend.photo}}" style="height: 30px;" />&nbsp;
                     {{chat.message}}
                 </div>
             </div>
@@ -14,10 +14,10 @@
     </ion-content>
     <ion-footer-bar class="bar-positive">
         <label class="item item-input col-80">
-            <input type="text" placeholder="Message..."/>
+            <input id="message" type="text" placeholder="Message..." ng-model="message" ng-change="inputSaver('message', message)"/>
         </label>
         <div class="buttons form-input">
-            <button class="button button-dark">送 岀</button>
+            <button class="button button-dark" ng-click="send()">送 岀</button>
         </div>
     </ion-footer-bar>
 </div>

@@ -1,0 +1,23 @@
+<div>
+    <ion-header-bar
+        type="bar-positive"
+        left-buttons="leftButtons"
+        right-buttons="rightButtons" 
+        title="'新增朋友'">
+    </ion-header-bar>
+	<ion-content has-header="true" padding="true">
+        <br />
+        <br />
+		<div class="list">
+            <label class="item item-input">
+                <i class="icon ion-plus placeholder-icon"></i>
+                <input type="text" placeholder="Enter Phone" ng-model="phone" ng-change="inputSaver('phone', phone)" />
+            </label>
+        </div>
+        <div class="list">
+            <button class="item button button-block button-positive" ng-click="add()">
+                新增
+            </button>
+        </div>
+	</ion-content>
+</div>

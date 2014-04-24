@@ -5,6 +5,14 @@ app.controller('FriendListCtrl', function($scope, HostManager, $window, FriendMa
 		$scope.filterFriends = FM.friends;
 	});
 
+	$scope.leftButtons = [{
+		type: 'button-positive',
+		content: "<i class='icon ion-plus'></i>",
+		tap: function(){
+			$window.location = "#/add";
+		},
+	}];
+
 	$scope.filter = function(key){
 		$scope.filterFriends = [];
 		angular.forEach(FM.friends, function(obj){

@@ -1,44 +1,32 @@
-app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager){
+app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, FriendManager){
 	HostManager.checkLogin();
 	var phone = $stateParams.phone;
-
-	// test 
-	$scope.friend = {
-		name: "謝宗廷",
-		phone: "0987103180",
-		photo: "images/NoPhoto.jpg",
-		mail: "gary62107@gmail.com",
-		read: 2,
-		chats: [
-			{
-				timestamp: 1,
-				message: "Hello",
-				self: false,
-				read: false,
-			},
-			{
-				timestamp: 2,
-				message: "Hello",
-				self: true,
-				read: false,
-			},
-			{
-				timestamp: 3,
-				message: "今天高家嗎?",
-				self: false,
-				read: false,
-			},
-			{
-				timestamp: 4,
-				message: "好呀!?",
-				self: true,
-				read: false,
-			}
-		]
-	};
-	// test end
+	var FM = FriendManager.register();
+	FriendManager.listMsg(phone, function(){
+		$scope.chats = FM.chats[phone];
+		$scope.$apply();
+	});
+	angular.forEach(FM.friends, function(obj){
+		console.log(obj.phone);
+		if(obj.phone == phone){
+			$scope.friend = obj;
+		}
+	});
+	$scope.chats = [];
+    $scope.predicate = '-timestamp';
+    $scope.reverse = true;
 
 	$scope.back = function(){
 		$window.history.back();
+	}
+
+	$scope.inputSaver = function(key, value){
+		$scope[key] = value;
+	}
+
+	$scope.send = function(){
+		var message = $scope.message;
+		FriendManager.sendMsg(phone, message);
+		document.getElementById("message").value = "";
 	}
 });

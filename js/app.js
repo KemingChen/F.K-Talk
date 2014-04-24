@@ -17,6 +17,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'templates/setting.html',
             controller: 'SettingCtrl'
         })
+        .state('add', {
+            url: '/add',
+            templateUrl: 'templates/addFriend.html',
+            controller: 'AddFriendCtrl'
+        })
         .state('tab.FList', {
             url: '/FList',
             views: {
