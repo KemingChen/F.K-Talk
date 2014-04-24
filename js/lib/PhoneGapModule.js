@@ -74,7 +74,7 @@ angular.module('PhoneGap').factory('BusyIndicator', function ($q, $window, Phone
     };
 });
 
-angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootScope, $log, PhoneGap) {
+angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootScope, $log, PhoneGap, Notification) {
     var pushNotificationsFactory = function (gcmSenderId, registeredCallback) {
         PhoneGap.ready(function () {
             var pushNotification;
@@ -108,6 +108,11 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
 
             var genericErrorHandler = function (error) {
                 $log.error('Error registering with push server:', error);
+                Notification.alert("未開啟網路!!!", closeApp, "不明錯誤", "朕知道了");
+
+                function closeApp(){
+                    navigator.app.exitApp();
+                }
             };
             // Register device with push server
             if (device.platform === 'Android') {

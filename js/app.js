@@ -68,3 +68,15 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory) {
         HostManager.setHost(host);
     });
 });
+
+/*
+gcmSenderId: 389225011519
+Server Public Key: AIzaSyBsf4l9d4mpSaT2QH9ybpRd6GccU-367RU
+
+Keming Token
+    APA91bHMkZ7f1PyaO2CB29nUyZJll7_hw1l1eYulQdkAfgWlMhv_8oSmbOd9YH1F3ln00YEajZVN_1d30MWV-o-VJL_KA1vW44FYMwx8DvZpu2P-fFKuwOaaf_fSZq14qvP17qCcPxrVLdYbxA-nbWDu2RWTjl4L-g
+
+Flex Token
+    
+
+*/
