@@ -21,6 +21,7 @@ app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, 
 	}
 
 	$scope.inputSaver = function(key, value){
+		console.log("INPUT: " + value);
 		$scope[key] = value;
 	}
 
@@ -28,5 +29,9 @@ app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, 
 		var message = $scope.message;
 		FriendManager.sendMsg(phone, message);
 		document.getElementById("message").value = "";
+	}
+
+	$scope.isRead = function(chat){
+		return true;
 	}
 });

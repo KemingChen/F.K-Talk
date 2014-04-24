@@ -9,10 +9,14 @@
                     <img ng-show="chat.phone == friend.phone" ng-src="{{friend.photo}}" style="height: 30px;" />&nbsp;
                     {{chat.message}}
                 </div>
+                <div style="font.weight: narmal;font-size: 10px;">
+                    <span ng-show="isRead(chat)">已讀&nbsp;&nbsp;</span>
+                    <span>{{chat.timestamp*1000 | date:'a h:mm'}}</span>
+                </div>
             </div>
         </div>
     </ion-content>
-    <ion-footer-bar class="bar-positive">
+    <ion-footer-bar class="bar-positive" style="position: fixed;bottom: 0px;">
         <label class="item item-input col-80">
             <input id="message" type="text" placeholder="Message..." ng-model="message" ng-change="inputSaver('message', message)"/>
         </label>

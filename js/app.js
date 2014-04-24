@@ -54,7 +54,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/tab/FList");
 });
 
-app.run(function($rootScope, HostManager, $window, PushNotificationsFactory) {
+app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading) {
     console.log("FKTalk v1.0");
     $rootScope.info = {
         server: "http://192.168.1.101:8888",
@@ -62,7 +62,17 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory) {
         gcmSenderId: '389225011519',
     };
     
+    var loading = $ionicLoading.show({
+        content: "與 GCM 連線中...",
+        animation: 'fade-in',
+        showBackdrop: true,
+        maxWidth: 200,
+        showDelay: 0,
+    });
+    loading.hide();
+    
     PushNotificationsFactory($rootScope.info.gcmSenderId, function(token, type) {
+        loading.hide();
         console.log("GET gcmRegId");
         var host = HostManager.getHost();
         host.gcmRegId = token;
