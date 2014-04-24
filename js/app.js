@@ -54,7 +54,7 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory) {
     $rootScope.info = {
         server: "http://192.168.1.101:8888",
         timeout: 5000,
-        gcmSenderId: '325215294371',
+        gcmSenderId: '389225011519',
     };
     
     PushNotificationsFactory($rootScope.info.gcmSenderId, function(token, type) {
