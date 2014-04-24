@@ -13,13 +13,19 @@ app.factory('HostManager', function($window) {
 	function checkLogin(){
 		// setHost({});
 		var host = getHost();
+		console.log("HOST: " + JSON.stringify(host));
 		if(host.token === undefined){
 			$window.location = "#/login";
 		}
 	};
+
+	function clean(){
+		setHost({});
+	}
 	return {
 		setHost: setHost,
 		getHost: getHost,
 		checkLogin: checkLogin,
+		clean: clean,
 	};
 });

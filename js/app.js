@@ -50,7 +50,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 });
 
 app.run(function($rootScope, HostManager, $window, PushNotificationsFactory) {
-    console.log("FKTalk");
+    console.log("FKTalk v1.0");
     $rootScope.info = {
         server: "http://192.168.1.101:8888",
         timeout: 5000,
@@ -58,9 +58,10 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory) {
     };
     
     PushNotificationsFactory($rootScope.info.gcmSenderId, function(token, type) {
+        console.log("GET gcmRegId");
         var host = HostManager.getHost();
-        host.token = token;
-        console.log(token);
+        host.gcmRegId = token;
+        console.log("SUCCESS: gcmRegId=> " + token);
         if (type == "GCM")
             host.type = 0;
         else if (type == "APNS")
@@ -75,7 +76,7 @@ Server Public Key: AIzaSyBsf4l9d4mpSaT2QH9ybpRd6GccU-367RU
 
 Keming Token
     APA91bHMkZ7f1PyaO2CB29nUyZJll7_hw1l1eYulQdkAfgWlMhv_8oSmbOd9YH1F3ln00YEajZVN_1d30MWV-o-VJL_KA1vW44FYMwx8DvZpu2P-fFKuwOaaf_fSZq14qvP17qCcPxrVLdYbxA-nbWDu2RWTjl4L-g
-
+    APA91bHMZ1pclzpZ0i3ZsjghZN0el1ic3J0PkyN69lIKCiqHjtAdlTi5bPo-eDJjkFfnaF4fhcoKDO4K4fewv1lxX2C-0L8Z8e7HvHme8gpQbHpFyXcdeFdogMSqKInQSZTAKZ6nEmOGSIin_63TU2U6orsJNcRJxA
 Flex Token
     
 

@@ -5,7 +5,7 @@ app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $
 	// test input
 	$scope.host.name = "陳科銘";
 	$scope.host.mail = "believe75467@gmail.com";
-	$scope.host.gcmRegId = "12345";
+	// $scope.host.gcmRegId = "12345";
 	// test end
 
 	$scope.save = function(){

@@ -10,8 +10,10 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 			return;
 		var info = $rootScope.info;
 		var api = info.server + "/login";
+		var host = HostManager.getHost();
+		$scope.loginForm.gcmRegId = host.gcmRegId;
 		var data = $scope.loginForm;
-		console.log("use api: " + api);
+		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
 		var http = $http({
 			method: 'POST',
 			url: api,
@@ -19,20 +21,18 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 			timeout: info.timeout,
 		});
 		http.success(function(respnose, status) {
-			console.log(respnose);
+			console.log("SUCCESS: " + JSON.stringify(respnose));
 			if(respnose.token === undefined){
 				Notification.alert(respnose.log, alertCallback, "Error", "確定");
 			}
 			else{
-				var host = HostManager.getHost();
-				host.token = respnose.token;
-				HostManager.setHost(host);
+				HostManager.setHost(respnose);
 				$window.location = "#/tab/FList";
 			}
 		});
 		http.error(function(data, status) {
 			respnose = data || "Request failed";
-			console.log(respnose);
+			console.log("FAIL: " + JSON.stringify(respnose));
 			Notification.alert(respnose, null, "不明錯誤", "朕知道了");
 		});
 
@@ -47,6 +47,8 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 	$scope.register = function(){
 		if(!checkInput())
 			return;
+		var host = HostManager.getHost();
+		$scope.loginForm.gcmRegId = host.gcmRegId;
 		HostManager.setHost($scope.loginForm);
 		$window.location = "#/setting";
 	};

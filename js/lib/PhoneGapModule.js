@@ -79,7 +79,7 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
         PhoneGap.ready(function () {
             var pushNotification;
             /* Setup and register device */
-
+            console.log("gcmSenderId=>" + gcmSenderId);
             // Check if phonegap and plugins are loaded
             if (typeof(window.plugins) === 'undefined') {
                 $log.error('PhoneGap plugins not found. Push notifications not initialized.');
@@ -108,11 +108,11 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
 
             var genericErrorHandler = function (error) {
                 $log.error('Error registering with push server:', error);
-                Notification.alert("未開啟網路!!!", closeApp, "不明錯誤", "朕知道了");
+                // Notification.alert("未開啟網路!!!", closeApp, "不明錯誤", "朕知道了");
 
-                function closeApp(){
-                    navigator.app.exitApp();
-                }
+                // function closeApp(){
+                //     navigator.app.exitApp();
+                // }
             };
             // Register device with push server
             if (device.platform === 'Android') {
