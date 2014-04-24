@@ -1,20 +1,34 @@
-app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, FriendManager){
+app.controller('ChatCtrl', function($scope, $stateParams, $rootScope, $window, HostManager, FriendManager, $timeout){
 	HostManager.checkLogin();
 	var phone = $stateParams.phone;
-	var FM = FriendManager.register();
-	FriendManager.listMsg(phone, function(){
+	var FM = FriendManager.register(function(){
 		$scope.chats = FM.chats[phone];
-		$scope.$apply();
+		FriendManager.readMsg(phone);
 	});
 	angular.forEach(FM.friends, function(obj){
 		console.log(obj.phone);
 		if(obj.phone == phone){
 			$scope.friend = obj;
+
+			FriendManager.listMsg($scope.friend, phone, function(){
+				$scope.chats = FM.chats[phone];
+				FriendManager.readMsg(phone);
+			});
+
+			getFriendRead();
+			function getFriendRead(){
+				$timeout(function(){
+			    	FriendManager.getFriendRead($scope.friend, phone);
+			    	getFriendRead();
+			    }, 1000);
+			}
 		}
 	});
 	$scope.chats = [];
     $scope.predicate = '-timestamp';
-    $scope.reverse = true;
+    $scope.reverse = false;
+
+
 
 	$scope.back = function(){
 		$window.history.back();
@@ -32,6 +46,10 @@ app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, 
 	}
 
 	$scope.isRead = function(chat){
-		return true;
+		if(chat.phone == $scope.friend.phone)
+			return false;
+		// console.log(chat.timestamp);
+		// console.log($scope.friend.readTime);
+		return chat.timestamp <= $scope.friend.readTime;
 	}
 });

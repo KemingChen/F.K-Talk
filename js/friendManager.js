@@ -1,10 +1,39 @@
-app.factory('FriendManager', function($http, $rootScope, Notification, HostManager, $window) {
+app.factory('FriendManager', function($http, $rootScope, Notification, HostManager, $window, $filter) {
 	var info = $rootScope.info;
 	var FM = {
 		friends: [],
 		chats: {},
 	}
 	var callbacks = [];
+	var pushCallback = [];
+
+    $rootScope.$on('NewMessage', function(event, res) {
+        console.log("NewMessage: " + JSON.stringify(res));
+        console.log("Target: " + res.name);
+
+        if(FM.friends.length == 0){
+        	pushCallback.push(moveTo);
+        }
+        else{
+        	moveTo();
+        }
+        function moveTo(){
+        	for(i in FM.friends){
+	        	var friend = FM.friends[i];
+	        	console.log(friend.name);
+	    		if(friend.name == res.name){
+	    			pushCallback = [];
+	    			console.log($window.location.href);
+	    			if($window.location.href.match("#/Chat/" + friend.phone) != null){
+	    				listMsg(friend, friend.phone, callbacks[0]);
+	    			}
+					else if($window.location.href.match("#/Chat/") == null)
+	    				$window.location = "#/Chat/" + friend.phone;
+	    			break;
+	    		}
+	    	}
+        }
+    });
 
 	function add(phone){
 		var host = HostManager.getHost();
@@ -61,6 +90,8 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 				FM.friends = respnose;
 				for(i in callbacks)
 					callbacks[i]();
+				if(i in pushCallback)
+					pushCallback[i]();
 			}
 		});
 		http.error(function(data, status) {
@@ -94,6 +125,13 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			if(respnose.errorMsg != undefined){
 				Notification.alert(respnose.errorMsg, null, "so sad ~~", "朕知道了");
 			}
+			else{
+				FM.chats[phone].push({
+					phone: host.phone,
+					message: message,
+					timestamp: respnose.timestamp,
+				});
+			}
 		});
 		http.error(function(data, status) {
 			respnose = data || "Request failed";
@@ -126,13 +164,13 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		});
 	}
 
-	function listMsg(phone, callback){
+	function listMsg(friend, phone, callback){
 		var host = HostManager.getHost();
 		var api = info.server + "/listMsg";
 		var data = {
 			token: host.token,
 			phone: phone,
-			timestamp: 0,
+			timestamp: friend.listTime ? friend.listTime : 0,
 		};
 		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
 		var http = $http({
@@ -144,7 +182,13 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		http.success(function(respnose, status) {
 			console.log("SUCCESS: " + JSON.stringify(respnose));
 			if(respnose.errorMsg === undefined){
-				FM.chats[phone] = respnose;
+				if(respnose.length != 0){
+					friend.listTime = $filter('orderBy')(respnose, "-timestamp", false)[0].timestamp;
+					console.log(friend.listTime);
+				}
+				if(FM.chats[phone] === undefined)
+					FM.chats[phone] = [];
+				FM.chats[phone] = FM.chats[phone].concat(respnose);
 				if(callback)
 					callback();
 			}
@@ -161,8 +205,33 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 
 	function register(callback){
 		if(callback)
-			callbacks.push(callback);
+			callbacks = [callback];
 		return FM;
+	}
+
+	function getFriendRead(friend, phone){
+		var host = HostManager.getHost();
+		var api = info.server + "/getFriendRead";
+		var data = {
+			token: host.token,
+			phone: phone,
+		};
+		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
+		var http = $http({
+			method: 'POST',
+			url: api,
+			data: data,
+			timeout: info.timeout,
+		});
+		http.success(function(respnose, status) {
+			console.log("SUCCESS: " + JSON.stringify(respnose));
+			friend.readTime = respnose.readTime;
+		});
+		http.error(function(data, status) {
+			respnose = data || "Request failed";
+			console.log("FAIL: " + JSON.stringify(respnose));
+			Notification.alert(respnose, null, "不明錯誤", "朕知道了");
+		});
 	}
 
 	return {
@@ -172,5 +241,6 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		sendMsg: sendMsg,
 		readMsg: readMsg,
 		listMsg: listMsg,
+		getFriendRead: getFriendRead,
 	};
 });

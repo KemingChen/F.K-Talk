@@ -154,9 +154,10 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
 
                     case 'message':
                         $log.info('GCM push notification received (only payload forwarded):', notification);
-                        $rootScope.$broadcast('phonegapPush.notification', {
-                            data: notification.payload.message,
-                            provider: 'GCM'
+                        console.log("PUSH: " + notification.payload.message);
+                        var strings = notification.payload.message.split(":");
+                        $rootScope.$broadcast('NewMessage', {
+                            name: strings[0],
                         });
                         break;
 
