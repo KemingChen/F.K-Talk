@@ -10,11 +10,11 @@
 				<div class="list">
 					<label class="item item-input">
 					    <span class="input-label">電話: </span>
-					    <input type="tel" ng-model="loginForm.phone">
+					    <input type="tel" ng-model="loginForm.phone" ng-change="loginFormSaver('phone', loginForm.phone)">
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">密碼: </span>
-					    <input type="password" ng-model="loginForm.password">
+					    <input type="password" ng-model="loginForm.password" ng-change="loginFormSaver('password', loginForm.password)">
 					</label>
 				</div>
 				<div class="list">

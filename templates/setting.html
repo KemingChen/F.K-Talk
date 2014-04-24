@@ -11,7 +11,10 @@
 					<div class="item item-avatar">
 						<img id="myPhoto" ng-src="{{host.photo}}">
 						<h2>My Photo</h2>
+						<!--
 					    <input type="file" fileread="host.photo" style="width: 75px;" />
+						-->
+						<button ng-click="select()">選擇檔案</button>
 					</div>
 					<label class="item item-input">
 					    <span class="input-label">Phone: </span>
@@ -19,17 +22,17 @@
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">Name: </span>
-					    <input type="text" ng-model="host.name">
+					    <input type="text" ng-model="host.name" ng-change="hostSaver('name', host.name)">
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">Email: </span>
-					    <input type="email" ng-model="host.mail">
+					    <input type="email" ng-model="host.mail" ng-change="hostSaver('mail', host.mail)">
 					</label>
 				</div>
 				<div class="list">
 					<label class="item item-input">
 					    <span class="input-label">Passward: </span>
-					    <input type="password" ng-model="password">
+					    <input type="password" ng-model="password" ng-change="inputSaver('password', password)">
 					</label>
 					<button class="item button button-block button-positive" ng-click="save()">
 						儲存設定

@@ -51,6 +51,10 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 		$window.location = "#/setting";
 	};
 
+	$scope.loginFormSaver = function(key, value){
+		$scope.loginForm[key] = value;
+	}
+
 	function checkInput(){
 		var log = "";
 		if($scope.loginForm.phone == "")
