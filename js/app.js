@@ -49,41 +49,22 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/tab/FList");
 });
 
-app.run(function($rootScope, HostManager, $window) {
+app.run(function($rootScope, HostManager, $window, PushNotificationsFactory) {
     console.log("FKTalk");
     $rootScope.info = {
-        server: "http://127.0.0.1:8888",
+        server: "http://192.168.1.101:8888",
         timeout: 5000,
+        gcmSenderId: '325215294371',
     };
+    
+    PushNotificationsFactory($rootScope.info.gcmSenderId, function(token, type) {
+        var host = HostManager.getHost();
+        host.token = token;
+        console.log(token);
+        if (type == "GCM")
+            host.type = 0;
+        else if (type == "APNS")
+            host.type = 1;
+        HostManager.setHost(host);
+    });
 });
-
-app.directive("fileread", [function () {
-    return {
-        scope: {
-            fileread: "="
-        },
-        link: function (scope, element, attributes) {
-            element.bind("change", function (changeEvent) {
-                var reader = new FileReader();
-                reader.onload = function (loadEvent) {
-                    scope.$apply(function () {
-                        var img = document.createElement("img");
-                        img.src = loadEvent.target.result;
-
-                        var cvs = document.createElement('canvas');
-                        var value = 60;
-                        cvs.width = value;
-                        cvs.height = value;
-
-                        var ctx = cvs.getContext("2d");
-                        ctx.scale(value / img.naturalWidth, value / img.naturalHeight);
-                        ctx.drawImage(img, 0, 0);
-
-                        scope.fileread = cvs.toDataURL("image/jpeg", 10);
-                    });
-                }
-                reader.readAsDataURL(changeEvent.target.files[0]);
-            });
-        }
-    }
-}]);
