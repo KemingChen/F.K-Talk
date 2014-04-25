@@ -20,15 +20,39 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
         function moveTo(){
         	for(i in FM.friends){
 	        	var friend = FM.friends[i];
-	        	console.log(friend.name);
+	        	// console.log(friend.name);
 	    		if(friend.name == res.name){
-	    			pushCallback = [];
-	    			console.log($window.location.href);
+	    			// console.log($window.location.href);
 	    			if($window.location.href.match("#/Chat/" + friend.phone) != null){
 	    				listMsg(friend, friend.phone, callbacks[0]);
 	    			}
 					else if($window.location.href.match("#/Chat/") == null)
 	    				$window.location = "#/Chat/" + friend.phone;
+	    			break;
+	    		}
+	    	}
+        }
+    });
+
+    $rootScope.$on('Read', function(event, res) {
+        console.log("Read: " + JSON.stringify(res));
+
+        if(FM.friends.length == 0){
+        	pushCallback.push(moveTo);
+        }
+        else{
+        	moveTo();
+        }
+        function moveTo(){
+        	for(i in FM.friends){
+	        	var friend = FM.friends[i];
+	        	console.log(friend.name);
+	    		if(friend.name == res.name){
+	    			// console.log($window.location.href);
+	    			if($window.location.href.match("#/Chat/" + friend.phone) != null){
+	    				friend.readTime = res.timestamp;
+	    				callbacks[0]();
+	    			}
 	    			break;
 	    		}
 	    	}
@@ -90,8 +114,9 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 				FM.friends = respnose;
 				for(i in callbacks)
 					callbacks[i]();
-				if(i in pushCallback)
-					pushCallback[i]();
+				while(pushCallback.length != 0){
+					pushCallback.pop()();
+				}
 			}
 		});
 		http.error(function(data, status) {

@@ -9,19 +9,13 @@ app.controller('ChatCtrl', function($scope, $stateParams, $rootScope, $window, H
 		console.log(obj.phone);
 		if(obj.phone == phone){
 			$scope.friend = obj;
+			$scope.friend.listTime = 0;
+			FM.chats[phone] = [];
 
 			FriendManager.listMsg($scope.friend, phone, function(){
 				$scope.chats = FM.chats[phone];
 				FriendManager.readMsg(phone);
 			});
-
-			getFriendRead();
-			function getFriendRead(){
-				$timeout(function(){
-			    	FriendManager.getFriendRead($scope.friend, phone);
-			    	getFriendRead();
-			    }, 1000);
-			}
 		}
 	});
 	$scope.chats = [];

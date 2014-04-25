@@ -57,7 +57,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading) {
     console.log("FKTalk v1.0");
     $rootScope.info = {
-        server: "http://140.124.181.7:8888",
+        server: "http://140.124.181.174:8888",//"http://192.168.1.108:8888",// 
         timeout: 5000,
         gcmSenderId: '389225011519',
     };
@@ -69,19 +69,25 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
         maxWidth: 200,
         showDelay: 0,
     });
-    // loading.hide();
+    loading.hide();
     
+    // HostManager.setHost({});
     PushNotificationsFactory($rootScope.info.gcmSenderId, function(token, type) {
         loading.hide();
         console.log("GET gcmRegId");
         var host = HostManager.getHost();
         host.gcmRegId = token;
         console.log("SUCCESS: gcmRegId=> " + token);
-        if (type == "GCM")
-            host.type = 0;
-        else if (type == "APNS")
-            host.type = 1;
         HostManager.setHost(host);
+        if(host.token != undefined){
+            var loginForm = {
+                phone: host.phone,
+                password: host.password,
+                photo: host.photo,
+            };
+            console.log(loginForm)
+            HostManager.login(loginForm);
+        }
     });
 });
 

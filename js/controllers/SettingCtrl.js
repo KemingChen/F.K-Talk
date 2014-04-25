@@ -3,8 +3,8 @@ app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $
 	console.log(JSON.stringify($scope.host));
 
 	// test input
-	$scope.host.name = "陳科銘";
-	$scope.host.mail = "believe75467@gmail.com";
+	// $scope.host.name = "陳科銘";
+	// $scope.host.mail = "believe75467@gmail.com";
 	// $scope.host.gcmRegId = "12345";
 	// test end
 
