@@ -155,10 +155,19 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
                     case 'message':
                         $log.info('GCM push notification received (only payload forwarded):', notification);
                         console.log("PUSH: " + JSON.stringify(notification.payload));
-                        var strings = notification.payload.message.split(":");
-                        $rootScope.$broadcast('NewMessage', {
-                            name: strings[0],
-                        });
+                        // var strings = notification.payload.message.split(":");
+                        // $rootScope.$broadcast('NewMessage', {
+                        //     name: strings[0],
+                        // });
+                        if(notification.payload.newmessage != undefined){
+                            var res = notification.payload.newmessage;
+                            for(phone in res){
+                                $rootScope.$broadcast('NewMessage', {
+                                    phone: phone,
+                                    timestamp: res[phone],
+                                });
+                            }
+                        }
                         if(notification.payload.readtime != undefined){
                             var res = notification.payload.readtime;
                             for(name in res){

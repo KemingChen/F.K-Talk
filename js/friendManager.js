@@ -9,7 +9,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 
     $rootScope.$on('NewMessage', function(event, res) {
         console.log("NewMessage: " + JSON.stringify(res));
-        console.log("Target: " + res.name);
+        console.log("Target: " + res.phone);
 
         if(FM.friends.length == 0){
         	pushCallback.push(moveTo);
@@ -21,7 +21,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
         	for(i in FM.friends){
 	        	var friend = FM.friends[i];
 	        	// console.log(friend.name);
-	    		if(friend.name == res.name){
+	    		if(friend.phone == res.phone){
 	    			// console.log($window.location.href);
 	    			if($window.location.href.match("#/Chat/" + friend.phone) != null){
 	    				listMsg(friend, friend.phone, callbacks[0]);
@@ -76,7 +76,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		http.success(function(respnose, status) {
 			console.log("SUCCESS: " + JSON.stringify(respnose));
 			if(respnose.errorMsg != undefined){
-				var message = "已成功新增: " + respnose.name;
+				var message = "已成功新增: " + phone;
 				Notification.alert(message, null, "恭喜", "朕知道了");
 			}
 			else{
@@ -213,7 +213,9 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 				}
 				if(FM.chats[phone] === undefined)
 					FM.chats[phone] = [];
-				FM.chats[phone] = FM.chats[phone].concat(respnose);
+				for(mid in respnose){
+					FM.chats[phone][mid] = respnose[mid];
+				}
 				if(callback)
 					callback();
 			}
