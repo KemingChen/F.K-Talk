@@ -69,7 +69,7 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
         maxWidth: 200,
         showDelay: 0,
     });
-    loading.hide();
+    // loading.hide();
     
     // HostManager.setHost({});
     PushNotificationsFactory($rootScope.info.gcmSenderId, function(token, type) {
