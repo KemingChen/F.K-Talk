@@ -39,6 +39,11 @@ angular.module('PhoneGap').factory('Notification', function ($q, $window, PhoneG
             PhoneGap.ready(function () {
                 $window.navigator.notification.vibrate(milliseconds);
             });
+        },
+        status: function (title, message){
+            PhoneGap.ready(function () {
+                $window.plugins.statusBarNotification.notify(title, message);
+            });
         }
     };
 });

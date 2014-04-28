@@ -54,8 +54,9 @@
     <plugin name="InAppBrowser" value="org.apache.cordova.InAppBrowser" />
     <plugin name="SQLitePlugin" value="org.pgsqlite.SQLitePlugin" />
     <plugin name="EmailComposer" value="org.apache.cordova.emailcomposer.EmailComposer"/>
-	<plugin name="Sms" value="org.apache.cordova.plugin.sms.Sms" />
-	<plugin name="PushPlugin" value="com.plugin.gcm.PushPlugin" />
+    <plugin name="Sms" value="org.apache.cordova.plugin.sms.Sms" />
+    <plugin name="PushPlugin" value="com.plugin.gcm.PushPlugin" />
+    <plugin name="StatusBarNotification" value="com.phonegap.plugins.statusBarNotification.StatusBarNotification"/>
  </plugins>
 
 </cordova>

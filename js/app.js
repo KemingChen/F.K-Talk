@@ -54,8 +54,9 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/tab/FList");
 });
 
-app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading) {
+app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, Notification) {
     console.log("FKTalk v1.0");
+    Notification.status("Test", "Hello World!!!");
     $rootScope.info = {
         server: "http://140.124.181.7:8888",//"http://140.124.181.174:8888", //"http://192.168.1.101:8888",
         timeout: 5000,
