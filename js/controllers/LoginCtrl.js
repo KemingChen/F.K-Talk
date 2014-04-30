@@ -2,7 +2,6 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 	$scope.loginForm = {
 		phone: "",
 		password: "",
-		photo: "images/NoPhoto.jpg",
 	};
 
 	$scope.login = function(){
@@ -19,11 +18,6 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 	};
 
 	$scope.register = function(){
-		if(!checkInput())
-			return;
-		var host = HostManager.getHost();
-		$scope.loginForm.gcmRegId = host.gcmRegId;
-		HostManager.setHost($scope.loginForm);
 		$window.location = "#/setting";
 	};
 

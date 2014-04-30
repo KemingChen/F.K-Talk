@@ -16,23 +16,27 @@
 						-->
 						<button ng-click="select()">選擇檔案</button>
 					</div>
-					<label class="item item-input">
+					<label class="item item-input" ng-show="isRegister">
 					    <span class="input-label">Phone: </span>
-					    <input type="tel" ng-model="host.phone" disabled>
+					    <input type="tel" ng-model="host.phone" placeholder="Type Phone Number">
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">Name: </span>
-					    <input type="text" ng-model="host.name" ng-change="hostSaver('name', host.name)">
+					    <input type="text" ng-model="host.name" ng-change="hostSaver('name', host.name)" placeholder="Type Name">
 					</label>
 					<label class="item item-input">
 					    <span class="input-label">Email: </span>
-					    <input type="email" ng-model="host.mail" ng-change="hostSaver('mail', host.mail)">
+					    <input type="email" ng-model="host.mail" ng-change="hostSaver('mail', host.mail)" placeholder="Type Email">
 					</label>
 				</div>
 				<div class="list">
 					<label class="item item-input">
 					    <span class="input-label">Passward: </span>
-					    <input type="password" ng-model="password" ng-change="inputSaver('password', password)">
+					    <input type="password" ng-model="host.password" ng-change="hostSaver('password', host.password)" placeholder="Type Password">
+					</label>
+					<label class="item item-input">
+					    <span class="input-label">Confirm: </span>
+					    <input type="password" ng-model="password" ng-change="inputSaver('password', password)" placeholder="Type Password Again">
 					</label>
 					<button class="item button button-block button-positive" ng-click="save()">
 						儲存設定

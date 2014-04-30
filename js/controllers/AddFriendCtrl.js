@@ -6,7 +6,7 @@ app.controller('AddFriendCtrl', function($scope, $window, HostManager, FriendMan
 	}
 
 	$scope.add = function(){
-		FriendManager.add($scope.phone);
+		FriendManager.addFriend($scope.phone);
 		$window.history.back();
 	}
 });

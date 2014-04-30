@@ -80,9 +80,12 @@ angular.module('PhoneGap').factory('BusyIndicator', function ($q, $window, Phone
 });
 
 angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootScope, $log, PhoneGap, Notification) {
-    var pushNotificationsFactory = function (gcmSenderId, registeredCallback) {
+    var pushNotificationsFactory = function () {
         PhoneGap.ready(function () {
+            console.log(JSON.stringify($rootScope.info));
             var pushNotification;
+            var gcmSenderId = $rootScope.info.gcmSenderId;
+
             /* Setup and register device */
             console.log("gcmSenderId=>" + gcmSenderId);
             // Check if phonegap and plugins are loaded
@@ -98,6 +101,13 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
                 return false;
             }
 
+            // run on the chrome
+            if(typeof(device) == "undefined"){
+                console.log("run on the chrome");
+                $rootScope.testLogin();
+                return false;
+            }
+
             var gcmSuccessHandler = function (result) {
                 $log.info(
                     'Successfully registered with GCM push server. ' +
@@ -108,7 +118,7 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
 
             var apnsSuccessHandler = function (deviceToken) {
                 $log.info('Successfully registered with APNS push server. Device token:', deviceToken);
-                registeredCallback(deviceToken, 'APNS');
+                $rootScope.successGetGCMRegId(deviceToken, 'APNS');
             };
 
             var genericErrorHandler = function (error) {
@@ -151,7 +161,7 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
                     case 'registered':
                         if (notification.regid.length > 0) {
                             $log.info('Got GCM device registration ID:', notification.regid);
-                            registeredCallback(notification.regid, 'GCM');
+                            $rootScope.successGetGCMRegId(notification.regid, 'GCM');
                         } else {
                             $log.error('Error registering with GCM push server: No device registration ID received.');
                         }
@@ -160,28 +170,6 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
                     case 'message':
                         $log.info('GCM push notification received (only payload forwarded):', notification);
                         console.log("PUSH: " + JSON.stringify(notification.payload));
-                        // var strings = notification.payload.message.split(":");
-                        // $rootScope.$broadcast('NewMessage', {
-                        //     name: strings[0],
-                        // });
-                        if(notification.payload.newmessage != undefined){
-                            var res = notification.payload.newmessage;
-                            for(phone in res){
-                                $rootScope.$broadcast('NewMessage', {
-                                    phone: phone,
-                                    timestamp: res[phone],
-                                });
-                            }
-                        }
-                        if(notification.payload.readtime != undefined){
-                            var res = notification.payload.readtime;
-                            for(name in res){
-                                $rootScope.$broadcast('Read', {
-                                    name: name,
-                                    timestamp: res[name],
-                                });
-                            }
-                        }
                         break;
 
                     case 'error':

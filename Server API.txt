@@ -1,0 +1,94 @@
+Server API
+
+/addFriend
+	token, phone
+
+	response Success
+		MQTT{ // 要對 "加入方" 跟 "被加方" 都要送相對應的訊息
+			action: "updateFriend",
+			data: {phone, photo, email, timestamp, hasReadMsgId}
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+/listFriend
+	token
+
+	response Success
+		MQTT{ 
+			action: "listFriend",
+			data: friendArr: [{phone, photo, email, timestamp, hasReadMsgId}, {...}, ...]
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+/sendMsg
+	token, phone, message
+
+	response Success
+		MQTT{ // 要對 "送方" 跟 "被送方" 都要送一樣的訊息
+			action: "addMsg",
+			data: {messageId, sender, receiver, message, timestamp}
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+/readMsg
+	token, phone, MsgId
+
+	response Success
+		MQTT{
+			action: "hasRead",
+			data: {phone, hasReadMsgId}
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+/delFriend
+	token, phone
+
+	response Success
+		MQTT{ // 要對 "刪除方" 跟 "被刪除方" 都要送相對應的訊息
+			action: "deleteFriend",
+			data: "phone"
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+/signup
+	photo, phone, name, mail, password, gcmRegId,
+
+	response Success
+		{photo, phone, name, mail, gcmRegId, token}
+
+	response Fail
+		"error Msg"
+
+/setting
+	token, photo, name, mail, password
+
+	response Success
+		{photo, phone, name, mail, gcmRegId, token}
+
+	response Fail
+		"error Msg"

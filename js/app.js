@@ -54,33 +54,23 @@ app.config(function($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise("/tab/FList");
 });
 
-app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, Notification) {
+app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, FriendManager) {
     console.log("FKTalk v1.0");
-    Notification.status("Test", "Hello World!!!");
-    $rootScope.info = {
-        server: "http://140.124.181.7:8888",//"http://140.124.181.174:8888", //"http://192.168.1.101:8888",
-        timeout: 5000,
-        gcmSenderId: '389225011519',
-    };
-    
-    var loading = $ionicLoading.show({
+
+    $rootScope.loading = $ionicLoading.show({
         content: "與 GCM 連線中...",
         animation: 'fade-in',
         showBackdrop: true,
         maxWidth: 200,
         showDelay: 0,
     });
-    // loading.hide();
-    
-    // HostManager.setHost({});
-    PushNotificationsFactory($rootScope.info.gcmSenderId, function(token, type) {
-        loading.hide();
-        console.log("GET gcmRegId");
+    // $rootScope.loading.hide();
+
+    $rootScope.testLogin = function(){
+        $rootScope.loading.hide();
+
         var host = HostManager.getHost();
-        host.gcmRegId = token;
-        console.log("SUCCESS: gcmRegId=> " + token);
-        HostManager.setHost(host);
-        if(host.token != undefined){
+        if(host.token != undefined && host.token != ""){
             var loginForm = {
                 phone: host.phone,
                 password: host.password,
@@ -89,17 +79,28 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
             console.log(loginForm)
             HostManager.login(loginForm);
         }
-    });
+    }
+
+    $rootScope.onLoginSuccess = function(mqttTopic){
+        PhoneGap.ready(function() {     
+            $window.plugins.MQTTPlugin.CONNECT(angular.noop, angular.noop, mqttTopic, mqttTopic);
+        });
+        $window.location = "#/tab/FList";
+    }
+
+    $rootScope.successGetGCMRegId = function(gcmRegId){
+        console.log("SUCCESS: GET gcmRegId=>" + gcmRegId);
+        $rootScope.gcmRegId = gcmRegId;
+
+        $rootScope.testLogin();
+    };
+    PushNotificationsFactory();
+
+    $window.receiveMessage = function(payload) {
+        console.log('SUCCESS FROM MQTT: ' + payload);
+        var res = JSON.parse(payload);
+        if(!res)
+            return;
+        MQTTActions[res.action](res.data);
+    };
 });
-
-/*
-gcmSenderId: 389225011519
-Server Public Key: AIzaSyBsf4l9d4mpSaT2QH9ybpRd6GccU-367RU
-
-Keming Token
-    APA91bHMkZ7f1PyaO2CB29nUyZJll7_hw1l1eYulQdkAfgWlMhv_8oSmbOd9YH1F3ln00YEajZVN_1d30MWV-o-VJL_KA1vW44FYMwx8DvZpu2P-fFKuwOaaf_fSZq14qvP17qCcPxrVLdYbxA-nbWDu2RWTjl4L-g
-    APA91bHMZ1pclzpZ0i3ZsjghZN0el1ic3J0PkyN69lIKCiqHjtAdlTi5bPo-eDJjkFfnaF4fhcoKDO4K4fewv1lxX2C-0L8Z8e7HvHme8gpQbHpFyXcdeFdogMSqKInQSZTAKZ6nEmOGSIin_63TU2U6orsJNcRJxA
-Flex Token
-    
-
-*/

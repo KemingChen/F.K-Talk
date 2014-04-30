@@ -1,69 +1,20 @@
 app.factory('FriendManager', function($http, $rootScope, Notification, HostManager, $window, $filter) {
+	$rootScope.info = {
+        // server: "http://140.124.181.7:8888",
+        server: "http://192.168.1.106:8888",
+        timeout: 5000,
+        gcmSenderId: '389225011519',
+        gcmRegId: '',
+        selfPhone: '',
+        token: '',
+    };
 	var info = $rootScope.info;
-	var FM = {
-		friends: [],
-		chats: {},
-	}
-	var callbacks = [];
-	var pushCallback = [];
+	var friends = {};
 
-    $rootScope.$on('NewMessage', function(event, res) {
-        console.log("NewMessage: " + JSON.stringify(res));
-        console.log("Target: " + res.phone);
-
-        if(FM.friends.length == 0){
-        	pushCallback.push(moveTo);
-        }
-        else{
-        	moveTo();
-        }
-        function moveTo(){
-        	for(i in FM.friends){
-	        	var friend = FM.friends[i];
-	        	// console.log(friend.name);
-	    		if(friend.phone == res.phone){
-	    			// console.log($window.location.href);
-	    			if($window.location.href.match("#/Chat/" + friend.phone) != null){
-	    				listMsg(friend, friend.phone, callbacks[0]);
-	    			}
-					else if($window.location.href.match("#/Chat/") == null)
-	    				$window.location = "#/Chat/" + friend.phone;
-	    			break;
-	    		}
-	    	}
-        }
-    });
-
-    $rootScope.$on('Read', function(event, res) {
-        console.log("Read: " + JSON.stringify(res));
-
-        if(FM.friends.length == 0){
-        	pushCallback.push(moveTo);
-        }
-        else{
-        	moveTo();
-        }
-        function moveTo(){
-        	for(i in FM.friends){
-	        	var friend = FM.friends[i];
-	        	console.log(friend.name);
-	    		if(friend.name == res.name){
-	    			// console.log($window.location.href);
-	    			if($window.location.href.match("#/Chat/" + friend.phone) != null){
-	    				friend.readTime = res.timestamp;
-	    				callbacks[0]();
-	    			}
-	    			break;
-	    		}
-	    	}
-        }
-    });
-
-	function add(phone){
-		var host = HostManager.getHost();
+	function addFriend(phone){
 		var api = info.server + "/addFriend";
 		var data = {
-			token: host.token,
+			token: info.token,
 			phone: phone,
 		};
 		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
@@ -75,27 +26,23 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		});
 		http.success(function(respnose, status) {
 			console.log("SUCCESS: " + JSON.stringify(respnose));
-			if(respnose.errorMsg != undefined){
-				var message = "已成功新增: " + phone;
-				Notification.alert(message, null, "恭喜", "朕知道了");
-			}
-			else{
-				var message = "查無此會員: " + phone;
-				Notification.alert(message, null, "so sad ~~", "朕知道了");
-			}
 		});
 		http.error(function(data, status) {
-			respnose = data || "Request failed";
-			console.log("FAIL: " + JSON.stringify(respnose));
-			Notification.alert(respnose, null, "不明錯誤", "朕知道了");
+			var message = "加入朋友失敗 \n請問要再試一次嗎?";
+		    Notification.confirm(message, function(action){
+		    	console.log("confirm get button " + JSON.stringify(action) + ";");
+		    	if(action.buttonIndex == 2){
+		    		addFriend(phone);
+		    	}
+		    }, "網路不穩", "No,Yes");
 		});
 	}
 
-	function list(){
-		var host = HostManager.getHost();
-		var api = info.server + "/listFriend";
+	function delFriend(){
+		var api = info.server + "/delFriend";
 		var data = {
-			token: host.token,
+			token: info.token,
+			phone: phone,
 		};
 		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
 		var http = $http({
@@ -106,31 +53,48 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		});
 		http.success(function(respnose, status) {
 			console.log("SUCCESS: " + JSON.stringify(respnose));
-			if(respnose.errorMsg == "token error"){
-				HostManager.clean();
-				Notification.alert(respnose, HostManager.checkLogin, "不明錯誤", "朕知道了");
-			}
-			else{
-				FM.friends = respnose;
-				for(i in callbacks)
-					callbacks[i]();
-				while(pushCallback.length != 0){
-					pushCallback.pop()();
-				}
-			}
 		});
 		http.error(function(data, status) {
-			respnose = data || "Request failed";
-			console.log("FAIL: " + JSON.stringify(respnose));
-			Notification.alert(respnose, null, "不明錯誤", "朕知道了");
+			var message = "刪除朋友失敗 \n請問要再試一次嗎?";
+		    Notification.confirm(message, function(action){
+		    	console.log("confirm get button " + JSON.stringify(action) + ";");
+		    	if(action.buttonIndex == 2){
+		    		addFriend(phone);
+		    	}
+		    }, "網路不穩", "No,Yes");
+		});
+	}
+
+	function listFriend(){
+		var api = info.server + "/listFriend";
+		var data = {
+			token: info.token,
+		};
+		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
+		var http = $http({
+			method: 'POST',
+			url: api,
+			data: data,
+			timeout: info.timeout,
+		});
+		http.success(function(respnose, status) {
+			console.log("SUCCESS: " + JSON.stringify(respnose));
+		});
+		http.error(function(data, status) {
+			var message = "載入朋友列表失敗 \n請問要再試一次嗎?";
+		    Notification.confirm(message, function(action){
+		    	console.log("confirm get button " + JSON.stringify(action) + ";");
+		    	if(action.buttonIndex == 2){
+		    		listFriend();
+		    	}
+		    }, "網路不穩", "No,Yes");
 		});
 	}
 
 	function sendMsg(phone, message){
-		var host = HostManager.getHost();
 		var api = info.server + "/sendMsg";
 		var data = {
-			token: host.token,
+			token: info.token,
 			phone: phone,
 			message: message,
 		};
@@ -145,31 +109,27 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			console.log("SUCCESS: " + JSON.stringify(respnose));
 			if(respnose.errorMsg == "token error"){
 				HostManager.clean();
-				Notification.alert(respnose, HostManager.checkLogin, "不明錯誤", "朕知道了");
+				Notification.alert("認證 Token 過期", HostManager.checkLogin, "錯誤", "朕知道了");
 			}
 			if(respnose.errorMsg != undefined){
 				Notification.alert(respnose.errorMsg, null, "so sad ~~", "朕知道了");
 			}
-			else{
-				FM.chats[phone].push({
-					phone: host.phone,
-					message: message,
-					timestamp: respnose.timestamp,
-				});
-			}
 		});
 		http.error(function(data, status) {
-			respnose = data || "Request failed";
-			console.log("FAIL: " + JSON.stringify(respnose));
-			Notification.alert(respnose, null, "不明錯誤", "朕知道了");
+			var message = "傳送訊息失敗 \n請問要再試一次嗎?";
+		    Notification.confirm(message, function(action){
+		    	console.log("confirm get button " + JSON.stringify(action) + ";");
+		    	if(action.buttonIndex == 2){
+		    		sendMsg(phone, message);
+		    	}
+		    }, "網路不穩", "No,Yes");
 		});
 	}
 
 	function readMsg(phone){
-		var host = HostManager.getHost();
 		var api = info.server + "/readMsg";
 		var data = {
-			token: host.token,
+			token: info.token,
 			phone: phone,
 		};
 		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
@@ -183,91 +143,44 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			console.log("SUCCESS: " + JSON.stringify(respnose));
 		});
 		http.error(function(data, status) {
-			respnose = data || "Request failed";
-			console.log("FAIL: " + JSON.stringify(respnose));
-			Notification.alert(respnose, null, "不明錯誤", "朕知道了");
+			readMsg(phone);
 		});
 	}
 
-	function listMsg(friend, phone, callback){
-		var host = HostManager.getHost();
-		var api = info.server + "/listMsg";
-		var data = {
-			token: host.token,
-			phone: phone,
-			timestamp: friend.listTime ? friend.listTime : 0,
-		};
-		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
-		var http = $http({
-			method: 'POST',
-			url: api,
-			data: data,
-			timeout: info.timeout,
-		});
-		http.success(function(respnose, status) {
-			console.log("SUCCESS: " + JSON.stringify(respnose));
-			if(respnose.errorMsg === undefined){
-				if(respnose.length != 0){
-					friend.listTime = $filter('orderBy')(respnose, "-timestamp", false)[0].timestamp;
-					console.log(friend.listTime);
-				}
-				if(FM.chats[phone] === undefined)
-					FM.chats[phone] = [];
-				for(mid in respnose){
-					FM.chats[phone][mid] = respnose[mid];
-				}
-				if(callback)
-					callback();
-			}
-			else{
-				Notification.alert(respnose.errorMsg, null, "so sad ~~", "朕知道了");
-			}
-		});
-		http.error(function(data, status) {
-			respnose = data || "Request failed";
-			console.log("FAIL: " + JSON.stringify(respnose));
-			Notification.alert(respnose, null, "不明錯誤", "朕知道了");
-		});
-	}
-
-	function register(callback){
-		if(callback)
-			callbacks = [callback];
-		return FM;
-	}
-
-	function getFriendRead(friend, phone){
-		var host = HostManager.getHost();
-		var api = info.server + "/getFriendRead";
-		var data = {
-			token: host.token,
-			phone: phone,
-		};
-		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
-		var http = $http({
-			method: 'POST',
-			url: api,
-			data: data,
-			timeout: info.timeout,
-		});
-		http.success(function(respnose, status) {
-			console.log("SUCCESS: " + JSON.stringify(respnose));
-			friend.readTime = respnose.readTime;
-		});
-		http.error(function(data, status) {
-			respnose = data || "Request failed";
-			console.log("FAIL: " + JSON.stringify(respnose));
-			Notification.alert(respnose, null, "不明錯誤", "朕知道了");
-		});
-	}
+	// function listMsg(friend, phone){
+	// 	var api = info.server + "/listMsg";
+	// 	var data = {
+	// 		token: info.token,
+	// 		phone: phone,
+	// 		timestamp: friend.listTime ? friend.listTime : 0,
+	// 	};
+	// 	console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
+	// 	var http = $http({
+	// 		method: 'POST',
+	// 		url: api,
+	// 		data: data,
+	// 		timeout: info.timeout,
+	// 	});
+	// 	http.success(function(respnose, status) {
+	// 		console.log("SUCCESS: " + JSON.stringify(respnose));
+	// 	});
+	// 	http.error(function(data, status) {
+	// 		message = "得到朋友訊息失敗 \n請問要再試一次嗎?";
+	// 	    Notification.confirm(, function(action){
+	// 	    	console.log("confirm get button " + JSON.stringify(action) + ";");
+	// 	    	if(action.buttonIndex == 2){
+	// 	    		listMsg(friend, phone);
+	// 	    	}
+	// 	    }, "網路不穩", "No,Yes");
+	// 	});
+	// }
 
 	return {
-		add: add,
-		list: list,
-		register: register,
+		addFriend: addFriend,
+		listFriend: listFriend,
 		sendMsg: sendMsg,
 		readMsg: readMsg,
-		listMsg: listMsg,
-		getFriendRead: getFriendRead,
+		// listMsg: listMsg,
+		friends: friends,
 	};
 });
