@@ -8,8 +8,8 @@ import org.apache.cordova.api.CordovaPlugin;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import com.Simple_App04.MQTTResources;
-import com.Simple_App04.Simple_App04;
+import com.FKTalk.MQTTResources;
+import com.FKTalk.FKTalk;
 
 import edu.ntut.csie.mqtt.plugin.LogUtil;
 
@@ -27,7 +27,7 @@ public class MQTTPlugin extends CordovaPlugin {
 
 	@Override
 	public boolean execute(String action, JSONArray arguments, CallbackContext callbackContext) throws JSONException {
-		Simple_App04 app=MQTTResources.getMQTT();
+		FKTalk app=MQTTResources.getMQTT();
 		if(CONNECT.equals(action)) {
 			String clientId = arguments.getString(0);
 			String topic = arguments.getString(1);

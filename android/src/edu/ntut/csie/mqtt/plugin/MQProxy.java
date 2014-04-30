@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.Simple_App04.MQTTResources;
+import com.FKTalk.MQTTResources;
 import com.ibm.micro.client.mqttv3.MqttCallback;
 import com.ibm.micro.client.mqttv3.MqttClient;
 import com.ibm.micro.client.mqttv3.MqttConnectOptions;
