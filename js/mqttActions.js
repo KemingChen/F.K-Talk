@@ -59,7 +59,11 @@ app.factory('MQTTActions', function($rootScope, FriendManager, DBManager) {
 		var phone = data.phone;
 		var hasReadMsgId = data.readTime;
 		if(freinds[phone] != undefined && freinds[phone].hasReadMsgId < hasReadMsgId){
-			freinds[phone].hasReadMsgId = hasReadMsgId;
+			var mid = HostManager.getHasReadMsgId(phone);
+			if(hasReadMsgId > mid){
+				freinds[phone].hasReadMsgId = hasReadMsgId;
+				HostManager.setHasReadMsgId(phone, hasReadMsgId);
+			}
 		}
 	}
 

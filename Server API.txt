@@ -46,7 +46,7 @@ Server API
 		}
 
 /readMsg
-	token, phone, MsgId
+	token, phone, hasReadMsgId
 
 	response Success
 		MQTT{

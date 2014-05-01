@@ -126,11 +126,12 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		});
 	}
 
-	function readMsg(phone){
+	function readMsg(phone, hasReadMsgId){
 		var api = info.server + "/readMsg";
 		var data = {
 			token: info.token,
 			phone: phone,
+			hasReadMsgId: hasReadMsgId,
 		};
 		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
 		var http = $http({
@@ -146,7 +147,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			readMsg(phone);
 		});
 	}
-
+	
 	// function listMsg(friend, phone){
 	// 	var api = info.server + "/listMsg";
 	// 	var data = {

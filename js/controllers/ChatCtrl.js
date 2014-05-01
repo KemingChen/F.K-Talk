@@ -1,8 +1,14 @@
-app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, FriendManager, Notification){
-	// HostManager.checkLogin();
+app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, FriendManager, Notification, DBManager){
+	HostManager.checkLogin();
 	var phone = $stateParams.phone;
 	$scope.friend = FriendManager.friends[phone];
-
+	DBManager.listMsg(phone, function(maxSenderMsgId){
+		var hasReadMsgId = HostManager.getHasReadMsgId();
+		if(hasReadMsgId < maxSenderMsgId){
+			// 表示有未讀訊息
+			FriendManager.readMsg(maxSenderMsgId);
+		}
+	});
     $scope.predicate = '-messageId';
     $scope.reverse = false;
 
@@ -26,7 +32,7 @@ app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, 
 			return false;
 		// console.log(chat.timestamp);
 		// console.log($scope.friend.readTime);
-		return chat.timestamp <= $scope.friend.readTime;
+		return chat.messageId <= $scope.friend.hasReadMsgId;
 	}
 
 	$scope.toTypeMessage = function(){

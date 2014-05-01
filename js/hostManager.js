@@ -13,6 +13,20 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification) {
 		return JSON.parse($window.localStorage['host']);
 	};
 
+	function initPhone(key){
+		if (!$window.localStorage[key])
+			$window.localStorage[key] = "{mid:0}";
+	}
+
+	function getHasReadMsgId(phone){
+		initPhone(phone);
+		return JSON.parse($window.localStorage[phone]).mid;
+	}
+
+	function setHasReadMsgId(phone, mid){
+		$window.localStorage[key] = JSON.stringify({mid:mid});
+	}
+
 	function checkLogin(){
 		var host = getHost();
 
@@ -136,5 +150,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification) {
 		login: login,
 		saveSetting: saveSetting,
 		register: register,
+		getHasReadMsgId: getHasReadMsgId,
+		setHasReadMsgId: setHasReadMsgId,
 	};
 });

@@ -1,4 +1,4 @@
-app.factory('DBManager', function($window, PhoneGap) {
+app.factory('DBManager', function($window, PhoneGap, FriendManager) {
 	var db = null;
     PhoneGap.ready(function() {
         db = $window.sqlitePlugin.openDatabase({name: "FKTalk"});
@@ -24,34 +24,26 @@ app.factory('DBManager', function($window, PhoneGap) {
         	});
         },
         
-        // read: function (phone) {
-        // 	PhoneGap.ready(function() {
-	       //      db.transaction(function (tx) {
-	       //          tx.executeSql("UPDATE friends SET name = ?, phone = ?, email = ?, birthday = ?, isMember = ? where id = ?",
-	       //              [friend.name, friend.phone, friend.email, friend.birthday, friend.isMember, friend.id],
-	       //              onSuccess,
-	       //              onError
-	       //          );
-	       //      });
-        // 	});
-        // },
-        
-        // deleteFriend: function (friend, onSuccess, onError) {
-        // 	PhoneGap.ready(function() {
-	       //      db.transaction(function(tx) {
-	       //          tx.executeSql("delete from friends where id = ?", [friend.id],
-	       //          	onSuccess,
-	       //              onError
-	       //          );
-	       //      });
-        // 	});
-        // },
-        
         listMsg: function (phone, callback) {
         	PhoneGap.ready(function() {
         		db.transaction(function(tx) {
-        			tx.executeSql("SELECT * FROM chats WHERE sender=? OR receiver=?", [phone, phone],
-	        			callback,
+        			tx.executeSql("SELECT * FROM chats WHERE sender=? OR receiver=?", 
+                        [phone, phone],
+	        			function(tx, res) {
+                            var friend = FriendManager.friends[phone];
+                            var maxSenderMsgId = -1;
+                            if(friend != undefined){
+                                if(friend.chats === undefined)
+                                    friend.chats = {};
+                                for (var i = 0, max = res.rows.length; i < max; i++) {
+                                    var mid = res.rows.item(i).messageId;
+                                    friend.chats[mid] = res.rows.item(i);
+                                    if(friend.chats[mid].sender == phone && mid > maxSenderMsgId)
+                                        maxSenderMsgId = mid;
+                                }
+                            }
+                            callback(maxSenderMsgId);
+                        },
         				null
     				);
             	});
