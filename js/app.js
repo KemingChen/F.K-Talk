@@ -31,6 +31,15 @@ app.config(function($stateProvider, $urlRouterProvider) {
                 }
             }
         })
+        .state('tab.setting', {
+            url: '/setting',
+            views: {
+                'tab-setting': {
+                    templateUrl: 'templates/setting.html',
+                    controller: 'SettingCtrl'
+                }
+            }
+        })
         .state('FInfo', {
             url: '/FInfo/:phone',
             templateUrl: 'templates/friendInfo.html',
@@ -51,7 +60,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ChatCtrl'
         });
 
-    $urlRouterProvider.otherwise("/tab/FList");
+    // $urlRouterProvider.otherwise("/tab/FList");
 });
 
 app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, FriendManager) {
@@ -79,13 +88,16 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
             console.log(loginForm)
             HostManager.login(loginForm);
         }
+        else{
+            $window.location = "#/login";
+        }
     }
 
     $rootScope.onLoginSuccess = function(mqttTopic){
         PhoneGap.ready(function() {     
-            $window.plugins.MQTTPlugin.CONNECT(angular.noop, angular.noop, mqttTopic, mqttTopic);
+            $window.plugins.MQTTPlugin.CONNECT(angular.noop, angular.noop, "FK-" + mqttTopic, "FK-" + mqttTopic);
+            $window.location = "#/tab/FList";
         });
-        $window.location = "#/tab/FList";
     }
 
     $rootScope.successGetGCMRegId = function(gcmRegId){

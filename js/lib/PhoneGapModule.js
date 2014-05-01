@@ -123,25 +123,30 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
 
             var genericErrorHandler = function (error) {
                 $log.error('Error registering with push server:', error);
-                // Notification.alert("未開啟網路!!!", closeApp, "不明錯誤", "朕知道了");
-
-                // function closeApp(){
-                //     navigator.app.exitApp();
-                // }
+                var message = "與GCM連現失敗 \n請問要再試一次嗎?";
+                Notification.confirm(message, function(action){
+                    console.log("confirm get button " + action + ";");
+                    if(action == 2){
+                        login(loginForm, onFail);
+                    }
+                }, "網路不穩", "No,Yes");
             };
             // Register device with push server
-            if (device.platform === 'Android') {
-                pushNotification.register(gcmSuccessHandler, genericErrorHandler, {
-                    'senderID': gcmSenderId,
-                    'ecb': 'onNotificationGCM'
-                });
-            } else if (device.platform === 'iOS') {
-                pushNotification.register(apnsSuccessHandler, genericErrorHandler, {
-                    'badge': 'true',
-                    'sound': 'true',
-                    'alert': 'true',
-                    'ecb': 'onNotificationAPN'
-                });
+
+            function connect(){
+                if (device.platform === 'Android') {
+                    pushNotification.register(gcmSuccessHandler, genericErrorHandler, {
+                        'senderID': gcmSenderId,
+                        'ecb': 'onNotificationGCM'
+                    });
+                } else if (device.platform === 'iOS') {
+                    pushNotification.register(apnsSuccessHandler, genericErrorHandler, {
+                        'badge': 'true',
+                        'sound': 'true',
+                        'alert': 'true',
+                        'ecb': 'onNotificationAPN'
+                    });
+                }
             }
 
             /* Bind notification functions to window (called by phonegapPush plugin) */
@@ -181,6 +186,8 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
                         break;
                 }
             };
+
+            connect();
         });
         return true;
     };

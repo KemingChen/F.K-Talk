@@ -81,4 +81,8 @@ app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $
 	$scope.inputSaver = function(key, value){
 		$scope[key] = value;
 	}
+
+	$scope.logout = function(){
+		HostManager.clean();
+	}
 });

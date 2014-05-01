@@ -14,6 +14,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function addFriend(phone){
 		var api = info.server + "/addFriend";
 		var data = {
+			SP: info.SP,
 			token: info.token,
 			phone: phone,
 		};
@@ -41,6 +42,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function delFriend(){
 		var api = info.server + "/delFriend";
 		var data = {
+			SP: info.SP,
 			token: info.token,
 			phone: phone,
 		};
@@ -68,6 +70,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function listFriend(){
 		var api = info.server + "/listFriend";
 		var data = {
+			SP: info.SP,
 			token: info.token,
 		};
 		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
@@ -94,6 +97,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function sendMsg(phone, message){
 		var api = info.server + "/sendMsg";
 		var data = {
+			SP: info.SP,
 			token: info.token,
 			phone: phone,
 			message: message,
@@ -129,6 +133,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function readMsg(phone, hasReadMsgId){
 		var api = info.server + "/readMsg";
 		var data = {
+			SP: info.SP,
 			token: info.token,
 			phone: phone,
 			hasReadMsgId: hasReadMsgId,

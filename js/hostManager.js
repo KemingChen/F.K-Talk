@@ -38,6 +38,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification) {
 
 	function clean(){
 		setHost({});
+		$window.location = "#/login";
 	};
 
 	function login(loginForm, onFail){
@@ -61,7 +62,8 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification) {
 				respnose.password = loginForm.password;
 				setHost(respnose);
                 $rootScope.info.token = respnose.token;
-				$rootScope.onLoginSuccess("FK-" + respnose.phone);
+                $rootScope.info.SP = respnose.phone;
+				$rootScope.onLoginSuccess(respnose.phone);
 			}
 		});
 		http.error(function(data, status) {

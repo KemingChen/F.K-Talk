@@ -1,7 +1,7 @@
 Server API
 
 /addFriend
-	token, phone
+	SP, token, phone
 
 	response Success
 		MQTT{ // 要對 "加入方" 跟 "被加方" 都要送相對應的訊息
@@ -16,7 +16,7 @@ Server API
 		}
 
 /listFriend
-	token
+	SP, token
 
 	response Success
 		MQTT{ 
@@ -31,7 +31,7 @@ Server API
 		}
 
 /sendMsg
-	token, phone, message
+	SP, token, phone, message
 
 	response Success
 		MQTT{ // 要對 "送方" 跟 "被送方" 都要送一樣的訊息
@@ -46,7 +46,7 @@ Server API
 		}
 
 /readMsg
-	token, phone, hasReadMsgId
+	SP, token, phone, hasReadMsgId
 
 	response Success
 		MQTT{
@@ -61,7 +61,7 @@ Server API
 		}
 
 /delFriend
-	token, phone
+	SP, token, phone
 
 	response Success
 		MQTT{ // 要對 "刪除方" 跟 "被刪除方" 都要送相對應的訊息
