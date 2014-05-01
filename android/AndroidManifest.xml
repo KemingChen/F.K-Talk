@@ -62,6 +62,13 @@
                 <category android:name="com.FKTalk"/> 
             </intent-filter> 
         </receiver>
+        <receiver android:name=".BootBroadcastReveiver"> 
+            <intent-filter> 
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>  
+                <category android:name="android.intent.category.LAUNCHER"/> 
+            </intent-filter> 
+        </receiver>  
+        <service android:name=".MQService" android:label="MQTT Push Notifications Service"/> 
     </application>  
     <uses-sdk android:minSdkVersion="16"/> 
 </manifest>

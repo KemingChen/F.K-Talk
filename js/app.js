@@ -63,7 +63,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
     // $urlRouterProvider.otherwise("/tab/FList");
 });
 
-app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, FriendManager) {
+app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, FriendManager, PhoneGap) {
     console.log("FKTalk v1.0");
 
     $rootScope.loading = $ionicLoading.show({
@@ -94,15 +94,16 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
     }
 
     $rootScope.onLoginSuccess = function(mqttTopic){
+        FriendManager.listFriend();
         PhoneGap.ready(function() {     
-            $window.plugins.MQTTPlugin.CONNECT(angular.noop, angular.noop, "FK-" + mqttTopic, "FK-" + mqttTopic);
-            $window.location = "#/tab/FList";
+            $window.plugins.MQTTPlugin.CONNECT(angular.noop, angular.noop, "FK" + mqttTopic, "FK" + mqttTopic);
         });
+        $window.location = "#/tab/FList";
     }
 
     $rootScope.successGetGCMRegId = function(gcmRegId){
         console.log("SUCCESS: GET gcmRegId=>" + gcmRegId);
-        $rootScope.gcmRegId = gcmRegId;
+        $rootScope.info.gcmRegId = gcmRegId;
 
         $rootScope.testLogin();
     };
@@ -111,7 +112,7 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
     $window.receiveMessage = function(payload) {
         console.log('SUCCESS FROM MQTT: ' + payload);
         var res = JSON.parse(payload);
-        if(!res)
+        if(!res || !res.action || !res.data)
             return;
         MQTTActions[res.action](res.data);
     };

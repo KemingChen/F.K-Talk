@@ -1,5 +1,5 @@
 app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $window, Notification, $timeout){
-	$scope.isRegister = $rootScope.info.selfPhone == "";
+	$scope.isRegister = $rootScope.info.SP == "";
 	if($scope.isRegister){
 		$scope.host = {
 			photo: "images/NoPhoto.jpg",

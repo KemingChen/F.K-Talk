@@ -6,7 +6,7 @@ Server API
 	response Success
 		MQTT{ // 要對 "加入方" 跟 "被加方" 都要送相對應的訊息
 			action: "updateFriend",
-			data: {phone, photo, email, timestamp, hasReadMsgId}
+			data: {phone, photo, mail, timestamp, hasReadMsgId}
 		}
 
 	response Fail
@@ -21,7 +21,7 @@ Server API
 	response Success
 		MQTT{ 
 			action: "listFriend",
-			data: friendArr: [{phone, photo, email, timestamp, hasReadMsgId}, {...}, ...]
+			data: friendArr: [{phone, photo, mail, timestamp, hasReadMsgId}, {...}, ...]
 		}
 
 	response Fail

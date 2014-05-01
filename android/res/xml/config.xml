@@ -57,6 +57,7 @@
     <plugin name="Sms" value="org.apache.cordova.plugin.sms.Sms" />
     <plugin name="PushPlugin" value="com.plugin.gcm.PushPlugin" />
     <plugin name="StatusBarNotification" value="com.phonegap.plugins.statusBarNotification.StatusBarNotification"/>
+    <plugin name="MQTTPlugin" value="com.mqtt.plugin.MQTTPlugin" />
  </plugins>
 
 </cordova>

@@ -1,8 +1,8 @@
 app.factory('FriendManager', function($http, $rootScope, Notification, HostManager, $window, $filter) {
 	$rootScope.info = {
         // server: "http://140.124.181.7:8888",
-        server: "http://192.168.1.106:8888",
-        timeout: 5000,
+        server: "http://192.168.1.104:8888",
+        timeout: 3000,
         gcmSenderId: '389225011519',
         gcmRegId: '',
         selfPhone: '',
@@ -14,7 +14,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function addFriend(phone){
 		var api = info.server + "/addFriend";
 		var data = {
-			SP: info.SP,
+			sp: info.SP,
 			token: info.token,
 			phone: phone,
 		};
@@ -42,7 +42,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function delFriend(){
 		var api = info.server + "/delFriend";
 		var data = {
-			SP: info.SP,
+			sp: info.SP,
 			token: info.token,
 			phone: phone,
 		};
@@ -70,7 +70,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function listFriend(){
 		var api = info.server + "/listFriend";
 		var data = {
-			SP: info.SP,
+			sp: info.SP,
 			token: info.token,
 		};
 		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
@@ -97,7 +97,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function sendMsg(phone, message){
 		var api = info.server + "/sendMsg";
 		var data = {
-			SP: info.SP,
+			sp: info.SP,
 			token: info.token,
 			phone: phone,
 			message: message,
@@ -133,7 +133,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	function readMsg(phone, hasReadMsgId){
 		var api = info.server + "/readMsg";
 		var data = {
-			SP: info.SP,
+			sp: info.SP,
 			token: info.token,
 			phone: phone,
 			hasReadMsgId: hasReadMsgId,
