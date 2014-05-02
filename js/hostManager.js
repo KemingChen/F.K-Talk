@@ -30,15 +30,10 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification) {
 	function checkLogin(){
 		var host = getHost();
 
-		console.log("HOST: " + JSON.stringify(host));
+		// console.log("HOST: " + JSON.stringify(host));
 		if(host.token === undefined){
 			$window.location = "#/login";
 		}
-	};
-
-	function clean(){
-		setHost({});
-		$window.location = "#/login";
 	};
 
 	function login(loginForm, onFail){
@@ -148,7 +143,6 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification) {
 		setHost: setHost,
 		getHost: getHost,
 		checkLogin: checkLogin,
-		clean: clean,
 		login: login,
 		saveSetting: saveSetting,
 		register: register,

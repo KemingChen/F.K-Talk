@@ -110,7 +110,7 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
     PushNotificationsFactory();
 
     $window.receiveMessage = function(payload) {
-        console.log('SUCCESS FROM MQTT: ' + payload);
+        console.log('SUCCESS FROM MQTT: ' + payload.length);
         var res = JSON.parse(payload);
         if(!res || !res.action || !res.data)
             return;

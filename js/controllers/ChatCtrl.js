@@ -2,6 +2,7 @@ app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, 
 	HostManager.checkLogin();
 	var phone = $stateParams.phone;
 	$scope.friend = FriendManager.friends[phone];
+	console.log(phone + " - " + JSON.stringify($scope.friend));
 	DBManager.listMsg(phone, function(maxSenderMsgId){
 		var hasReadMsgId = HostManager.getHasReadMsgId();
 		if(hasReadMsgId < maxSenderMsgId){
@@ -36,6 +37,7 @@ app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, 
 	}
 
 	$scope.toTypeMessage = function(){
+		console.log("Type Message!!!");
 		Notification.prompt("", function(answer){
 			if (answer.buttonIndex === 1) {
             	// 取消

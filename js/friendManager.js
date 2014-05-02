@@ -1,8 +1,8 @@
 app.factory('FriendManager', function($http, $rootScope, Notification, HostManager, $window, $filter) {
 	$rootScope.info = {
         // server: "http://140.124.181.7:8888",
-        server: "http://192.168.1.104:8888",
-        timeout: 3000,
+        server: "http://10.100.1.134:8888",
+        timeout: 10000,
         gcmSenderId: '389225011519',
         gcmRegId: '',
         selfPhone: '',
@@ -181,6 +181,10 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	// 	});
 	// }
 
+	function cleanFriends(){
+		friends = {};
+	}
+
 	return {
 		addFriend: addFriend,
 		listFriend: listFriend,
@@ -188,5 +192,6 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		readMsg: readMsg,
 		// listMsg: listMsg,
 		friends: friends,
+		cleanFriends: cleanFriends,
 	};
 });

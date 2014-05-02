@@ -21,15 +21,15 @@ app.factory('MQTTActions', function($rootScope, FriendManager, DBManager) {
 	}
 
 	function listFriend(data){
-		var freinds = FriendManager.friends;
+		var friends = FriendManager.friends;
 
-		var friendArr = data.friendArr;
+		var friendArr = data;
 		for(var i in friends){
 			delete friends[i];
 		}
 		for(var i in friendArr){
 			var friend = friendArr[i];
-			freinds[friend.phone] = friend;
+			friends[friend.phone] = friend;
 		}
 	}
 

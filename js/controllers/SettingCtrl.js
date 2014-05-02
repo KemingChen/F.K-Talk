@@ -1,4 +1,4 @@
-app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $window, Notification, $timeout){
+app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $window, Notification, $timeout, FriendManager){
 	$scope.isRegister = $rootScope.info.SP == "";
 	if($scope.isRegister){
 		$scope.host = {
@@ -14,7 +14,17 @@ app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $
 		$scope.host = HostManager.getHost();
 	}
 	
-	console.log(JSON.stringify($scope.host));
+	$scope.rightButtons = [{
+		type: 'button-positive',
+		content: "登出",
+		tap: function(){
+			HostManager.setHost({});
+			FriendManager.cleanFriends();
+			$window.location = "#/login";
+		},
+	}];
+
+	// console.log(JSON.stringify($scope.host));
 
 	$scope.save = function(){
 		if(!checkInput())
@@ -80,9 +90,5 @@ app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $
 
 	$scope.inputSaver = function(key, value){
 		$scope[key] = value;
-	}
-
-	$scope.logout = function(){
-		HostManager.clean();
 	}
 });
