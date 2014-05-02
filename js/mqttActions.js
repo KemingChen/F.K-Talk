@@ -18,6 +18,14 @@ app.factory('MQTTActions', function($rootScope, FriendManager, DBManager) {
 				if(friends[key].chats === undefined)
 					friends[key].chats = {};
 				friends[key].chats[messageId] = data;
+
+				if(selfPhone != sender && ($window.location.href.match("#/Chat/" + sender) != null)){
+					var hasReadMsgId = friends[sender].hasReadMsgId;
+					if(hasReadMsgId < messageId){
+						console.log("Send Read Msg: " + messageId + ", to " + phone);
+						FriendManager.readMsg(messageId);
+					}
+				}
 			}
 		});
 	}

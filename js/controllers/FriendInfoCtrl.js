@@ -7,7 +7,7 @@ app.controller('FriendInfoCtrl', function($scope, $stateParams, $window, HostMan
 		type: 'button-positive',
 		content: "刪除此好友",
 		tap: function(){
-			FriendManager.friends[phone].show = false;
+			// FriendManager.friends[phone].show = false;
 			FriendManager.delFriend(phone);
 			$window.location = "#/tab/FList";
 		},
