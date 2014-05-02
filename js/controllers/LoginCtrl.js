@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, HostManager, $window){
+app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, HostManager, $window, $ionicLoading){
 	$scope.loginForm = {
 		phone: "",
 		password: "",
@@ -7,6 +7,13 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 	$scope.login = function(){
 		if(!checkInput())
 			return;
+		$rootScope.loading = $ionicLoading.show({
+            content: "Login...",
+            animation: 'fade-in',
+            showBackdrop: true,
+            maxWidth: 200,
+            showDelay: 0,
+        });
 		HostManager.login($scope.loginForm, alertCallback);
 
 		function alertCallback(){

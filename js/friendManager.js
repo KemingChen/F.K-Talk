@@ -1,13 +1,13 @@
 app.factory('FriendManager', function($http, $rootScope, Notification, HostManager, $window, $filter) {
 	$rootScope.info = {
-        // server: "http://140.124.181.7:8888",
-        server: "http://10.100.1.134:8888",
-        timeout: 10000,
+        server: "http://192.168.1.101:8888",
+        timeout: 15000,
         gcmSenderId: '389225011519',
         gcmRegId: '',
-        selfPhone: '',
+        SP: '',
         token: '',
     };
+    var scopeCallback = null;
 	var info = $rootScope.info;
 	var friends = {};
 
@@ -31,7 +31,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		http.error(function(data, status) {
 			var message = "加入朋友失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
-		    	console.log("confirm get button " + JSON.stringify(action) + ";");
+		    	console.log("confirm get button " + action.buttonIndex + ";");
 		    	if(action.buttonIndex == 2){
 		    		addFriend(phone);
 		    	}
@@ -39,7 +39,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		});
 	}
 
-	function delFriend(){
+	function delFriend(phone){
 		var api = info.server + "/delFriend";
 		var data = {
 			sp: info.SP,
@@ -57,11 +57,15 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			console.log("SUCCESS: " + JSON.stringify(respnose));
 		});
 		http.error(function(data, status) {
-			var message = "刪除朋友失敗 \n請問要再試一次嗎?";
+			var message = "刪除" + friends[phone].name + "失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
-		    	console.log("confirm get button " + JSON.stringify(action) + ";");
+		    	console.log("confirm get button " + action.buttonIndex + ";");
 		    	if(action.buttonIndex == 2){
-		    		addFriend(phone);
+		    		delFriend(phone);
+		    	}
+		    	else{
+		    		friends[phone].show = true;
+		    		notifyScope();
 		    	}
 		    }, "網路不穩", "No,Yes");
 		});
@@ -182,16 +186,45 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 	// }
 
 	function cleanFriends(){
-		friends = {};
+		for(var i in friends){
+			console.log("delete i: " + i + ", in FriendManager");
+			delete friends[i];
+		}
+	}
+
+	function getFriends(callback){
+		if(callback)
+			scopeCallback = callback;
+		else
+			scopeCallback = null;
+		return friends;
+	}
+
+	function notifyScope(){
+		if(scopeCallback){
+			console.log("Apply Scope Callback");
+			scopeCallback();
+		}
+	}
+
+	function setChatHasRead(friendPhone, chat){
+		// console.log("hasReadMsgId: " + friends[friendPhone].hasReadMsgId + ", chat: " + JSON.stringify(chat) + ", friendPhone: " + friendPhone);
+		var isRead = friendPhone == chat.receiver && chat.messageId <= friends[friendPhone].hasReadMsgId;
+		console.log(chat.messageId + " isRead = " + isRead);
+		chat.isRead = isRead;
 	}
 
 	return {
 		addFriend: addFriend,
+		delFriend: delFriend,
 		listFriend: listFriend,
 		sendMsg: sendMsg,
 		readMsg: readMsg,
 		// listMsg: listMsg,
 		friends: friends,
+		getFriends: getFriends,
 		cleanFriends: cleanFriends,
+		notifyScope: notifyScope,
+		setChatHasRead: setChatHasRead,
 	};
 });

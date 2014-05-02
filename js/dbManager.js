@@ -14,6 +14,7 @@ app.factory('DBManager', function($window, PhoneGap, FriendManager) {
 	                tx.executeSql("INSERT INTO chats(messageId, sender, receiver, message, timestamp) VALUES (?, ?, ?, ?, ?)",
 	                    [messageId, sender, receiver, message, timestamp],
 	                    function(tx, res) {
+                            console.log(JSON.stringify(res));
 	                		callback();
 	                    }, function (e) {
 	                        console.log('新增訊息失敗，原因: ' + e.message);
@@ -25,21 +26,26 @@ app.factory('DBManager', function($window, PhoneGap, FriendManager) {
         },
         
         listMsg: function (phone, callback) {
+            console.log("listMsg " + phone);
         	PhoneGap.ready(function() {
         		db.transaction(function(tx) {
-        			tx.executeSql("SELECT * FROM chats WHERE sender=? OR receiver=?", 
+        			tx.executeSql("SELECT * FROM chats WHERE receiver = ? OR sender = ?", 
                         [phone, phone],
 	        			function(tx, res) {
                             var friend = FriendManager.friends[phone];
                             var maxSenderMsgId = -1;
+                            console.log(JSON.stringify(res));
+                            console.log(phone + ", chats length: " + res.rows.length);
                             if(friend != undefined){
                                 if(friend.chats === undefined)
                                     friend.chats = {};
                                 for (var i = 0, max = res.rows.length; i < max; i++) {
-                                    var mid = res.rows.item(i).messageId;
-                                    friend.chats[mid] = res.rows.item(i);
-                                    if(friend.chats[mid].sender == phone && mid > maxSenderMsgId)
-                                        maxSenderMsgId = mid;
+                                    var chat = res.rows.item(i);
+                                    var messageId = chat.messageId;
+                                    friend.chats[messageId] = chat;
+                                    FriendManager.setChatHasRead(phone, chat);
+                                    if(chat.sender == phone && messageId > maxSenderMsgId)
+                                        maxSenderMsgId = messageId;
                                 }
                             }
                             callback(maxSenderMsgId);

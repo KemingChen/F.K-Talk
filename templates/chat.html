@@ -1,17 +1,18 @@
 <div>
     <div class="bar bar-header bar-positive">
-        <title>{{friend.name}}</title>
+        <h1 class="title">{{friend.name}}</h1>
     </div>
     <ion-content has-header="true" padding="true">
         <div class="list">
-            <div class="item item-divider item-text-wrap" ng-repeat="chat in friend.chats | orderBy:predicate:reverse" style="{{chat.phone != friend.phone ? 'text-align: right;' : ''}}">
+            <div class="item item-divider item-text-wrap" ng-repeat="chat in friend.chats | orderBy:predicate:reverse" style="{{chat.sender != friend.phone ? 'text-align: right;' : ''}}">
                 <div>
-                    <img ng-show="chat.phone == friend.phone" ng-src="{{friend.photo}}" style="height: 30px;" />&nbsp;
+                    <img ng-show="chat.sender == friend.phone" ng-src="{{friend.photo}}" style="height: 30px;" />&nbsp;
                     {{chat.message}}
                 </div>
                 <div style="font.weight: narmal;font-size: 10px;">
-                    <span ng-show="isRead(chat)">已讀&nbsp;&nbsp;</span>
+                    <span ng-show="chat.isRead">已讀&nbsp;&nbsp;</span>
                     <span>{{chat.timestamp*1000 | date:'a h:mm'}}</span>
+                    <span>{{chat.messageId}}</span>
                 </div>
             </div>
         </div>

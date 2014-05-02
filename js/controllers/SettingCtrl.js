@@ -16,11 +16,12 @@ app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $
 	
 	$scope.rightButtons = [{
 		type: 'button-positive',
-		content: "登出",
+		content: "登出並關閉",
 		tap: function(){
 			HostManager.setHost({});
-			FriendManager.cleanFriends();
-			$window.location = "#/login";
+			// FriendManager.cleanFriends();
+			// $window.location = "#/login";
+			navigator.app.exitApp();
 		},
 	}];
 

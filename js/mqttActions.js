@@ -1,6 +1,6 @@
 app.factory('MQTTActions', function($rootScope, FriendManager, DBManager) {
 	function addMsg(data){
-		var freinds = FriendManager.friends;
+		var friends = FriendManager.friends;
 
 		var messageId = data.messageId;
 		var sender = data.sender;
@@ -8,13 +8,15 @@ app.factory('MQTTActions', function($rootScope, FriendManager, DBManager) {
 		var message = data.message;
 		var timestamp = data.timestamp;
 		DBManager.addMsg(messageId, sender, receiver, message, timestamp, function(){
-			var selfPhone = $rootScope.info.selfPhone;
+			var selfPhone = $rootScope.info.SP;
 			var key = "";
 			if(selfPhone != sender)
 				key = sender;
 			if(selfPhone != receiver)
 				key = receiver;
 			if(key != ""){
+				if(friends[key].chats === undefined)
+					friends[key].chats = {};
 				friends[key].chats[messageId] = data;
 			}
 		});
@@ -25,45 +27,54 @@ app.factory('MQTTActions', function($rootScope, FriendManager, DBManager) {
 
 		var friendArr = data;
 		for(var i in friends){
+			console.log("delete i: " + i);
 			delete friends[i];
 		}
 		for(var i in friendArr){
 			var friend = friendArr[i];
+			console.log("add " + i + ": " + friend.phone);
+			friend.show = true;
 			friends[friend.phone] = friend;
 		}
+		FriendManager.notifyScope();
 	}
 
 	function deleteFriend(data){
-		var freinds = FriendManager.friends;
+		var friends = FriendManager.friends;
 
 		var phone = data.phone;
-		if(freinds[phone] != undefined){
-			delete freinds[phone];
+		if(friends[phone] != undefined){
+			console.log("SUCCESS delete " + phone);
+			delete friends[phone];
+			FriendManager.notifyScope();
 		}
 	}
 
 	function updateFriend(data){
-		var freinds = FriendManager.friends;
+		console.log("MQTT updateFriend");
 
 		var phone = data.phone;
-		var photo = data.photo;
-		var email = data.email;
-		var timestamp = data.timestamp;
-		var hasReadMsgId = data.hasReadMsgId;
-		freinds[phone] = data;
+		console.log(phone);
+		FriendManager.friends[phone] = data;
+		FriendManager.friends[phone].show = true;
+		FriendManager.notifyScope();
 	}
 
 	function hasRead(data){
-		var freinds = FriendManager.friends;
+		var friends = FriendManager.friends;
 
 		var phone = data.phone;
-		var hasReadMsgId = data.readTime;
-		if(freinds[phone] != undefined && freinds[phone].hasReadMsgId < hasReadMsgId){
-			var mid = HostManager.getHasReadMsgId(phone);
-			if(hasReadMsgId > mid){
-				freinds[phone].hasReadMsgId = hasReadMsgId;
-				HostManager.setHasReadMsgId(phone, hasReadMsgId);
+		var hasReadMsgId = data.hasReadMsgId;
+
+		var mid = friends[phone].hasReadMsgId;
+		console.log('mid: ' + mid);
+		if(friends[phone] != undefined && mid < hasReadMsgId){
+			friends[phone].hasReadMsgId = hasReadMsgId;
+			for(var i in friends[phone].chats){
+				var chat = friends[phone].chats[i];
+				FriendManager.setChatHasRead(phone, chat);
 			}
+			FriendManager.notifyScope();
 		}
 	}
 

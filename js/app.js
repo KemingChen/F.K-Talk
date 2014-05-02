@@ -73,17 +73,23 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
         maxWidth: 200,
         showDelay: 0,
     });
-    // $rootScope.loading.hide();
 
     $rootScope.testLogin = function(){
         $rootScope.loading.hide();
 
         var host = HostManager.getHost();
         if(host.token != undefined && host.token != ""){
+            $rootScope.loading = $ionicLoading.show({
+                content: "Auto Login...",
+                animation: 'fade-in',
+                showBackdrop: true,
+                maxWidth: 200,
+                showDelay: 0,
+            });
             var loginForm = {
                 phone: host.phone,
                 password: host.password,
-                photo: host.photo,
+                // photo: host.photo,
             };
             console.log(loginForm)
             HostManager.login(loginForm);
@@ -110,7 +116,8 @@ app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $io
     PushNotificationsFactory();
 
     $window.receiveMessage = function(payload) {
-        console.log('SUCCESS FROM MQTT: ' + payload.length);
+        var message = payload.length < 2000 ? payload : payload.length;
+        console.log('SUCCESS FROM MQTT: ' + message);
         var res = JSON.parse(payload);
         if(!res || !res.action || !res.data)
             return;

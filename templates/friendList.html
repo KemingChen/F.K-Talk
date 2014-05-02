@@ -13,7 +13,7 @@
             </label>
 		    <div ng-repeat="friend in filterFriends" 
             class="item item-avatar" 
-            ng-click="moveTo(friend.phone)">
+            ng-click="moveTo(friend.phone)" ng-show="friend.show">
                 <img ng-src="{{friend.photo}}">
 				<h2>{{friend.name}}</h2>
 				<span>{{friend.phone}}</span>
