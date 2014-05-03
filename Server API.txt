@@ -60,6 +60,21 @@ Server API
 			data: "Error Msg"
 		}
 
+/listMsg
+	SP, token, phone
+
+	response Success
+		MQTT{ // 只要給 SP 即可
+			action: "addMsg",
+			data: [{messageId, sender, receiver, message, timestamp}, ...]
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
 /delFriend
 	SP, token, phone
 

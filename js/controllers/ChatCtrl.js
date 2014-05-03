@@ -6,12 +6,15 @@ app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, 
 		$scope.$apply();
 	});
 	$scope.friend = FriendManager.friends[phone];
-	DBManager.listMsg(phone, function(maxSenderMsgId){
+	// DBManager.listMsg(phone, function(maxSenderMsgId){
+	HostManager.getChats($scope.friend, function(maxSenderMsgId){
 		var hasReadMsgId = $scope.friend.hasReadMsgId;
+		console.log("hasReadMsgId: " + hasReadMsgId + ", maxSenderMsgId: " + maxSenderMsgId);
 		if(hasReadMsgId < maxSenderMsgId){
 			// 表示有未讀訊息
 			console.log("Send Read Msg: " + maxSenderMsgId + ", to " + phone);
-			FriendManager.readMsg(maxSenderMsgId);
+			FriendManager.readMsg(phone, maxSenderMsgId);
+			$scope.friend.hasReadMsgId = maxSenderMsgId;
 		}
 	});
     $scope.predicate = '-messageId';

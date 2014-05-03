@@ -1,6 +1,6 @@
 app.factory('FriendManager', function($http, $rootScope, Notification, HostManager, $window, $filter) {
 	$rootScope.info = {
-        server: "http://140.124.181.7:8888",
+        server: "http://192.168.1.101:8888",
         timeout: 15000,
         gcmSenderId: '389225011519',
         gcmRegId: '',

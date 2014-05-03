@@ -60,12 +60,12 @@ app.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ChatCtrl'
         });
 
-    // $urlRouterProvider.otherwise("/tab/FList");
+    // $urlRouterProvider.otherwise("/Chat/0987103180");
 });
 
-app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, FriendManager, PhoneGap) {
+app.run(function(DBManager, $rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, FriendManager, PhoneGap) {
     console.log("FKTalk v1.0");
-
+    // DBManager.showAll();
     $rootScope.loading = $ionicLoading.show({
         content: "與 GCM 連線中...",
         animation: 'fade-in',

@@ -1,4 +1,4 @@
-app.factory('MQTTActions', function($rootScope, FriendManager, DBManager) {
+app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManager, HostManager) {
 	function addMsg(data){
 		var friends = FriendManager.friends;
 
@@ -7,27 +7,32 @@ app.factory('MQTTActions', function($rootScope, FriendManager, DBManager) {
 		var receiver = data.receiver;
 		var message = data.message;
 		var timestamp = data.timestamp;
-		DBManager.addMsg(messageId, sender, receiver, message, timestamp, function(){
-			var selfPhone = $rootScope.info.SP;
-			var key = "";
-			if(selfPhone != sender)
-				key = sender;
-			if(selfPhone != receiver)
-				key = receiver;
-			if(key != ""){
-				if(friends[key].chats === undefined)
-					friends[key].chats = {};
-				friends[key].chats[messageId] = data;
+		console.log(JSON.stringify([messageId, sender, receiver, message, timestamp]));
 
-				if(selfPhone != sender && ($window.location.href.match("#/Chat/" + sender) != null)){
-					var hasReadMsgId = friends[sender].hasReadMsgId;
-					if(hasReadMsgId < messageId){
-						console.log("Send Read Msg: " + messageId + ", to " + phone);
-						FriendManager.readMsg(messageId);
+		var selfPhone = $rootScope.info.SP;
+		var key = "";
+		if(selfPhone != sender)
+			key = sender;
+		if(selfPhone != receiver)
+			key = receiver;
+		// DBManager.addMsg(messageId, sender, receiver, message, timestamp, function(){
+		if(key != ""){
+			console.log("SP: " + key);
+			if(friends[key].chats === undefined)
+				friends[key].chats = {};
+			friends[key].chats[messageId] = data;
+			HostManager.saveChats(key, friends[key].chats, function(){
+					FriendManager.notifyScope();
+					if(selfPhone != sender && ($window.location.href.match("#/Chat/" + sender) != null)){
+						var hasReadMsgId = friends[sender].hasReadMsgId;
+						if(hasReadMsgId < messageId){
+							console.log("Send Read Msg: " + messageId + ", to " + sender);
+							FriendManager.readMsg(sender, messageId);
+							friends[sender].hasReadMsgId = messageId;
+						}
 					}
-				}
-			}
-		});
+			});
+		}
 	}
 
 	function listFriend(data){

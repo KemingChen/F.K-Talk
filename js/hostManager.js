@@ -15,7 +15,43 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 
 	function initPhone(key){
 		if (!$window.localStorage[key])
-			$window.localStorage[key] = "{mid:0}";
+			$window.localStorage[key] = "{}";
+	}
+
+	function getChats(friend, callback){
+        var maxSenderMsgId = -1;
+        var phone = friend.phone;
+		initPhone(phone);
+        var res = JSON.parse($window.localStorage[phone]);
+        // console.log(JSON.stringify(res));
+        // console.log(phone + ", chats length: " + res.rows.length);
+        console.log("hasReadMsgId: "+ friend.hasReadMsgId);
+        if(friend != undefined){
+            if(friend.chats === undefined)
+                friend.chats = {};
+            for (var i in res) {
+                var chat = res[i];
+                console.log(JSON.stringify(chat));
+                var messageId = chat.messageId;
+                friend.chats[messageId] = chat;
+                setChatHasRead(friend, chat);
+                if(chat.sender == phone && messageId > maxSenderMsgId)
+                    maxSenderMsgId = messageId;
+            }
+        }
+        callback(maxSenderMsgId);
+	}
+
+	function saveChats(phone, chats, callback){
+		$window.localStorage[phone] = JSON.stringify(chats);
+		callback();
+	}
+
+	function setChatHasRead(friend, chat){
+		// console.log("hasReadMsgId: " + friends[friendPhone].hasReadMsgId + ", chat: " + JSON.stringify(chat) + ", friendPhone: " + friendPhone);
+		var isRead = friend.phone == chat.receiver && chat.messageId <= friend.hasReadMsgId;
+		console.log(chat.messageId + " isRead = " + isRead);
+		chat.isRead = isRead;
 	}
 
 	function checkLogin(){
@@ -135,6 +171,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 		    }, "網路不穩", "No,Yes");
 		});
 	}
+
 	return {
 		setHost: setHost,
 		getHost: getHost,
@@ -142,5 +179,8 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 		login: login,
 		saveSetting: saveSetting,
 		register: register,
+
+		getChats: getChats,
+		saveChats: saveChats,
 	};
 });
