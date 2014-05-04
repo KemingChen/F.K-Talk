@@ -12,18 +12,18 @@ app.controller('SettingCtrl', function($scope, HostManager, $rootScope, $http, $
 	}
 	else{
 		$scope.host = HostManager.getHost();
+
+		$scope.rightButtons = [{
+			type: 'button-positive',
+			content: "登出並關閉",
+			tap: function(){
+				HostManager.clean();
+				// FriendManager.cleanFriends();
+				// $window.location = "#/login";
+				navigator.app.exitApp();
+			},
+		}];
 	}
-	
-	$scope.rightButtons = [{
-		type: 'button-positive',
-		content: "登出並關閉",
-		tap: function(){
-			HostManager.setHost({});
-			// FriendManager.cleanFriends();
-			// $window.location = "#/login";
-			navigator.app.exitApp();
-		},
-	}];
 
 	// console.log(JSON.stringify($scope.host));
 

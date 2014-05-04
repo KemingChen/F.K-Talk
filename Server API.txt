@@ -1,4 +1,4 @@
-Server API
+﻿Server API
 
 /addFriend
 	SP, token, phone
@@ -65,7 +65,7 @@ Server API
 
 	response Success
 		MQTT{ // 只要給 SP 即可
-			action: "addMsg",
+			action: "listMsg",
 			data: [{messageId, sender, receiver, message, timestamp}, ...]
 		}
 

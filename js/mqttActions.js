@@ -20,6 +20,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 			console.log("SP: " + key);
 			if(friends[key].chats === undefined)
 				friends[key].chats = {};
+			HostManager.setChatHasRead(friends[key], data);
 			friends[key].chats[messageId] = data;
 			HostManager.saveChats(key, friends[key].chats, function(){
 					FriendManager.notifyScope();
@@ -31,6 +32,57 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 							friends[sender].hasReadMsgId = messageId;
 						}
 					}
+			});
+		}
+	}
+
+	function listMsg(data){
+		var friends = FriendManager.friends;
+
+		var selfPhone = $rootScope.info.SP;
+		var key = "";
+		var maxSenderMsgId = -1;
+
+		for(var i in data){
+			var chat = data[i];
+			console.log(JSON.stringify(chat));
+			var messageId = chat.messageId;
+			var sender = chat.sender;
+			var receiver = chat.receiver;
+			var message = chat.message;
+			chat.timestamp = (new Date(chat.timestamp)).getTime();
+			var timestamp = chat.timestamp;
+			if(key == ""){
+				if(selfPhone != sender)
+					key = sender;
+				if(selfPhone != receiver)
+					key = receiver;
+				console.log("key: " + key);
+				friends[key].chats = {};
+			}
+
+			if(key && key != ""){
+				HostManager.setChatHasRead(friends[key], chat);
+				friends[key].chats[messageId] = chat;
+				if(chat.sender == key && messageId > maxSenderMsgId)
+                    maxSenderMsgId = messageId;
+			}
+			else{
+				break;
+			}
+		}
+		if(key && key != ""){
+			var sender = key;
+			FriendManager.notifyScope();
+			HostManager.saveChats(key, friends[key].chats, function(){
+				if($window.location.href.match("#/Chat/" + sender) != null){
+					var hasReadMsgId = friends[sender].hasReadMsgId;
+					if(hasReadMsgId < maxSenderMsgId){
+						console.log("Send Read Msg: " + maxSenderMsgId + ", to " + sender);
+						FriendManager.readMsg(sender, maxSenderMsgId);
+						friends[sender].hasReadMsgId = maxSenderMsgId;
+					}
+				}
 			});
 		}
 	}
@@ -97,6 +149,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 
 	return {
 		addMsg: addMsg,
+		listMsg: listMsg,
 		listFriend: listFriend,
 		deleteFriend: deleteFriend,
 		updateFriend: updateFriend,

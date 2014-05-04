@@ -1,8 +1,9 @@
-app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, FriendManager, Notification, DBManager){
+app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, HostManager, FriendManager, Notification, DBManager){
 	HostManager.checkLogin();
 	var phone = $stateParams.phone;
 	var friends = FriendManager.getFriends(function(){
 		console.log("ChatCtrl Scope Apply");
+		$ionicScrollDelegate.scrollBottom();
 		$scope.$apply();
 	});
 	$scope.friend = FriendManager.friends[phone];
@@ -29,19 +30,19 @@ app.controller('ChatCtrl', function($scope, $stateParams, $window, HostManager, 
 		$scope[key] = value;
 	}
 
+	$scope.scrollBottom = function(){
+		$ionicScrollDelegate.scrollBottom();
+	}
+
 	$scope.send = function(){
 		var message = $scope.message;
 		FriendManager.sendMsg(phone, message);
 		document.getElementById("message").value = "";
 	}
 
-	// $scope.isRead = function(chat){
-	// 	if(chat.sender == $scope.friend.phone)
-	// 		return false;
-	// 	// console.log(chat.timestamp);
-	// 	// console.log($scope.friend.readTime);
-	// 	return chat.messageId <= $scope.friend.hasReadMsgId;
-	// }
+	$scope.listMsg = function(){
+		FriendManager.listMsg(phone);
+	}
 
 	$scope.toTypeMessage = function(){
 		console.log("Type Message!!!");

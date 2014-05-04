@@ -172,6 +172,10 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 		});
 	}
 
+	function clean(){
+		$window.localStorage.clear();
+	}
+
 	return {
 		setHost: setHost,
 		getHost: getHost,
@@ -182,5 +186,8 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 
 		getChats: getChats,
 		saveChats: saveChats,
+		setChatHasRead: setChatHasRead,
+
+		clean: clean,
 	};
 });

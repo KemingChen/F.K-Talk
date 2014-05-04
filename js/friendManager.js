@@ -1,6 +1,6 @@
 app.factory('FriendManager', function($http, $rootScope, Notification, HostManager, $window, $filter) {
 	$rootScope.info = {
-        server: "http://192.168.1.101:8888",
+        server: "http://140.124.181.7:8888",
         timeout: 15000,
         gcmSenderId: '389225011519',
         gcmRegId: '',
@@ -157,33 +157,33 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		});
 	}
 	
-	// function listMsg(friend, phone){
-	// 	var api = info.server + "/listMsg";
-	// 	var data = {
-	// 		token: info.token,
-	// 		phone: phone,
-	// 		timestamp: friend.listTime ? friend.listTime : 0,
-	// 	};
-	// 	console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
-	// 	var http = $http({
-	// 		method: 'POST',
-	// 		url: api,
-	// 		data: data,
-	// 		timeout: info.timeout,
-	// 	});
-	// 	http.success(function(respnose, status) {
-	// 		console.log("SUCCESS: " + JSON.stringify(respnose));
-	// 	});
-	// 	http.error(function(data, status) {
-	// 		message = "得到朋友訊息失敗 \n請問要再試一次嗎?";
-	// 	    Notification.confirm(, function(action){
-	// 	    	console.log("confirm get button " + JSON.stringify(action) + ";");
-	// 	    	if(action.buttonIndex == 2){
-	// 	    		listMsg(friend, phone);
-	// 	    	}
-	// 	    }, "網路不穩", "No,Yes");
-	// 	});
-	// }
+	function listMsg(phone){
+		var api = info.server + "/listMsg";
+		var data = {
+			sp: info.SP,
+			token: info.token,
+			phone: phone,
+		};
+		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
+		var http = $http({
+			method: 'POST',
+			url: api,
+			data: data,
+			timeout: info.timeout,
+		});
+		http.success(function(respnose, status) {
+			console.log("SUCCESS: " + JSON.stringify(respnose));
+		});
+		http.error(function(data, status) {
+			message = "同步朋友訊息失敗 \n請問要再試一次嗎?";
+		    Notification.confirm(message, function(action){
+		    	console.log("confirm get button " + JSON.stringify(action) + ";");
+		    	if(action.buttonIndex == 2){
+		    		listMsg(phone);
+		    	}
+		    }, "網路不穩", "No,Yes");
+		});
+	}
 
 	function cleanFriends(){
 		for(var i in friends){
@@ -220,7 +220,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		listFriend: listFriend,
 		sendMsg: sendMsg,
 		readMsg: readMsg,
-		// listMsg: listMsg,
+		listMsg: listMsg,
 		friends: friends,
 		getFriends: getFriends,
 		cleanFriends: cleanFriends,
