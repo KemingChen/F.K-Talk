@@ -97,7 +97,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 		var friends = FriendManager.friends;
 
 		var phone = data.phone;
-		if(friends[phone] != undefined){
+		if(friends[phone] !== undefined){
 			console.log("SUCCESS delete " + phone);
 			delete friends[phone];
 			FriendManager.notifyScope();
@@ -122,7 +122,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 
 		var mid = friends[phone].hasReadMsgId;
 		console.log('mid: ' + mid);
-		if(friends[phone] != undefined && mid < hasReadMsgId){
+		if(friends[phone] !== undefined && mid < hasReadMsgId){
 			friends[phone].hasReadMsgId = hasReadMsgId;
 			for(var i in friends[phone].chats){
 				var chat = friends[phone].chats[i];

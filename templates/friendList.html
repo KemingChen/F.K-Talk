@@ -17,6 +17,7 @@
                 <img ng-src="{{friend.photo}}">
 				<h2>{{friend.name}}</h2>
 				<span>{{friend.phone}}</span>
+                <span ng-show="friend.counter && friend.counter != 0" class="badge badge-assertive">{{friend.counter}}</span>
 	        </div>
         </div>
 	</ion-content>
