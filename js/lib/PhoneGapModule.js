@@ -193,3 +193,13 @@ angular.module('PhoneGap').factory('PushNotificationsFactory', function ($rootSc
     };
     return pushNotificationsFactory;
 });
+
+angular.module('PhoneGap').factory('Geolocation', function ($q, $window, PhoneGap) {
+    return {
+        getCurrentPosition: function(onSuccess, onError) {
+            PhoneGap.ready(function () {
+                $window.navigator.geolocation.getCurrentPosition(onSuccess, onError);
+            });
+        }
+    };
+});

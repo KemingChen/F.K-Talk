@@ -39,52 +39,41 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 	function listMsg(data){
 		var friends = FriendManager.friends;
 
-		var selfPhone = $rootScope.info.SP;
-		var key = "";
+		var phone = data.phone;
+		var msgs = data.Msgs;
 		var maxSenderMsgId = -1;
 
-		for(var i in data){
-			var chat = data[i];
-			console.log(JSON.stringify(chat));
+		var friend = friends[phone];
+		if(friend === undefined)
+			return;
+
+		friend.chats = {};
+		for(var i in msgs){
+			var chat = msgs[i];
+			// console.log(JSON.stringify(chat));
 			var messageId = chat.messageId;
 			var sender = chat.sender;
 			var receiver = chat.receiver;
 			var message = chat.message;
 			chat.timestamp = (new Date(chat.timestamp)).getTime();
 			var timestamp = chat.timestamp;
-			if(key == ""){
-				if(selfPhone != sender)
-					key = sender;
-				if(selfPhone != receiver)
-					key = receiver;
-				console.log("key: " + key);
-				friends[key].chats = {};
-			}
-
-			if(key && key != ""){
-				HostManager.setChatHasRead(friends[key], chat);
-				friends[key].chats[messageId] = chat;
-				if(chat.sender == key && messageId > maxSenderMsgId)
-                    maxSenderMsgId = messageId;
-			}
-			else{
-				break;
-			}
+			HostManager.setChatHasRead(friend, chat);
+			friend.chats[messageId] = chat;
+			if(chat.sender == key && messageId > maxSenderMsgId)
+				maxSenderMsgId = messageId;
 		}
-		if(key && key != ""){
-			var sender = key;
-			FriendManager.notifyScope();
-			HostManager.saveChats(key, friends[key].chats, function(){
-				if($window.location.href.match("#/Chat/" + sender) != null){
-					var hasReadMsgId = friends[sender].hasReadMsgId;
-					if(hasReadMsgId < maxSenderMsgId){
-						console.log("Send Read Msg: " + maxSenderMsgId + ", to " + sender);
-						FriendManager.readMsg(sender, maxSenderMsgId);
-						friends[sender].hasReadMsgId = maxSenderMsgId;
-					}
+		
+		FriendManager.notifyScope();
+		HostManager.saveChats(phone, friend.chats, function(){
+			if($window.location.href.match("#/Chat/" + phone) != null){
+				var hasReadMsgId = friends[phone].hasReadMsgId;
+				if(hasReadMsgId < maxSenderMsgId){
+					console.log("Send Read Msg: " + maxSenderMsgId + ", to " + phone);
+					FriendManager.readMsg(phone, maxSenderMsgId);
+					friend.hasReadMsgId = maxSenderMsgId;
 				}
-			});
-		}
+			}
+		});
 	}
 
 	function listFriend(data){

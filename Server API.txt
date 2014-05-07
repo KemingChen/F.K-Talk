@@ -1,6 +1,4 @@
-﻿Server API
-
-/addFriend
+﻿/addFriend
 	SP, token, phone
 
 	response Success
@@ -66,7 +64,7 @@
 	response Success
 		MQTT{ // 只要給 SP 即可
 			action: "listMsg",
-			data: [{messageId, sender, receiver, message, timestamp}, ...]
+			data: {phone, Msgs: [{messageId, sender, receiver, message, timestamp}, ...]}
 		}
 
 	response Fail
@@ -107,3 +105,54 @@
 
 	response Fail
 		"error Msg"
+
+/listCounter
+	SP, token
+	
+	response Success
+		MQTT{
+			action: "updateCounter",
+			data: [{phone, counter}, ...]
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+/listPublisher
+	SP
+	
+	response Success
+		MQTT{
+			action: "listPublisher",
+			data: [{pId, name}, ...]
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+/subscribePublisher
+	SP, token, pId
+	
+	response Success
+		MQTT{
+			action: "listPublisher",
+			data: [{pId, name}, ...]
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+PublishMsg // Server 用API
+	MQTT{
+		action: "getPublisherMsg",
+		data: [{pmId, name, message, timestamp}, ...]
+	}
