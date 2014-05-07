@@ -98,6 +98,28 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		});
 	}
 
+	function listCounter(){
+		var api = info.server + "/listCounter";
+		var data = {
+			sp: info.SP,
+			token: info.token,
+		};
+		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
+		var http = $http({
+			method: 'POST',
+			url: api,
+			data: data,
+			timeout: info.timeout,
+		});
+		http.success(function(respnose, status) {
+			console.log("SUCCESS: " + JSON.stringify(respnose));
+		});
+		http.error(function(data, status) {
+			console.log("網路不穩");
+			listCounter();
+		});
+	}
+
 	function sendMsg(phone, message){
 		var api = info.server + "/sendMsg";
 		var data = {
