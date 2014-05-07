@@ -134,12 +134,15 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 
 	function updateCounter(data){
 		var friends = FriendManager.friends;
+		// var update = false;
+
 		for(var i in data){
 			var phone = data[i].phone;
 			var counter = data[i].counter;
 
 			if(friends[phone] !== undefined){
 				friends[phone].counter = counter;
+				// update = true;
 			}
 		}
 	}

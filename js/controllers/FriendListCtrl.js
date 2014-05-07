@@ -1,6 +1,9 @@
 app.controller('FriendListCtrl', function($scope, HostManager, $window, FriendManager, $rootScope){
 	HostManager.checkLogin();
+
 	var friends = FriendManager.getFriends(function(){
+		FriendManager.listCounter();
+
 		console.log("search: " + $scope.search + ";");
 		$scope.filter($scope.search);
 		$scope.$apply();

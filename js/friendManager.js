@@ -240,6 +240,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		addFriend: addFriend,
 		delFriend: delFriend,
 		listFriend: listFriend,
+		listCounter: listCounter,
 		sendMsg: sendMsg,
 		readMsg: readMsg,
 		listMsg: listMsg,
