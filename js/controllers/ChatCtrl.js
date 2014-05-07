@@ -1,4 +1,4 @@
-app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, HostManager, FriendManager, Notification, DBManager){
+app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, HostManager, FriendManager, Notification){
 	HostManager.checkLogin();
 	var phone = $stateParams.phone;
 	var friends = FriendManager.getFriends(function(){

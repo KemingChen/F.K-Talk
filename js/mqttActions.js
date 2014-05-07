@@ -1,4 +1,4 @@
-app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManager, HostManager) {
+app.factory('MQTTActions', function($window, $rootScope, FriendManager, HostManager) {
 	function addMsg(data){
 		var friends = FriendManager.friends;
 
@@ -20,7 +20,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 			console.log("SP: " + key);
 			if(friends[key].chats === undefined)
 				friends[key].chats = {};
-			HostManager.setChatHasRead(friends[key], data);
+			HostManager.setChat(friends[key], data);
 			friends[key].chats[messageId] = data;
 			HostManager.saveChats(key, friends[key].chats, function(){
 					FriendManager.notifyScope();
@@ -31,6 +31,9 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 							FriendManager.readMsg(sender, messageId);
 							friends[sender].hasReadMsgId = messageId;
 						}
+					}
+					if($window.location.href.match("#/tab/FList") != null){
+						FriendManager.listCounter();
 					}
 			});
 		}
@@ -57,7 +60,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 			var message = chat.message;
 			chat.timestamp = (new Date(chat.timestamp)).getTime();
 			var timestamp = chat.timestamp;
-			HostManager.setChatHasRead(friend, chat);
+			HostManager.setChat(friend, chat);
 			friend.chats[messageId] = chat;
 			if(chat.sender == key && messageId > maxSenderMsgId)
 				maxSenderMsgId = messageId;
@@ -90,6 +93,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 			friend.show = true;
 			friends[friend.phone] = friend;
 		}
+		FriendManager.listCounter();
 		FriendManager.notifyScope();
 	}
 
@@ -126,7 +130,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 			friends[phone].hasReadMsgId = hasReadMsgId;
 			for(var i in friends[phone].chats){
 				var chat = friends[phone].chats[i];
-				FriendManager.setChatHasRead(phone, chat);
+				HostManager.setChat(friends[phone], chat);
 			}
 			FriendManager.notifyScope();
 		}

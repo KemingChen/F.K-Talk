@@ -34,7 +34,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
                 console.log(JSON.stringify(chat));
                 var messageId = chat.messageId;
                 friend.chats[messageId] = chat;
-                setChatHasRead(friend, chat);
+                setChat(friend, chat);
                 if(chat.sender == phone && messageId > maxSenderMsgId)
                     maxSenderMsgId = messageId;
             }
@@ -47,7 +47,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 		callback();
 	}
 
-	function setChatHasRead(friend, chat){
+	function setChat(friend, chat){
 		// console.log("hasReadMsgId: " + friends[friendPhone].hasReadMsgId + ", chat: " + JSON.stringify(chat) + ", friendPhone: " + friendPhone);
 		var isRead = friend.phone == chat.receiver && chat.messageId <= friend.hasReadMsgId;
 		console.log(chat.messageId + " isRead = " + isRead);
@@ -186,7 +186,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 
 		getChats: getChats,
 		saveChats: saveChats,
-		setChatHasRead: setChatHasRead,
+		setChat: setChat,
 
 		clean: clean,
 	};

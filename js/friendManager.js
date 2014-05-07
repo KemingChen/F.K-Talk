@@ -115,8 +115,13 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			console.log("SUCCESS: " + JSON.stringify(respnose));
 		});
 		http.error(function(data, status) {
-			console.log("網路不穩");
-			listCounter();
+			var message = "載入未讀訊息失敗 \n請問要再試一次嗎?";
+		    Notification.confirm(message, function(action){
+		    	console.log("confirm get button " + JSON.stringify(action) + ";");
+		    	if(action.buttonIndex == 2){
+		    		listCounter();
+		    	}
+		    }, "網路不穩", "No,Yes");
 		});
 	}
 
@@ -229,13 +234,6 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		}
 	}
 
-	function setChatHasRead(friendPhone, chat){
-		// console.log("hasReadMsgId: " + friends[friendPhone].hasReadMsgId + ", chat: " + JSON.stringify(chat) + ", friendPhone: " + friendPhone);
-		var isRead = friendPhone == chat.receiver && chat.messageId <= friends[friendPhone].hasReadMsgId;
-		console.log(chat.messageId + " isRead = " + isRead);
-		chat.isRead = isRead;
-	}
-
 	return {
 		addFriend: addFriend,
 		delFriend: delFriend,
@@ -248,6 +246,5 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 		getFriends: getFriends,
 		cleanFriends: cleanFriends,
 		notifyScope: notifyScope,
-		setChatHasRead: setChatHasRead,
 	};
 });
