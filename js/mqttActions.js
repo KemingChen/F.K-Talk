@@ -138,7 +138,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, HostMana
 
 	function updateCounter(data){
 		var friends = FriendManager.friends;
-		// var update = false;
+		var update = false;
 
 		for(var i in data){
 			var phone = data[i].phone;
@@ -146,8 +146,12 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, HostMana
 
 			if(friends[phone] !== undefined){
 				friends[phone].counter = counter;
-				// update = true;
+				update = true;
 			}
+		}
+
+		if(update && ($window.location.href.match("#/tab/FList") != null)){
+			FriendManager.notifyScope();
 		}
 	}
 

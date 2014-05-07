@@ -129,8 +129,8 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 		http.error(function(data, status) {
 			var message = "儲存失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
-		    	console.log("confirm get button " + action.buttonIndex + ";");
-		    	if(action.buttonIndex == 2){
+		    	console.log("confirm get button " + action + ";");
+		    	if(action == 2){
 		    		saveSetting(form);
 		    	}
 		    }, "網路不穩", "No,Yes");
@@ -165,7 +165,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 			var message = "儲存失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
 		    	console.log("confirm get button " + action + ";");
-		    	if(action.buttonIndex == 2){
+		    	if(action == 2){
 		    		register(form);
 		    	}
 		    }, "網路不穩", "No,Yes");

@@ -32,7 +32,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			var message = "加入朋友失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
 		    	console.log("confirm get button " + action.buttonIndex + ";");
-		    	if(action.buttonIndex == 2){
+		    	if(action == 2){
 		    		addFriend(phone);
 		    	}
 		    }, "網路不穩", "No,Yes");
@@ -60,7 +60,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			var message = "刪除" + friends[phone].name + "失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
 		    	console.log("confirm get button " + action.buttonIndex + ";");
-		    	if(action.buttonIndex == 2){
+		    	if(action == 2){
 		    		delFriend(phone);
 		    	}
 		    	else{
@@ -91,7 +91,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			var message = "載入朋友列表失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
 		    	console.log("confirm get button " + JSON.stringify(action) + ";");
-		    	if(action.buttonIndex == 2){
+		    	if(action == 2){
 		    		listFriend();
 		    	}
 		    }, "網路不穩", "No,Yes");
@@ -118,7 +118,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			var message = "載入未讀訊息失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
 		    	console.log("confirm get button " + JSON.stringify(action) + ";");
-		    	if(action.buttonIndex == 2){
+		    	if(action == 2){
 		    		listCounter();
 		    	}
 		    }, "網路不穩", "No,Yes");
@@ -154,7 +154,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			var message = "傳送訊息失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
 		    	console.log("confirm get button " + JSON.stringify(action) + ";");
-		    	if(action.buttonIndex == 2){
+		    	if(action == 2){
 		    		sendMsg(phone, message);
 		    	}
 		    }, "網路不穩", "No,Yes");
@@ -205,7 +205,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			message = "同步朋友訊息失敗 \n請問要再試一次嗎?";
 		    Notification.confirm(message, function(action){
 		    	console.log("confirm get button " + JSON.stringify(action) + ";");
-		    	if(action.buttonIndex == 2){
+		    	if(action == 2){
 		    		listMsg(phone);
 		    	}
 		    }, "網路不穩", "No,Yes");
