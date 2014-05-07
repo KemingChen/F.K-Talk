@@ -62,7 +62,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 			if(chat.sender == key && messageId > maxSenderMsgId)
 				maxSenderMsgId = messageId;
 		}
-		
+
 		FriendManager.notifyScope();
 		HostManager.saveChats(phone, friend.chats, function(){
 			if($window.location.href.match("#/Chat/" + phone) != null){
@@ -132,6 +132,18 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 		}
 	}
 
+	function updateCounter(data){
+		var friends = FriendManager.friends;
+		for(var i in data){
+			var phone = data[i].phone;
+			var counter = data[i].counter;
+
+			if(friends[phone] !== undefined){
+				friends[phone].counter = counter;
+			}
+		}
+	}
+
 	function error(data){
 		Notification.alert(data, null, "出了一點問題唷~~", "朕知道了");
 	}
@@ -143,6 +155,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, DBManage
 		deleteFriend: deleteFriend,
 		updateFriend: updateFriend,
 		hasRead: hasRead,
+		updateCounter: updateCounter,
 		error: error,
 	}
 });
