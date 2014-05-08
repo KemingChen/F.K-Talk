@@ -2,39 +2,34 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, HostMana
 	function addMsg(data){
 		var friends = FriendManager.friends;
 
-		var messageId = data.messageId;
-		var sender = data.sender;
-		var receiver = data.receiver;
-		var message = data.message;
-		var timestamp = data.timestamp;
+		var phone = data.phone;
+		var messageId = data.Msg.messageId;
+		var sender = data.Msg.sender;
+		var receiver = data.Msg.receiver;
+		var message = data.Msg.message;
+		var timestamp = data.Msg.timestamp;
 		console.log(JSON.stringify([messageId, sender, receiver, message, timestamp]));
 
-		var selfPhone = $rootScope.info.SP;
-		var key = "";
-		if(selfPhone != sender)
-			key = sender;
-		if(selfPhone != receiver)
-			key = receiver;
-		// DBManager.addMsg(messageId, sender, receiver, message, timestamp, function(){
-		if(key != ""){
-			console.log("SP: " + key);
-			if(friends[key].chats === undefined)
-				friends[key].chats = {};
-			HostManager.setChat(friends[key], data);
-			friends[key].chats[messageId] = data;
-			HostManager.saveChats(key, friends[key].chats, function(){
-					FriendManager.notifyScope();
-					if(selfPhone != sender && ($window.location.href.match("#/Chat/" + sender) != null)){
-						var hasReadMsgId = friends[sender].hasReadMsgId;
-						if(hasReadMsgId < messageId){
-							console.log("Send Read Msg: " + messageId + ", to " + sender);
-							FriendManager.readMsg(sender, messageId);
-							friends[sender].hasReadMsgId = messageId;
-						}
+		var friend = friends[phone];
+		if(friend){
+			console.log("SP: " + phone);
+			if(friend.chats === undefined)
+				friend.chats = {};
+			HostManager.setChat(friend, data);
+			friend.chats[messageId] = data;
+			HostManager.saveChats(phone, friend.chats, function(){
+				if(phone == sender && ($window.location.href.match("#/Chat/" + sender) != null)){
+					var hasReadMsgId = friends[sender].hasReadMsgId;
+					if(hasReadMsgId < messageId){
+						console.log("Send Read Msg: " + messageId + ", to " + sender);
+						FriendManager.readMsg(sender, messageId);
+						friends[sender].hasReadMsgId = messageId;
 					}
-					if($window.location.href.match("#/tab/FList") != null){
-						FriendManager.listCounter();
-					}
+				}
+				if(phone == sender && $window.location.href.match("#/tab/FList") != null){
+					friend.counter++;
+				}
+				FriendManager.notifyScope();
 			});
 		}
 	}
@@ -130,8 +125,9 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, HostMana
 			friends[phone].hasReadMsgId = hasReadMsgId;
 			for(var i in friends[phone].chats){
 				var chat = friends[phone].chats[i];
-				HostManager.setChat(friends[phone], chat);
+				HostManager.setChat(friends[phone], chat, "isRead");
 			}
+			friends[phone].counter = 0;
 			FriendManager.notifyScope();
 		}
 	}

@@ -47,11 +47,23 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 		callback();
 	}
 
-	function setChat(friend, chat){
+	function setChat(friend, chat, action){
+		action = action ? action : "all";
+		// .match(/{"type":(\d+),"data":({.*})}/) // match is special type
 		// console.log("hasReadMsgId: " + friends[friendPhone].hasReadMsgId + ", chat: " + JSON.stringify(chat) + ", friendPhone: " + friendPhone);
-		var isRead = friend.phone == chat.receiver && chat.messageId <= friend.hasReadMsgId;
-		console.log(chat.messageId + " isRead = " + isRead);
-		chat.isRead = isRead;
+		if(action == "isRead" || action == "all"){
+			var isRead = friend.phone == chat.receiver && chat.messageId <= friend.hasReadMsgId;
+			// console.log(chat.messageId + " isRead = " + isRead);
+			chat.isRead = isRead;
+		}
+
+		if(action == "all"){ // init Special Message
+			var specialMessage = chat.message.match(/{"type":(\d+),"data":({.*})}/);
+			if(specialMessage){
+				chat.type = JSON.parse(specialMessage[1]);
+				chat.data = JSON.parse(specialMessage[2]);
+			}
+		}
 	}
 
 	function checkLogin(){
