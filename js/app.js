@@ -45,6 +45,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
             templateUrl: 'templates/friendInfo.html',
             controller: 'FriendInfoCtrl'
         })
+        .state('Map', {
+            url: '/Map/:phone/:latitude/:longitude',
+            templateUrl: 'templates/map.html',
+            controller: 'MapCtrl'
+        })
         .state('tab.RList', {
             url: '/RList',
             views: {
@@ -60,7 +65,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
             controller: 'ChatCtrl'
         });
 
-    // $urlRouterProvider.otherwise("/Chat/0987103180");
+    // $urlRouterProvider.otherwise("/Map/0961276368/25.043032/121.535208");
 });
 
 app.run(function($rootScope, HostManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, FriendManager, PhoneGap) {

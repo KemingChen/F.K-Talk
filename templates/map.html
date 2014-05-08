@@ -1,0 +1,13 @@
+<div>
+    <div class="bar bar-header bar-positive">
+        <h1 class="title">{{title}}</h1>
+    </div>
+	<ion-content has-header="false" padding="false">
+		<div id="map-canvas" ng-init="init()">
+     	</div>
+     	<div class="item" ng-show="!isSelf">
+	     	<p>距離：{{distance.text}}</p>
+	     	<p>時間：{{duration.text}}</p>
+     	</div>
+	</ion-content>
+</div>
