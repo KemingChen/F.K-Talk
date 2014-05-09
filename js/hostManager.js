@@ -34,7 +34,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
                 console.log(JSON.stringify(chat));
                 var messageId = chat.messageId;
                 friend.chats[messageId] = chat;
-                setChat(friend, chat);
+                setChat(friend, chat, "isRead");
                 if(chat.sender == phone && messageId > maxSenderMsgId)
                     maxSenderMsgId = messageId;
             }
@@ -60,10 +60,14 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 		if(action == "all"){ // init Special Message
 			// var specialMessage = chat.message.match(/{"type":(\d+),"data":({.*})}/);
 
-			if(typeof chat.message === "object" && chat.message.type && chat.message.data){
-				chat.type = chat.message.type;
-				chat.data = chat.message.data;
-				chat.messag = "[Object]";
+			var result = chat.message.match(/{&#&type&#&:(\d+),&#&data&#&:({.*})}/);
+			// console.log(result);
+			if(result != null){
+				var chatObject = JSON.parse(chat.message.replace(/&#&/g, "\""));
+				console.log(JSON.stringify(chatObject));
+				chat.type = chatObject.type;
+				chat.data = chatObject.data;
+				chat.message = chatObject.message ? chatObject.message : "???";
 			}
 		}
 	}

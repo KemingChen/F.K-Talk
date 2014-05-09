@@ -21,7 +21,15 @@
         style="{{chat.sender != friend.phone ? 'text-align: right;' : ''}}"
     -->
     </ion-content>
-    <div class="bar bar-footer bar-positive">
-        <div class="title" ng-click="toTypeMessage()">輸入訊息</div>
+    <div class="bar bar-footer bar-positive row">
+        <button class="button col col-50" ng-click="toTypeMessage()">
+            輸入訊息
+        </button>
+        <button class="button col col-33" ng-click="toSendLocation()" ng-disabled="waitSendingLocation">
+            傳送位置
+        </button>
+        <!--
+        <div class="title" ng-click="toTypeMessage()"></div>
+        -->
     </div>
 </div>

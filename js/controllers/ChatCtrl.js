@@ -1,4 +1,4 @@
-app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, HostManager, FriendManager, Notification, $timeout){
+app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, HostManager, FriendManager, Notification, $timeout, Geolocation){
 	HostManager.checkLogin();
 	var phone = $stateParams.phone;
 	var friends = FriendManager.getFriends(function(){
@@ -6,6 +6,7 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 		$scope.$apply();
 		$timeout($ionicScrollDelegate.scrollBottom, 500);
 	});
+	$scope.waitSendingLocation = false;
 	$scope.friend = FriendManager.friends[phone];
 	// DBManager.listMsg(phone, function(maxSenderMsgId){
 	if(!$scope.friend.chats){
@@ -67,5 +68,55 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 			'輸入訊息',
 			['取消','送出']
 		);
+	}
+
+	$scope.toSendLocation = function(){
+		console.log("Sending Location...");
+		var message = "確定要將您的位置傳送給 " + $scope.friend.name;
+        Notification.confirm(message, function(action){
+            console.log("confirm get button " + action + ";");
+            if(action == 2){
+                $scope.waitSendingLocation = true;
+				$timeout(function(){
+					$scope.waitSendingLocation = false;
+				}, 1000);
+				Geolocation.getCurrentPosition(function(position) {
+					var latitude = position.coords.latitude;
+					var longitude = position.coords.longitude;
+					codeLatLng(latitude, longitude, function(address){
+						MessageObj = {
+			    			type: 1,
+			    			data: {
+			    				latitude: latitude,
+			    				longitude: longitude,
+			    			},
+			    			message: address,
+			    		}
+			    		FriendManager.sendMsg($scope.friend.phone, JSON.stringify(MessageObj));
+					});
+		    	});
+            }
+        }, "傳送位置", "No,Yes");
+	}
+
+	function codeLatLng(lat, lng, callback) {
+		var latlng = new google.maps.LatLng(lat, lng);
+		(new google.maps.Geocoder()).geocode({'latLng': latlng}, function(results, status) {
+			var address;
+			if (status == google.maps.GeocoderStatus.OK) {
+				if (results[1]) {
+					address = results[1].formatted_address;
+				} else {
+					address = "不知名的位置";
+					console.log('No results found');
+				}
+			} else {
+				address = "";
+				console.log('Geocoder failed due to: ' + status);
+			}
+			if(callback){
+				callback(address);
+			}
+		});
 	}
 });

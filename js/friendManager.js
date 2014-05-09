@@ -131,7 +131,7 @@ app.factory('FriendManager', function($http, $rootScope, Notification, HostManag
 			sp: info.SP,
 			token: info.token,
 			phone: phone,
-			message: message,
+			message: message.replace(/"/g, "&#&"),
 		};
 		console.log("use api: " + api + ", DATA: " + JSON.stringify(data));
 		var http = $http({
