@@ -58,10 +58,12 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 		}
 
 		if(action == "all"){ // init Special Message
-			var specialMessage = chat.message.match(/{"type":(\d+),"data":({.*})}/);
-			if(specialMessage){
-				chat.type = JSON.parse(specialMessage[1]);
-				chat.data = JSON.parse(specialMessage[2]);
+			// var specialMessage = chat.message.match(/{"type":(\d+),"data":({.*})}/);
+
+			if(typeof chat.message === "object" && chat.message.type && chat.message.data){
+				chat.type = chat.message.type;
+				chat.data = chat.message.data;
+				chat.messag = "[Object]";
 			}
 		}
 	}

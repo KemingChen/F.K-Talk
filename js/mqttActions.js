@@ -3,11 +3,12 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, HostMana
 		var friends = FriendManager.friends;
 
 		var phone = data.phone;
-		var messageId = data.Msg.messageId;
-		var sender = data.Msg.sender;
-		var receiver = data.Msg.receiver;
-		var message = data.Msg.message;
-		var timestamp = data.Msg.timestamp;
+		var chat = data.Msg;
+		var messageId = chat.messageId;
+		var sender = chat.sender;
+		var receiver = chat.receiver;
+		var message = chat.message;
+		var timestamp = chat.timestamp;
 		console.log(JSON.stringify([messageId, sender, receiver, message, timestamp]));
 
 		var friend = friends[phone];
@@ -15,8 +16,8 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, HostMana
 			console.log("SP: " + phone);
 			if(friend.chats === undefined)
 				friend.chats = {};
-			HostManager.setChat(friend, data);
-			friend.chats[messageId] = data;
+			HostManager.setChat(friend, chat);
+			friend.chats[messageId] = chat;
 			HostManager.saveChats(phone, friend.chats, function(){
 				if(phone == sender && ($window.location.href.match("#/Chat/" + sender) != null)){
 					var hasReadMsgId = friends[sender].hasReadMsgId;
@@ -57,7 +58,7 @@ app.factory('MQTTActions', function($window, $rootScope, FriendManager, HostMana
 			var timestamp = chat.timestamp;
 			HostManager.setChat(friend, chat);
 			friend.chats[messageId] = chat;
-			if(chat.sender == key && messageId > maxSenderMsgId)
+			if(chat.sender == phone && messageId > maxSenderMsgId)
 				maxSenderMsgId = messageId;
 		}
 

@@ -1,23 +1,27 @@
-app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, HostManager, FriendManager, Notification){
+app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, HostManager, FriendManager, Notification, $timeout){
 	HostManager.checkLogin();
 	var phone = $stateParams.phone;
 	var friends = FriendManager.getFriends(function(){
 		console.log("ChatCtrl Scope Apply");
-		$ionicScrollDelegate.scrollBottom();
 		$scope.$apply();
+		$timeout($ionicScrollDelegate.scrollBottom, 500);
 	});
 	$scope.friend = FriendManager.friends[phone];
 	// DBManager.listMsg(phone, function(maxSenderMsgId){
-	HostManager.getChats($scope.friend, function(maxSenderMsgId){
-		var hasReadMsgId = $scope.friend.hasReadMsgId;
-		console.log("hasReadMsgId: " + hasReadMsgId + ", maxSenderMsgId: " + maxSenderMsgId);
-		if(hasReadMsgId < maxSenderMsgId){
-			// 表示有未讀訊息
-			console.log("Send Read Msg: " + maxSenderMsgId + ", to " + phone);
-			FriendManager.readMsg(phone, maxSenderMsgId);
-			$scope.friend.hasReadMsgId = maxSenderMsgId;
-		}
-	});
+	if(!$scope.friend.chats){
+		console.log("Read " + $scope.friend.phone + " in localDB");
+		HostManager.getChats($scope.friend, function(maxSenderMsgId){
+			var hasReadMsgId = $scope.friend.hasReadMsgId;
+			console.log("hasReadMsgId: " + hasReadMsgId + ", maxSenderMsgId: " + maxSenderMsgId);
+			if(hasReadMsgId < maxSenderMsgId){
+				// 表示有未讀訊息
+				console.log("Send Read Msg: " + maxSenderMsgId + ", to " + phone);
+				FriendManager.readMsg(phone, maxSenderMsgId);
+				$scope.friend.hasReadMsgId = maxSenderMsgId;
+			}
+		});
+	}
+
     $scope.predicate = '-messageId';
     $scope.reverse = false;
 
