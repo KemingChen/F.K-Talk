@@ -49,6 +49,20 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 		FriendManager.listMsg(phone);
 	}
 
+	$scope.clickMessage = function(chat){
+		if(chat.type){
+			console.log("Click Message Type: " + chat.type);
+			switch(chat.type){
+				case 1://Map
+					var phone = chat.sender;
+					var latitude = chat.data.latitude;
+					var longitude = chat.data.longitude;
+					$window.location = "#/Map/" + phone + "/" + latitude + "/" + longitude;
+					break;
+			}
+		}
+	}
+
 	$scope.toTypeMessage = function(){
 		console.log("Type Message!!!");
 		Notification.prompt('Chat With ' + $scope.friend.name,
@@ -85,7 +99,7 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 					var longitude = position.coords.longitude;
 					codeLatLng(latitude, longitude, function(address){
 						MessageObj = {
-			    			type: 1,
+			    			type: 1,// type == 1 -> Map
 			    			data: {
 			    				latitude: latitude,
 			    				longitude: longitude,
