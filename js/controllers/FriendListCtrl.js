@@ -6,6 +6,11 @@ app.controller('FriendListCtrl', function($scope, HostManager, $window, FriendMa
 		$scope.filter($scope.search);
 		$scope.$apply();
 	});
+
+	if(friends.length > 0){
+		FriendManager.listCounter();
+	}
+
 	$scope.search = "";
 	$scope.leftButtons = [{
 		type: 'button-positive',

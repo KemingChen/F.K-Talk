@@ -15,6 +15,7 @@ app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation
 	$scope.title = "地圖";
 
 	$scope.init = function(){
+		console.log("IsSelf: " + $scope.isSelf);
 		if($scope.isSelf){
 			var origin = new google.maps.LatLng(latitude, longitude);
 			mapOptions.center = origin;
@@ -30,6 +31,7 @@ app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation
 		}
 		else{
 			Geolocation.getCurrentPosition(function(position) {
+				console.log("Self Position: " + JSON.stringify(position));
 				var directionsService = new google.maps.DirectionsService();
 
 				var origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
@@ -50,11 +52,14 @@ app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation
 					travelMode: google.maps.TravelMode.WALKING
 				};
 				directionsService.route(request, function(result, status) {
+					console.log(JSON.stringify(status));
 					if (status == google.maps.DirectionsStatus.OK) {
+						console.log(JSON.stringify(result));
 						var leg = result.routes[0].legs[0];
+						directionsDisplay.setDirections(result);
 						$scope.distance.text = leg.distance.text;
 						$scope.duration.text = leg.duration.text;
-						$scope.$apply();
+						
 						var destinationMarker = new MarkerWithLabel({
 							position: new google.maps.LatLng(leg.end_location.k, leg.end_location.A),
 							labelContent: friend ? friend.name : "???",
@@ -67,10 +72,10 @@ app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation
 							labelAnchor: new google.maps.Point(30, 0),
 							labelClass: "labels"
 						});
-						directionsDisplay.setDirections(result);
 						originMarker.setMap(map);
 						destinationMarker.setMap(map);
 						directionsDisplay.setMap(map);
+						$scope.$apply();
 					}
 				});
 			});

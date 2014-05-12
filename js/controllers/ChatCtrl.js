@@ -117,15 +117,17 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 		var latlng = new google.maps.LatLng(lat, lng);
 		(new google.maps.Geocoder()).geocode({'latLng': latlng}, function(results, status) {
 			var address;
+			console.log(JSON.stringify(status));
 			if (status == google.maps.GeocoderStatus.OK) {
 				if (results[1]) {
+					console.log(JSON.stringify(results));
 					address = results[1].formatted_address;
 				} else {
 					address = "不知名的位置";
 					console.log('No results found');
 				}
 			} else {
-				address = "";
+				address = "Get Geocoder Fail";
 				console.log('Geocoder failed due to: ' + status);
 			}
 			if(callback){

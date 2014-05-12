@@ -66,7 +66,7 @@ app.factory('HostManager', function($window, $rootScope, $http, Notification, $i
 				chat.type = JSON.parse(result[1]);
 				chat.data = JSON.parse(result[2].replace(/&#&/g, '"'));
 				chat.message = result[3];
-				console.log(chat);
+				console.log("Chat: " + JSON.stringify(chat));
 			}
 		}
 	}
