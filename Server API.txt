@@ -1,10 +1,48 @@
-﻿/addFriend
-	SP, token, phone
+﻿* type => 0[FKTalk], 1[FB], 2[Google]
+
+/login
+	type, arg{{phone, password} | FBToken | GoogleToken}, gcmRegId
+	
+	response Success
+		{token, photo, phone, name, mail, type, arg}
+	
+	response Fail
+		{error}
+
+/signup
+	photo, phone, name, mail, type, arg{password | FBID | googleID}
 
 	response Success
+		{}
+
+	response Fail
+		{error}
+
+/bind
+	token, type, arg
+	
+	response Success
+		{}
+
+	response Fail
+		{error}
+
+/setting
+	token, photo, name, mail, password
+
+	response Success
+		{}
+
+	response Fail
+		{error}
+
+/addFriends
+	token, type, args[arg, arg, ...]
+	
+	response Success
 		MQTT{ // 要對 "加入方" 跟 "被加方" 都要送相對應的訊息
-			action: "updateFriend",
-			data: {name, phone, photo, mail, hasReadMsgId}
+			action: "updateFriends",
+			data: [{name, phone, photo, mail, hasReadMsgId}, {...}, ...]
 		}
 
 	response Fail
@@ -12,13 +50,13 @@
 			action: "error",
 			data: "Error Msg"
 		}
-
-/listFriend
-	SP, token
+	
+/listFriends
+	token
 
 	response Success
 		MQTT{ 
-			action: "listFriend",
+			action: "listFriends",
 			data: [{name, phone, photo, mail, hasReadMsgId}, {...}, ...]
 		}
 
@@ -28,13 +66,43 @@
 			data: "Error Msg"
 		}
 
+/delFriend
+	token, phone
+
+	response Success
+		MQTT{ // 要對 "刪除方" 跟 "被刪除方" 都要送相對應的訊息
+			action: "deleteFriend",
+			data: "phone"
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
+/listCounter
+	token
+	
+	response Success
+		MQTT{
+			action: "updateCounter",
+			data: [{phone, counter}, ...]
+		}
+
+	response Fail
+		MQTT{
+			action: "error",
+			data: "Error Msg"
+		}
+
 /sendMsg
-	SP, token, phone, message
+	token, phone, message
 
 	response Success
 		MQTT{ // 要對 "送方" 跟 "被送方" 都要送一樣的訊息
 			action: "addMsg",
-			data: {messageId, sender, receiver, message, timestamp}
+			data: {phone, Msg: {messageId, sender, receiver, message, timestamp}}
 		}
 
 	response Fail
@@ -44,7 +112,7 @@
 		}
 
 /readMsg
-	SP, token, phone, hasReadMsgId
+	token, phone, hasReadMsgId
 
 	response Success
 		MQTT{
@@ -59,7 +127,7 @@
 		}
 
 /listMsg
-	SP, token, phone
+	token, phone
 
 	response Success
 		MQTT{ // 只要給 SP 即可
@@ -73,56 +141,8 @@
 			data: "Error Msg"
 		}
 
-/delFriend
-	SP, token, phone
-
-	response Success
-		MQTT{ // 要對 "刪除方" 跟 "被刪除方" 都要送相對應的訊息
-			action: "deleteFriend",
-			data: "phone"
-		}
-
-	response Fail
-		MQTT{
-			action: "error",
-			data: "Error Msg"
-		}
-
-/signup
-	photo, phone, name, mail, password, gcmRegId,
-
-	response Success
-		{photo, phone, name, mail, gcmRegId, token}
-
-	response Fail
-		"error Msg"
-
-/setting
-	token, photo, name, mail, password
-
-	response Success
-		{photo, phone, name, mail, gcmRegId, token}
-
-	response Fail
-		"error Msg"
-
-/listCounter
-	SP, token
-	
-	response Success
-		MQTT{
-			action: "updateCounter",
-			data: [{phone, counter}, ...]
-		}
-
-	response Fail
-		MQTT{
-			action: "error",
-			data: "Error Msg"
-		}
-
 /listPublisher
-	SP
+	token
 	
 	response Success
 		MQTT{
@@ -137,7 +157,7 @@
 		}
 
 /subscribePublisher
-	SP, token, pId
+	token, pId
 	
 	response Success
 		MQTT{
