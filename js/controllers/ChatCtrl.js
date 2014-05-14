@@ -1,23 +1,23 @@
-app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, HostManager, FriendManager, Notification, $timeout, Geolocation){
-	HostManager.checkLogin();
+app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, FKManager, ServerAPI, Notification, $timeout, Geolocation){
+	FKManager.checkLogin();
 	var phone = $stateParams.phone;
-	var friends = FriendManager.getFriends(function(){
+	var friends = ServerAPI.getFriends(function(){
 		console.log("ChatCtrl Scope Apply");
 		$scope.$apply();
 		$timeout($ionicScrollDelegate.scrollBottom, 500);
 	});
 	$scope.waitSendingLocation = false;
-	$scope.friend = FriendManager.friends[phone];
+	$scope.friend = ServerAPI.friends[phone];
 	// DBManager.listMsg(phone, function(maxSenderMsgId){
 	if(!$scope.friend.chats){
 		console.log("Read " + $scope.friend.phone + " in localDB");
-		HostManager.getChats($scope.friend, function(maxSenderMsgId){
+		FKManager.getChats($scope.friend, function(maxSenderMsgId){
 			var hasReadMsgId = $scope.friend.hasReadMsgId;
 			console.log("hasReadMsgId: " + hasReadMsgId + ", maxSenderMsgId: " + maxSenderMsgId);
 			if(hasReadMsgId < maxSenderMsgId){
 				// 表示有未讀訊息
 				console.log("Send Read Msg: " + maxSenderMsgId + ", to " + phone);
-				FriendManager.readMsg(phone, maxSenderMsgId);
+				ServerAPI.readMsg(phone, maxSenderMsgId);
 				$scope.friend.hasReadMsgId = maxSenderMsgId;
 			}
 		});
@@ -41,12 +41,12 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 
 	$scope.send = function(){
 		var message = $scope.message;
-		FriendManager.sendMsg(phone, message);
+		ServerAPI.sendMsg(phone, message);
 		document.getElementById("message").value = "";
 	}
 
 	$scope.listMsg = function(){
-		FriendManager.listMsg(phone);
+		ServerAPI.listMsg(phone);
 	}
 
 	$scope.clickMessage = function(chat){
@@ -75,7 +75,7 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 					// 送出
 					var message = answer.input1;
 					if(message.trim() != ""){
-						FriendManager.sendMsg($scope.friend.phone, message);
+						ServerAPI.sendMsg($scope.friend.phone, message);
 					}
 				}
 			},
@@ -106,7 +106,7 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 			    			},
 			    			message: address,
 			    		}
-			    		FriendManager.sendMsg($scope.friend.phone, JSON.stringify(MessageObj));
+			    		ServerAPI.sendMsg($scope.friend.phone, JSON.stringify(MessageObj));
 					});
 		    	});
             }

@@ -24,7 +24,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 
 	function isError(respnose){
 		console.log("RESPONSE: " + JSON.stringify(respnose));
-		return typeof respnose.error === "string";
+		return typeof respnose.error === "string" || typeof respnose.errorMsg === "string";
 	}
 
 	function showNetworkError(message, callback){
@@ -42,7 +42,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		}
 	}
 
-	function login(loginForm, onFail){
+	function login(loginForm){
 		var http = toRequest("/login", loginForm);
 
 		http.success(function(respnose, status) {
@@ -51,8 +51,8 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 			console.log("SUCCESS: " + toLog(respnose, 300));
 			if(!isError(respnose)){
 				FKManager.setHost({
-					type: form.type,
-					arg: form.arg,
+					type: loginForm.type,
+					arg: loginForm.arg,
 				});
 				$rootScope.saveToInfo(respnose);
 				$rootScope.onLoginSuccess(respnose);
@@ -64,7 +64,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		http.error(function(data, status){
 			$rootScope.showLoading("網路不穩, Login Retry...");
 			$timeout(function(){
-				login(loginForm, onFail);
+				login(loginForm);
 			}, 1000);
 		});
 	}
@@ -154,12 +154,12 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		});
 	}
 
-	function listFriend(){
-		var http = toRequest("/listFriend", {}, true);
+	function listFriends(){
+		var http = toRequest("/listFriends", {}, true);
 		http.success(doNothing);
 		http.error(function(data, status){
 			showNetworkError("載入朋友列表失敗 \n請問要再試一次嗎?", function(){
-				listFriend();
+				listFriends();
 			});
 		});
 	}

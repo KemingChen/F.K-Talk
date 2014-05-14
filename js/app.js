@@ -12,6 +12,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			templateUrl: 'templates/login.html',
 			controller: 'LoginCtrl'
 		})
+		.state('fkLogin', {
+			url: '/fkLogin',
+			templateUrl: 'templates/fkLogin.html',
+			controller: 'LoginCtrl'
+		})
 		.state('setting', {
 			url: '/setting',
 			templateUrl: 'templates/setting.html',
@@ -65,18 +70,26 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			controller: 'ChatCtrl'
 		});
 
-	// $urlRouterProvider.otherwise("/Map/0961276368/25.043032/121.535208");
+	$urlRouterProvider.otherwise("/login");
 });
 
-app.run(function($rootScope, FMManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, ServerAPI, PhoneGap) {
+app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, ServerAPI, PhoneGap) {
 	var version = "FKTalk v2.0";
 	console.log(version);
 	$rootScope.info = {
 		server: "http://140.124.181.7:8888",
 		timeout: 15000,
 		gcmSenderId: '389225011519',
+		FBAppId: '270369976420378',
+		loginType: {
+			Register: -1,
+			FKTalk: 0,
+			Facebook: 1, 
+			Google: 2,
+		},
 	};
-	
+	openFB.init($rootScope.info.FBAppId);
+
 	$rootScope.saveToInfo = function(data){
 		for(i in data){
 			$rootScope.info[i] = data[i];
@@ -114,7 +127,7 @@ app.run(function($rootScope, FMManager, $window, PushNotificationsFactory, $ioni
 	}
 
 	$rootScope.onLoginSuccess = function(response){
-		FriendManager.listFriend();
+		ServerAPI.listFriends();
 		PhoneGap.ready(function(){
             var clientId = "FK" + response.phone;
             var topic = response.token;
@@ -130,8 +143,8 @@ app.run(function($rootScope, FMManager, $window, PushNotificationsFactory, $ioni
 		$rootScope.testLogin();
 	};
 
-	$rootScope.showLoading(version);
-	PushNotificationsFactory();
+	// $rootScope.showLoading(version);
+	// PushNotificationsFactory();
 
 	$window.receiveMessage = function(payload) {
 		var message = payload.length < 2000 ? payload : payload.length;

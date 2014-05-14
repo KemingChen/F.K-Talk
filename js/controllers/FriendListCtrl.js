@@ -1,14 +1,16 @@
-app.controller('FriendListCtrl', function($scope, HostManager, $window, FriendManager, $rootScope){
-	HostManager.checkLogin();
+app.controller('FriendListCtrl', function($scope, FKManager, $window, ServerAPI){
+	FKManager.checkLogin();
 	
-	var friends = FriendManager.getFriends(function(){
+	FKManager.registerCallback(function(){
 		console.log("search: " + $scope.search + ";");
 		$scope.filter($scope.search);
 		$scope.$apply();
 	});
 
+	var friends = FKManager.friends;
+
 	if(friends.length > 0){
-		FriendManager.listCounter();
+		ServerAPI.listCounter();
 	}
 
 	$scope.search = "";
@@ -24,8 +26,7 @@ app.controller('FriendListCtrl', function($scope, HostManager, $window, FriendMa
 		type: 'button-positive',
 		content: "重新整理",
 		tap: function(){
-			FriendManager.cleanFriends();
-			FriendManager.listFriend();
+			ServerAPI.listFriend();
 		},
 	}];
 

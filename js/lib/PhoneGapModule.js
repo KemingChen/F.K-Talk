@@ -16,34 +16,40 @@ angular.module('PhoneGap', []).factory('PhoneGap', function ($q, $rootScope, $wi
 angular.module('PhoneGap').factory('Notification', function ($q, $window, PhoneGap) {
     return {
         alert: function (message, alertCallback, title, buttonName) {
-            PhoneGap.ready(function () {
-                $window.navigator.notification.alert(message, alertCallback, title, buttonName);
-            });
+            if($window.navigator && $window.navigator.notification)
+                PhoneGap.ready(function () {
+                    $window.navigator.notification.alert(message, alertCallback, title, buttonName);
+                });
         },
         confirm: function (message, confirmCallback, title, buttonLabels) {
-            PhoneGap.ready(function () {
-                $window.navigator.notification.confirm(message, confirmCallback, title, buttonLabels);
-            });
+            if($window.navigator && $window.navigator.notification)
+                PhoneGap.ready(function () {
+                    $window.navigator.notification.confirm(message, confirmCallback, title, buttonLabels);
+                });
         },
         prompt: function (message, promptCallback, title, buttonLabels, defaultText) {
-            PhoneGap.ready(function () {
-                $window.navigator.notification.prompt(message, promptCallback, title, buttonLabels, defaultText);
-            });
+            if($window.navigator && $window.navigator.notification)
+                PhoneGap.ready(function () {
+                    $window.navigator.notification.prompt(message, promptCallback, title, buttonLabels, defaultText);
+                });
         },
         beep: function (times) {
-            PhoneGap.ready(function () {
-                $window.navigator.notification.beep(times);
-            });
+            if($window.navigator && $window.navigator.notification)
+                PhoneGap.ready(function () {
+                    $window.navigator.notification.beep(times);
+                });
         },
         vibrate: function (milliseconds) {
-            PhoneGap.ready(function () {
-                $window.navigator.notification.vibrate(milliseconds);
-            });
+            if($window.navigator && $window.navigator.notification)
+                PhoneGap.ready(function () {
+                    $window.navigator.notification.vibrate(milliseconds);
+                });
         },
         status: function (title, message){
-            PhoneGap.ready(function () {
-                $window.plugins.statusBarNotification.notify(title, message);
-            });
+            if($window.plugins && $window.plugins.statusBarNotification)
+                PhoneGap.ready(function () {
+                    $window.plugins.statusBarNotification.notify(title, message);
+                });
         }
     };
 });

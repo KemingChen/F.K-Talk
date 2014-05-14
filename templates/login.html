@@ -1,32 +1,18 @@
 <div>
-    <ion-header-bar
-        type="bar-positive"
-        left-buttons="leftButtons"
-        right-buttons="rightButtons" 
-        title="'F.K-Talk'">
-    </ion-header-bar>
-	<ion-content has-header="true" padding="true">
-			<div class="list card">
-				<div class="list">
-					<label class="item item-input">
-					    <span class="input-label">電話: </span>
-					    <input type="tel" ng-model="loginForm.phone" ng-change="loginFormSaver('phone', loginForm.phone)">
-					</label>
-					<label class="item item-input">
-					    <span class="input-label">密碼: </span>
-					    <input type="password" ng-model="loginForm.password" ng-change="loginFormSaver('password', loginForm.password)">
-					</label>
-				</div>
-				<div class="list">
-					<a class="item button button-energized button-block fk-bloder" ng-click="login()">
-						登入
-					</a>
-				<div>
-				<div class="list">
-					<a class="item button button-calm button-block fk-bloder" ng-click="register()">
-						免費註冊
-					</a>
-				<div>
-			</div>
+	<ion-content has-header="true" padding="true" style="text-align: center;">
+		<button class="button button-positive" style="width: 75%;margin-top: 100px;"
+			ng-click="LoginAction(LoginType.Facebook)">
+			<span class="fk-bloder">Facebook</span> &nbsp; Login
+		</button>
+		<button class="button button-positive" style="width: 75%;margin-top: 20px;"
+			ng-click="LoginAction(LoginType.FKTalk)">
+			<span class="fk-bloder">FKTalk</span> &nbsp; Login
+		</button>
 	</ion-content>
+	<div class="bar bar-footer bar-energized"
+		ng-click="LoginAction(LoginType.Register)">
+		<div class="title">
+			Register
+		</div>
+	</div>
 </div>

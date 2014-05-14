@@ -1,6 +1,6 @@
-app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation, $window, FriendManager){
+app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation, FKManager){
 	var phone = $stateParams.phone;
-	var friend = FriendManager.friends[phone];
+	var friend = FKManager.friends[phone];
 	var latitude = $stateParams.latitude;
 	var longitude = $stateParams.longitude;
 

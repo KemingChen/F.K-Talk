@@ -1,28 +1,8 @@
-app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, HostManager, $window, $ionicLoading){
-	$scope.loginForm = {
-		phone: "",
-		password: "",
-	};
-
-	$scope.login = function(){
-		if(!checkInput())
-			return;
-		$rootScope.loading = $ionicLoading.show({
-            content: "Login...",
-            animation: 'fade-in',
-            showBackdrop: true,
-            maxWidth: 200,
-            showDelay: 0,
-        });
-		HostManager.login($scope.loginForm, alertCallback);
-
-		function alertCallback(){
-			$scope.loginForm = {
-				phone: "",
-				password: "",
-			};
-		}
-	};
+app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI, $window){
+	var loginType = $rootScope.info.loginType;
+	
+	$scope.loginForm = {};
+	$scope.LoginType = loginType;
 
 	$scope.register = function(){
 		$window.location = "#/setting";
@@ -44,4 +24,45 @@ app.controller('LoginCtrl', function($scope, $rootScope, $http, Notification, Ho
 		Notification.alert(log, null, "Alert", "確定");
 		return false;
 	}
+
+	$scope.LoginAction = function(type){
+		switch(type){
+			case loginType.FKTalk:
+				console.log("Login With FKTalk");
+				$window.location = "#/fkLogin";
+				break;
+			case loginType.Facebook:
+				console.log("Login With Facebook");
+				$rootScope.showLoading("Login...");
+				openFB.login('email', function(fbToken){
+					ServerAPI.login({
+						type: type,
+						arg: fbToken,
+						gcmRegId: $rootScope.info.gcmRegId;
+					});
+				}, function(error){
+					Notification.alert('Facebook login failed: ' + error.error_description, null, "Alert", "確定");
+				});
+				break;
+			case loginType.Google:
+				console.log("Login With Google");
+				break;
+			case loginType.Register:
+				console.log("Login With Register");
+				break;
+			default:
+				console.log("Unknown");
+		}
+	}
+
+	$scope.doFKLogin = function(){
+		if(!checkInput())
+			return;
+		$rootScope.showLoading("Login...");
+		ServerAPI.login({
+			type: loginType.FKTalk,
+			arg: $scope.loginForm,
+			gcmRegId: $rootScope.info.gcmRegId;
+		});
+	};
 });

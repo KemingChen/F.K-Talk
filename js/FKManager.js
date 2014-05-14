@@ -87,7 +87,6 @@ app.factory('FKManager', function($window, $rootScope) {
 			scopeCallback = callback;
 		else
 			scopeCallback = null;
-		return friends;
 	}
 
 	function notifyScope(){
@@ -108,5 +107,6 @@ app.factory('FKManager', function($window, $rootScope) {
 		clean: clean,
 		registerCallback: registerCallback,
 		notifyScope: notifyScope,
+		friends: friends,
 	}
 });

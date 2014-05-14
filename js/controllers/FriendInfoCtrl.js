@@ -1,14 +1,14 @@
-app.controller('FriendInfoCtrl', function($scope, $stateParams, $window, HostManager, FriendManager){
-	HostManager.checkLogin();
+app.controller('FriendInfoCtrl', function($scope, $stateParams, $window, FKManager, ServerAPI){
+	FKManager.checkLogin();
 	var phone = $stateParams.phone;
-	$scope.friend = FriendManager.friends[phone];
+	$scope.friend = ServerAPI.friends[phone];
 
 	$scope.rightButtons = [{
 		type: 'button-positive',
 		content: "刪除此好友",
 		tap: function(){
-			// FriendManager.friends[phone].show = false;
-			FriendManager.delFriend(phone);
+			// ServerAPI.friends[phone].show = false;
+			ServerAPI.delFriend(phone);
 			$window.location = "#/tab/FList";
 		},
 	}];
