@@ -34,3 +34,7 @@ a, abbr, address, article, aside, audio, b, blockquote, body, canvas, caption, c
 	border: 2px solid black;
 	white-space: nowrap;
 }
+
+.fk-background{
+	background-image: url("../images/tiles.png");
+}

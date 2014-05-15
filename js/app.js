@@ -17,6 +17,21 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			templateUrl: 'templates/fkLogin.html',
 			controller: 'LoginCtrl'
 		})
+		.state('regInputPhone', {
+			url: '/regInputPhone',
+			templateUrl: 'templates/regInputPhone.html',
+			controller: 'LoginCtrl'
+		})
+		.state('regBind', {
+			url: '/regBind/:phone',
+			templateUrl: 'templates/regBind.html',
+			controller: 'LoginCtrl'
+		})
+		.state('regInputInfo', {
+			url: '/regInputInfo',
+			templateUrl: 'templates/regInputInfo.html',
+			controller: 'LoginCtrl'
+		})
 		.state('setting', {
 			url: '/setting',
 			templateUrl: 'templates/setting.html',
@@ -88,7 +103,6 @@ app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ioni
 			Google: 2,
 		},
 	};
-	openFB.init($rootScope.info.FBAppId);
 
 	$rootScope.saveToInfo = function(data){
 		for(i in data){
