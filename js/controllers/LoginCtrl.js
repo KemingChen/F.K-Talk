@@ -2,7 +2,7 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 	var fkLoginType = $rootScope.info.loginType;
 	var phone = $stateParams.phone;
 
-	$scope.loginForm = {};
+	$scope.form = {};
 	$scope.loginType = fkLoginType;
 	$scope.loginActions = {};
 	$scope.loginActions[fkLoginType.Facebook] = loginWithFacebook;
@@ -46,14 +46,27 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 		$rootScope.showLoading("Login...");
 		ServerAPI.login({
 			type: fkLoginType.FKTalk,
-			arg: $scope.loginForm,
+			arg: $scope.form,
 			gcmRegId: $rootScope.info.gcmRegId,
 		});
+
+		function checkInput(){
+			var log = "";
+			if($scope.form.phone.trim() == "")
+				log += "Please type Phone Number!!!";
+			else if($scope.form.password.trim() == "")
+				log += "Please type Password!!!";
+			if(log == "")
+				return true;
+			console.log(log);
+			Notification.alert(log, null, "Alert", "確定");
+			return false;
+		}
 	}
 
 	$scope.toBind = function(){
-		if($scope.loginForm.phone && $scope.loginForm.phone.length == 10){
-			$window.location = "#/regBind/" + $scope.loginForm.phone;
+		if($scope.form.phone && $scope.form.phone.length == 10){
+			$window.location = "#/regBind/" + $scope.form.phone;
 		}
 		else{
 			Notification.alert("電話號碼長度不對", null, "Alert", "確定");
@@ -83,19 +96,41 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 
 	function registerWithFKTalk(){
 		console.log("Register With FKTalk");
+		$window.location = "#/regInputInfo/" + phone;
+	}
+
+	$scope.initInputInfo = function(){
+		$scope.title = "基本資料";
+		$scope.rightBtn = undefined;
+		$scope.submit = "註冊";
+		$scope.form = {
+			type: fkLoginType.FKTalk,
+			photo: "images/NoPhoto.jpg",
+			phone: phone,
+		};
+	}
+
+	$scope.doFKSignup = function(){
+		if(!checkInput())
+			return;
+		$rootScope.showLoading("註冊中...");
+		ServerAPI.signup($scope.form);
+
+		function checkInput(){
+			var log = "";
+			if($scope.form.name.trim() == "")
+				log += "Please type Name!!!";
+			else if($scope.form.mail.trim() == "")
+				log += "Please type Email!!!";
+			else if($scope.form.arg.trim() == "")
+				log += "Please type Password!!!";
+			else if($scope.form.password != $scope.form.arg)
+				log += "Password is Not Same!!!";
+			if(log == "")
+				return true;
+			console.log(log);
+			Notification.alert(log, null, "Alert", "確定");
+			return false;
+		}
 	}
 });
-/*
-	function checkInput(){
-		var log = "";
-		if($scope.loginForm.phone == "")
-			log += "Please type Phone Number!!!";
-		else if($scope.loginForm.password == "")
-			log += "Please type Password!!!";
-		if(log == "")
-			return true;
-		console.log(log);
-		Notification.alert(log, null, "Alert", "確定");
-		return false;
-	}
-*/

@@ -28,8 +28,8 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			controller: 'LoginCtrl'
 		})
 		.state('regInputInfo', {
-			url: '/regInputInfo',
-			templateUrl: 'templates/regInputInfo.html',
+			url: '/regInputInfo/:phone',
+			templateUrl: 'templates/inputInfo.html',
 			controller: 'LoginCtrl'
 		})
 		.state('setting', {
