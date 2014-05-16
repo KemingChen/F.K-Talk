@@ -43,6 +43,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 	}
 
 	function login(loginForm){
+		console.log(JSON.stringify(loginForm));
 		var http = toRequest("/login", loginForm);
 
 		http.success(function(respnose, status) {
@@ -58,7 +59,10 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 				$rootScope.onLoginSuccess(respnose);
 			}
 			else{
-				Notification.alert(respnose.error, null, "Error", "確定");
+				Notification.alert(respnose.error, function(){
+					FKManager.setHost({});
+					$rootScope.testLogin();
+				}, "Error", "確定");
 			}
 		});
 		http.error(function(data, status){
@@ -69,9 +73,23 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		});
 	}
 
+	function checkIsMember(data, callback){
+		var http = toRequest("/checkIsMember", data);
+		http.success(function(respnose, status) {
+			callback(respnose.result);
+		});
+		http.error(function(data, status){
+			showNetworkError("請問要再試一次嗎?", function(){
+				checkIsMember(data, callback);
+			});
+		});
+	}
+
 	function signup(form){
 		var http = toRequest("/signup", form);
 		http.success(function(respnose, status) {
+			$rootScope.hideLoading();
+
 			if(!isError(respnose)){
 				FKManager.setHost({
 					type: form.type,
@@ -107,6 +125,8 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 	function setting(form){
 		var http = toRequest("/setting", form, true);
 		http.success(function(respnose, status) {
+			$rootScope.hideLoading();
+
 			if(!isError(respnose)){
 				$rootScope.saveToInfo({
 					photo: form.photo,
@@ -120,7 +140,10 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 			}
 		});
 		http.error(function(data, status){
+			$rootScope.hideLoading();
+
 			showNetworkError("儲存失敗 \n請問要再試一次嗎?", function(){
+				$rootScope.showLoading("Retry...");
 				setting(form);
 			});
 		});
@@ -214,6 +237,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 
 	return {
 		login: login,
+		checkIsMember: checkIsMember,
 		signup: signup,
 		bind: bind,
 		setting: setting,

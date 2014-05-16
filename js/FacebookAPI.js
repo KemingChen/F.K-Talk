@@ -1,5 +1,6 @@
 app.factory('FacebookAPI', function($window, $rootScope, Notification) {
 	function errorHandle(res){
+		$rootScope.hideLoading();
 		console.log(JSON.stringify(res));
 		Notification.alert('Facebook Failed: ' + res.error, null, "Alert", "確定");
 	}

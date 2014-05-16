@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI, $window, $stateParams, FacebookAPI){
+app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI, $window, $stateParams, FacebookAPI, $timeout){
 	var fkLoginType = $rootScope.info.loginType;
 	var phone = $stateParams.phone;
 
@@ -66,7 +66,14 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 
 	$scope.toBind = function(){
 		if($scope.form.phone && $scope.form.phone.length == 10){
-			$window.location = "#/regBind/" + $scope.form.phone;
+			ServerAPI.checkIsMember($scope.form, function(isMember){
+				if(isMember){
+					Notification.alert("此電話號碼已被註冊", null, "Alert", "確定");
+				}
+				else{
+					$window.location = "#/regBind/" + $scope.form.phone;
+				}
+			});
 		}
 		else{
 			Notification.alert("電話號碼長度不對", null, "Alert", "確定");
@@ -75,6 +82,7 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 
 	function registerWithFacebook(){
 		console.log("Register With Facebook");
+		$rootScope.showLoading("註冊中...");
 		FacebookAPI.login(function(){
 			FacebookAPI.me(function(data){
 				FacebookAPI.picture(data.id, function(photo){
@@ -99,18 +107,7 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 		$window.location = "#/regInputInfo/" + phone;
 	}
 
-	$scope.initInputInfo = function(){
-		$scope.title = "基本資料";
-		$scope.rightBtn = undefined;
-		$scope.submit = "註冊";
-		$scope.form = {
-			type: fkLoginType.FKTalk,
-			photo: "images/NoPhoto.jpg",
-			phone: phone,
-		};
-	}
-
-	$scope.doFKSignup = function(){
+	function doFKSignup(){
 		if(!checkInput())
 			return;
 		$rootScope.showLoading("註冊中...");
@@ -118,19 +115,65 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 
 		function checkInput(){
 			var log = "";
-			if($scope.form.name.trim() == "")
+			if(!$scope.form.name || $scope.form.name.trim() == "")
 				log += "Please type Name!!!";
-			else if($scope.form.mail.trim() == "")
+			else if(!$scope.form.mail || $scope.form.mail.trim() == "")
 				log += "Please type Email!!!";
-			else if($scope.form.arg.trim() == "")
+			else if(!$scope.form.arg || $scope.form.arg.trim() == "")
 				log += "Please type Password!!!";
-			else if($scope.form.password != $scope.form.arg)
+			else if(!$scope.form.password || $scope.form.password != $scope.form.arg)
 				log += "Password is Not Same!!!";
 			if(log == "")
 				return true;
 			console.log(log);
 			Notification.alert(log, null, "Alert", "確定");
 			return false;
+		}
+	}
+
+	$scope.initInputInfo = function(){
+		$scope.title = "基本資料";
+		$scope.rightBtn = undefined;
+		$scope.submit = {
+			title: "註冊",
+			click: doFKSignup,
+		};
+		$scope.form = {
+			type: fkLoginType.FKTalk,
+			photo: "images/NoPhoto.jpg",
+			phone: phone,
+		};
+	}
+
+	$scope.select = function(){
+		var option = {
+			quality: 50, 
+			destinationType: navigator.camera.DestinationType.FILE_URI,
+			sourceType: navigator.camera.PictureSourceType.PHOTOLIBRARY 
+		};
+		navigator.camera.getPicture(success, 
+			function error(message){
+			alert('get picture failed'); 
+		}, option);
+		function success(imageURI){
+			console.log(imageURI);
+			$scope.$apply(function () {
+				var img = document.createElement("img");
+				img.src = imageURI;
+
+				var cvs = document.createElement('canvas');
+				var value = 60;
+				cvs.width = value;
+				cvs.height = value;
+				var show = function() {
+					var ctx = cvs.getContext("2d");
+					ctx.scale(value / img.naturalWidth, value / img.naturalHeight);
+					ctx.drawImage(img, 0, 0);
+					console.log(cvs.toDataURL("image/jpeg", 10));
+					$scope.form.photo = cvs.toDataURL("image/jpeg", 10);
+				}
+				$timeout(show, 500);
+			});
 		}
 	}
 });
