@@ -1,6 +1,6 @@
 <div>
 	<ion-content has-header="false" padding="true" style="text-align: center;" class="fk-background">
-		<button class="button button-positive" style="width: 75%;margin-top: 100px;"
+		<button class="button button-positive" style="width: 75%;margin-top: 140px;"
 			ng-click="loginActions[loginType.Facebook]()">
 			<span class="fk-bloder">Facebook</span> &nbsp; Login
 		</button>
@@ -8,11 +8,9 @@
 			ng-click="loginActions[loginType.FKTalk]()">
 			<span class="fk-bloder">FKTalk</span> &nbsp; Login
 		</button>
+		<button class="button button-energized" style="width: 75%;margin-top: 50px;"
+			ng-click="loginActions[loginType.Register]()">
+			<span class="fk-bloder">Register</span>
+		</button>
 	</ion-content>
-	<div class="bar bar-footer bar-energized"
-		ng-click="loginActions[loginType.Register]()">
-		<div class="title">
-			Register
-		</div>
-	</div>
 </div>

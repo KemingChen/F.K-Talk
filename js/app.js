@@ -88,11 +88,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
 	$urlRouterProvider.otherwise("/login");
 });
 
-app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, ServerAPI, PhoneGap) {
+app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, ServerAPI, PhoneGap, FacebookAPI) {
 	var version = "FKTalk v2.0";
 	console.log(version);
 	$rootScope.info = {
-		server: "http://140.124.181.7:8888",
+		server: "http://192.168.1.110:8888",
 		timeout: 15000,
 		gcmSenderId: '389225011519',
 		FBAppId: '270369976420378',
@@ -103,6 +103,7 @@ app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ioni
 			Google: 2,
 		},
 	};
+	FacebookAPI.init();
 
 	$rootScope.saveToInfo = function(data){
 		for(i in data){
@@ -120,20 +121,34 @@ app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ioni
 		});
 	}
 
-	$rootScope.testLogin = function(){
-		$rootScope.loading.hide();
+	$rootScope.hideLoading = function(){
+		if($rootScope.loading && $rootScope.loading.hide)
+			$rootScope.loading.hide();
+	}
 
-		var host = HostManager.getHost();
-		if(host.token != undefined && host.token != ""){
+	$rootScope.testLogin = function(){
+		$rootScope.hideLoading();
+
+		var host = FKManager.getHost();
+		if(host.type){
 			$rootScope.showLoading("Auto Login...");
 
+			var fkLoginType = $rootScope.info.loginType;
 			var loginForm = {
-				phone: host.phone,
-				password: host.password,
+				type: host.type,
 				gcmRegId: $rootScope.info.gcmRegId,
 			};
+			if(host.type == fkLoginType.Facebook){
+				FacebookAPI.login(function(fkToken){
+					loginForm.arg = fkToken;
+				});
+			}
+			if(host.type == fkLoginType.FKTalk){
+				loginForm.arg = host.arg;
+			}
+
 			console.log(loginForm);
-			HostManager.login(loginForm);
+			ServerAPI.login(loginForm);
 		}
 		else{
 			$window.location = "#/login";

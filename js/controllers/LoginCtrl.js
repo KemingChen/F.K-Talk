@@ -1,6 +1,6 @@
 app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI, $window, $stateParams, FacebookAPI){
 	var fkLoginType = $rootScope.info.loginType;
-	// var phone = $stateParams.phone;
+	var phone = $stateParams.phone;
 
 	$scope.loginForm = {};
 	$scope.loginType = fkLoginType;
@@ -17,9 +17,9 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 	function loginWithFacebook(){
 		console.log("Login With Facebook");
 		//$rootScope.showLoading("Login...");
-		FacebookAPI.login(function(){
+		FacebookAPI.login(function(fbToken){
 			ServerAPI.login({
-				type: type,
+				type: fkLoginType.Facebook,
 				arg: fbToken,
 				gcmRegId: $rootScope.info.gcmRegId,
 			});
@@ -45,7 +45,7 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 			return;
 		$rootScope.showLoading("Login...");
 		ServerAPI.login({
-			type: loginType.FKTalk,
+			type: fkLoginType.FKTalk,
 			arg: $scope.loginForm,
 			gcmRegId: $rootScope.info.gcmRegId,
 		});
@@ -61,11 +61,22 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 	}
 
 	function registerWithFacebook(){
-		//me/picture?redirect=0&height=80&width=80
 		console.log("Register With Facebook");
 		FacebookAPI.login(function(){
 			FacebookAPI.me(function(data){
-
+				FacebookAPI.picture(data.id, function(photo){
+					//photo, phone, name, mail, type, arg{password | FBID | googleID}
+					console.log(JSON.stringify(data));
+					console.log(photo);
+					ServerAPI.signup({
+						photo: photo ? photo : "images/NoPhoto.jpg",
+						phone: phone,
+						name: data.name,
+						mail: data.email ? data.email : "FK" + phone + "@fktalk.csie.ntut.edu.tw",
+						type: fkLoginType.Facebook,
+						arg: data.id,
+					});
+				});
 			});
 		});
 	}

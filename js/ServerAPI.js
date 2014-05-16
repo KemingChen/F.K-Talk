@@ -46,7 +46,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		var http = toRequest("/login", loginForm);
 
 		http.success(function(respnose, status) {
-			$rootScope.loading.hide();
+			$rootScope.hideLoading();
 
 			console.log("SUCCESS: " + toLog(respnose, 300));
 			if(!isError(respnose)){
