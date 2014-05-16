@@ -1,6 +1,6 @@
-app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager) {
+app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager, Notification) {
 	function addMsg(data){
-		var friends = ServerAPI.friends;
+		var friends = FKManager.friends;
 
 		var phone = data.phone;
 		var chat = data.Msg;
@@ -30,13 +30,13 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager) {
 				if(phone == sender && $window.location.href.match("#/tab/FList") != null){
 					friend.counter++;
 				}
-				ServerAPI.notifyScope();
+				FKManager.notifyScope();
 			});
 		}
 	}
 
 	function listMsg(data){
-		var friends = ServerAPI.friends;
+		var friends = FKManager.friends;
 
 		var phone = data.phone;
 		var msgs = data.Msgs;
@@ -62,7 +62,7 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager) {
 				maxSenderMsgId = messageId;
 		}
 
-		ServerAPI.notifyScope();
+		FKManager.notifyScope();
 		HostManager.saveChats(phone, friend.chats, function(){
 			if($window.location.href.match("#/Chat/" + phone) != null){
 				var hasReadMsgId = friends[phone].hasReadMsgId;
@@ -75,8 +75,8 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager) {
 		});
 	}
 
-	function listFriend(data){
-		var friends = ServerAPI.friends;
+	function listFriends(data){
+		var friends = FKManager.friends;
 
 		var friendArr = data;
 		for(var i in friends){
@@ -90,32 +90,36 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager) {
 			friends[friend.phone] = friend;
 		}
 		ServerAPI.listCounter();
-		ServerAPI.notifyScope();
+		FKManager.notifyScope();
 	}
 
 	function deleteFriend(data){
-		var friends = ServerAPI.friends;
+		var friends = FKManager.friends;
 
 		var phone = data.phone;
 		if(friends[phone] !== undefined){
 			console.log("SUCCESS delete " + phone);
 			delete friends[phone];
-			ServerAPI.notifyScope();
+			FKManager.notifyScope();
 		}
 	}
 
-	function updateFriend(data){
-		console.log("MQTT updateFriend");
+	function updateFriends(data){
+		console.log("MQTT updateFriends");
 
-		var phone = data.phone;
-		console.log(phone);
-		ServerAPI.friends[phone] = data;
-		ServerAPI.friends[phone].show = true;
-		ServerAPI.notifyScope();
+		var newFriends = data;
+		console.log(JSON.stringify(newFriends));
+		for(var i in newFriends){
+			var newFriend = newFriends[i];
+			FKManager.friends[newFriend.phone] = newFriend;
+			FKManager.friends[newFriend.phone].show = true;
+			FKManager.notifyScope();
+		}
+		
 	}
 
 	function hasRead(data){
-		var friends = ServerAPI.friends;
+		var friends = FKManager.friends;
 
 		var phone = data.phone;
 		var hasReadMsgId = data.hasReadMsgId;
@@ -129,12 +133,12 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager) {
 				HostManager.setChat(friends[phone], chat, "isRead");
 			}
 			friends[phone].counter = 0;
-			ServerAPI.notifyScope();
+			FKManager.notifyScope();
 		}
 	}
 
 	function updateCounter(data){
-		var friends = ServerAPI.friends;
+		var friends = FKManager.friends;
 		var update = false;
 
 		for(var i in data){
@@ -148,7 +152,7 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager) {
 		}
 
 		if(update && ($window.location.href.match("#/tab/FList") != null)){
-			ServerAPI.notifyScope();
+			FKManager.notifyScope();
 		}
 	}
 
@@ -159,9 +163,9 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager) {
 	return {
 		addMsg: addMsg,
 		listMsg: listMsg,
-		listFriend: listFriend,
+		listFriends: listFriends,
 		deleteFriend: deleteFriend,
-		updateFriend: updateFriend,
+		updateFriends: updateFriends,
 		hasRead: hasRead,
 		updateCounter: updateCounter,
 		error: error,

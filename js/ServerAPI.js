@@ -157,7 +157,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		var http = toRequest("/addFriends", {
 			type: type,
 			args: args,
-		}. true);
+		}, true);
 		http.success(doNothing);
 		http.error(function(data, status){
 			showNetworkError("加入朋友失敗 \n請問要再試一次嗎?", function(){
@@ -241,6 +241,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		signup: signup,
 		bind: bind,
 		setting: setting,
+		addFriend: addFriend,
 		addFriends: addFriends,
 		listFriends: listFriends,
 		delFriend: delFriend,

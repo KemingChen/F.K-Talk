@@ -1,12 +1,18 @@
-app.controller('AddFriendCtrl', function($scope, $window, FKManager, ServerAPI){
+app.controller('AddFriendCtrl', function($scope, $rootScope, $window, FKManager, ServerAPI, Notification){
 	FKManager.checkLogin();
+	var fkLoginType = $rootScope.info.loginType;
 
-	$scope.inputSaver = function(key, value){
-		$scope[key] = value;
-	}
+	$scope.form = {};
 
-	$scope.add = function(){
-		ServerAPI.addFriend($scope.phone);
-		$window.history.back();
+	$scope.addWithFKTalk = function(){
+		var phone = $scope.form.phone;
+		console.log(phone);
+		if(phone && phone.length == 10){
+			ServerAPI.addFriend(fkLoginType.FKTalk, phone);
+			$window.history.back();
+		}
+		else{
+			Notification.alert("電話號碼長度不對", null, "Alert", "確定");
+		}
 	}
 });

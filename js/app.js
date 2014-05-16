@@ -160,7 +160,7 @@ app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ioni
 		ServerAPI.listFriends();
 		PhoneGap.ready(function(){
             var clientId = "FK" + response.phone;
-            var topic = response.token;
+            var topic = "FK" + response.token;
 			$window.plugins.MQTTPlugin.CONNECT(angular.noop, angular.noop, clientId, topic);
 		});
 		$window.location = "#/tab/FList";

@@ -26,7 +26,7 @@ app.controller('FriendListCtrl', function($scope, FKManager, $window, ServerAPI)
 		type: 'button-positive',
 		content: "重新整理",
 		tap: function(){
-			ServerAPI.listFriend();
+			ServerAPI.listFriends();
 		},
 	}];
 

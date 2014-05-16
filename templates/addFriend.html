@@ -11,11 +11,11 @@
 		<div class="list">
             <label class="item item-input">
                 <i class="icon ion-plus placeholder-icon"></i>
-                <input type="tel" placeholder="Enter Phone" ng-model="phone" ng-change="inputSaver('phone', phone)" />
+                <input type="tel" placeholder="Enter Phone" ng-model="form.phone"/>
             </label>
         </div>
         <div class="list">
-            <button class="item button button-block button-positive" ng-click="add()">
+            <button class="item button button-block button-positive" ng-click="addWithFKTalk()">
                 新增
             </button>
         </div>
