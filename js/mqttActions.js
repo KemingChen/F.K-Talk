@@ -16,9 +16,11 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager, N
 			console.log("SP: " + phone);
 			if(friend.chats === undefined)
 				friend.chats = {};
-			HostManager.setChat(friend, chat);
+
+			FKManager.initMessage(chat);
+			FKManager.setIsRead(friend, chat);
 			friend.chats[messageId] = chat;
-			HostManager.saveChats(phone, friend.chats, function(){
+			FKManager.saveChats(phone, friend.chats, function(){
 				if(phone == sender && ($window.location.href.match("#/Chat/" + sender) != null)){
 					var hasReadMsgId = friends[sender].hasReadMsgId;
 					if(hasReadMsgId < messageId){
@@ -56,14 +58,14 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager, N
 			var message = chat.message;
 			chat.timestamp = (new Date(chat.timestamp)).getTime();
 			var timestamp = chat.timestamp;
-			HostManager.setChat(friend, chat);
+			FKManager.setIsRead(friend, chat);
 			friend.chats[messageId] = chat;
 			if(chat.sender == phone && messageId > maxSenderMsgId)
 				maxSenderMsgId = messageId;
 		}
 
 		FKManager.notifyScope();
-		HostManager.saveChats(phone, friend.chats, function(){
+		FKManager.saveChats(phone, friend.chats, function(){
 			if($window.location.href.match("#/Chat/" + phone) != null){
 				var hasReadMsgId = friends[phone].hasReadMsgId;
 				if(hasReadMsgId < maxSenderMsgId){
@@ -130,7 +132,7 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager, N
 			friends[phone].hasReadMsgId = hasReadMsgId;
 			for(var i in friends[phone].chats){
 				var chat = friends[phone].chats[i];
-				HostManager.setChat(friends[phone], chat, "isRead");
+				FKManager.setIsRead(friends[phone], chat, "isRead");
 			}
 			friends[phone].counter = 0;
 			FKManager.notifyScope();
