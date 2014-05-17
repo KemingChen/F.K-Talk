@@ -1,23 +1,30 @@
 <div>
-    <ion-header-bar
-        type="bar-positive"
-        left-buttons="leftButtons"
-        right-buttons="rightButtons" 
-        title="'新增朋友'">
-    </ion-header-bar>
-	<ion-content has-header="true" padding="true">
-        <br />
-        <br />
-		<div class="list">
-            <label class="item item-input">
-                <i class="icon ion-plus placeholder-icon"></i>
-                <input type="tel" placeholder="Enter Phone" ng-model="form.phone"/>
-            </label>
-        </div>
-        <div class="list">
-            <button class="item button button-block button-positive" ng-click="addWithFKTalk()">
-                新增
-            </button>
-        </div>
+	<ion-header-bar
+		type="bar-positive"
+		left-buttons="leftButtons"
+		right-buttons="rightButtons" 
+		title="'新增朋友'">
+	</ion-header-bar>
+	<ion-content has-header="true" padding="true" class="fk-background">
+		<div class="list" style="margin: auto;margin-top: 60px;width: 75%;">
+			<label class="item item-input">
+				<i class="icon ion-plus placeholder-icon"></i>
+				<input type="tel" placeholder="Enter Phone" ng-model="form.phone"/>
+			</label>
+			<button class="item button button-block button-positive" ng-click="addWithFKTalk()"
+				style="margin-top: 20px;">
+				新增
+			</button>
+		</div>
+
+		<button class="item button button-block button-balanced" ng-click="addWithFacebook()"
+			style="margin: auto;margin-top: 50px;width: 75%;">
+			Import with <span class="fk-bloder">Facebook</span>
+		</button>
+
+		<button class="item button button-block button-balanced" ng-click="addWithGoogle()"
+			style="margin: auto;margin-top: 20px;width: 75%;">
+			Import with <span class="fk-bloder">Google</span>
+		</button>
 	</ion-content>
 </div>

@@ -1,13 +1,13 @@
 app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, $window, FKManager, ServerAPI, Notification, $timeout, Geolocation){
 	FKManager.checkLogin();
 	var phone = $stateParams.phone;
-	var friends = ServerAPI.getFriends(function(){
+	var friends = FKManager.getFriends(function(){
 		console.log("ChatCtrl Scope Apply");
 		$scope.$apply();
 		$timeout($ionicScrollDelegate.scrollBottom, 500);
 	});
 	$scope.waitSendingLocation = false;
-	$scope.friend = ServerAPI.friends[phone];
+	$scope.friend = FKManager.friends[phone];
 	// DBManager.listMsg(phone, function(maxSenderMsgId){
 	if(!$scope.friend.chats){
 		console.log("Read " + $scope.friend.phone + " in localDB");

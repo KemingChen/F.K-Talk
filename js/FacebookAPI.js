@@ -42,10 +42,29 @@ app.factory('FacebookAPI', function($window, $rootScope, Notification) {
 			},
 			success: function(res){
 				if(typeof res.error != "undefined"){
-					Notification.alert('Facebook Error: ' + res.error, null, "Alert", "確定");
+					errorHandle(res);
 				}
 				else if(callback && res.data.url){
 					callback(res.data.url);
+				}
+			},
+			error: errorHandle
+		});
+	}
+
+	function friends(callback){
+		openFB.api({
+			method: 'GET',
+			path: '/me/friends',
+			params: {},
+			success: function(res){
+				$rootScope.hideLoading();
+				
+				if(typeof res.error != "undefined"){
+					errorHandle(res);
+				}
+				else if(callback && res.data){
+					callback(res.data);
 				}
 			},
 			error: errorHandle
@@ -57,5 +76,6 @@ app.factory('FacebookAPI', function($window, $rootScope, Notification) {
 		login: login,
 		me: me,
 		picture: picture,
+		friends: friends,
 	};
 });

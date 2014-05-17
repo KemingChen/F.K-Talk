@@ -96,7 +96,7 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager, N
 	function deleteFriend(data){
 		var friends = FKManager.friends;
 
-		var phone = data.phone;
+		var phone = data;
 		if(friends[phone] !== undefined){
 			console.log("SUCCESS delete " + phone);
 			delete friends[phone];
