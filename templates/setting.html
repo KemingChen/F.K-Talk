@@ -1,0 +1,33 @@
+<div>
+	<div class="bar bar-header bar-positive">
+		<h1 class="title">我的設定</h1>
+	</div>
+	<ion-content has-header="true" padding="true" class="fk-background">
+		<div class="list">
+			<div class="item item-divider">
+				登入綁定
+			</div>
+			<div class="item item-button-right">
+				<span class="fk-bloder">Facebook</span>
+				<button class="button button-balanced" ng-show="isFBBind()">已綁定</button>
+				<button class="button button-assertive" ng-show="!isFBBind()" ng-click="FBBind()">未綁定</button>
+			</div>
+			<br />
+			<div class="item item-divider">
+				一般設定
+			</div>
+			<a class="item item-icon-right" href="#/editInputInfo">
+				基本資料
+				<i class="icon ion-arrow-right-c"></i>
+			</a>
+			<br />
+			<div class="item item-divider">
+				進階功能
+			</div>
+			<a class="item item-icon-right" ng-click="logout()" href="#/setting">
+				登出並關閉
+				<i class="icon ion-arrow-right-c"></i>
+			</a>
+		</div>
+	</ion-content>
+</div>

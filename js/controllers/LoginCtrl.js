@@ -107,42 +107,68 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 		$window.location = "#/regInputInfo/" + phone;
 	}
 
+	function checkInputInfo(){
+		var log = "";
+		if(!$scope.form.name || $scope.form.name.trim() == "")
+			log += "Please type Name!!!";
+		else if(!$scope.form.mail || $scope.form.mail.trim() == "")
+			log += "Please type Email!!!";
+		else if(!$scope.form.arg || $scope.form.arg.trim() == "")
+			log += "Please type Password!!!";
+		else if(!$scope.form.password || $scope.form.password != $scope.form.arg)
+			log += "Password is Not Same!!!";
+		if(log == "")
+			return true;
+		console.log(log);
+		Notification.alert(log, null, "Alert", "確定");
+		return false;
+	}
+
 	function doFKSignup(){
-		if(!checkInput())
+		if(!checkInputInfo())
 			return;
 		$rootScope.showLoading("註冊中...");
 		ServerAPI.signup($scope.form);
+	}
 
-		function checkInput(){
-			var log = "";
-			if(!$scope.form.name || $scope.form.name.trim() == "")
-				log += "Please type Name!!!";
-			else if(!$scope.form.mail || $scope.form.mail.trim() == "")
-				log += "Please type Email!!!";
-			else if(!$scope.form.arg || $scope.form.arg.trim() == "")
-				log += "Please type Password!!!";
-			else if(!$scope.form.password || $scope.form.password != $scope.form.arg)
-				log += "Password is Not Same!!!";
-			if(log == "")
-				return true;
-			console.log(log);
-			Notification.alert(log, null, "Alert", "確定");
-			return false;
-		}
+	function doFKSetting(){
+		if(!checkInputInfo())
+			return;
+		$rootScope.showLoading("儲存中...");
+		console.log(JSON.stringify($scope.form));
+		ServerAPI.setting($scope.form);
 	}
 
 	$scope.initInputInfo = function(){
 		$scope.title = "基本資料";
-		$scope.rightBtn = undefined;
-		$scope.submit = {
-			title: "註冊",
-			click: doFKSignup,
-		};
-		$scope.form = {
-			type: fkLoginType.FKTalk,
-			photo: "images/NoPhoto.jpg",
-			phone: phone,
-		};
+
+		if(phone){
+			$scope.submit = {
+				title: "註冊",
+				click: doFKSignup,
+			};
+
+			$scope.form = {
+				type: fkLoginType.FKTalk,
+				photo: "images/NoPhoto.jpg",
+				phone: phone,
+			};
+		}
+		else{
+			var info = $rootScope.info;
+			$scope.submit = {
+				title: "儲存",
+				click: doFKSetting,
+			};
+
+			$scope.form = {
+				type: fkLoginType.FKTalk,
+				photo: info.photo,
+				phone: info.phone,
+				name: info.name,
+				mail: info.mail,
+			};
+		}
 	}
 
 	$scope.select = function(){

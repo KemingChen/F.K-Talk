@@ -9,7 +9,7 @@ app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation
 		disableDefaultUI: true
 	};
 
-	$scope.isSelf = phone == $rootScope.info.SP;
+	$scope.isSelf = phone == $rootScope.info.phone;
 	$scope.distance = {text: ""};
 	$scope.duration = {duration: ""};
 	$scope.title = "地圖";

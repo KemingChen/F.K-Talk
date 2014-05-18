@@ -1,39 +1,36 @@
 <div ng-init="initInputInfo()">
 	<div class="bar bar-header bar-positive">
 		<h1 class="title">{{title}}</h1>
-		<button class="button" ng-show="rightBtn">{{rightBtn}}</button>
 	</div>
 	<ion-content has-header="true" padding="true" class="fk-background">
-			<div class="list card">
-				<div class="list">
-					<div class="item item-avatar">
-						<img id="myPhoto" ng-src="{{form.photo}}">
-						<h2>My Photo</h2>
-						<button ng-click="select()">選擇檔案</button>
-					</div>
-					<label class="item item-input">
-						<span class="input-label">Name: </span>
-						<input type="text" ng-model="form.name" placeholder="Type Name">
-					</label>
-					<label class="item item-input">
-						<span class="input-label">Email: </span>
-						<input type="email" ng-model="form.mail" placeholder="Type Email">
-					</label>
+			<div class="list" style="margin-top: 10px;">
+				<div class="item item-avatar">
+					<img id="myPhoto" ng-src="{{form.photo}}">
+					<h2>My Photo</h2>
+					<button ng-click="select()">選擇檔案</button>
 				</div>
-				<div class="list">
-					<label class="item item-input">
-						<span class="input-label">Passward: </span>
-						<input type="password" ng-model="form.arg" placeholder="Type Password">
-					</label>
-					<label class="item item-input">
-						<span class="input-label">Confirm: </span>
-						<input type="password" ng-model="form.password" placeholder="Type Password Again">
-					</label>
-					<button class="item button button-block button-positive"
-						ng-click="submit.click()">
-						{{submit.title}}
-					</button>
-				</div>
+				<label class="item item-input">
+					<span class="input-label">Name: </span>
+					<input type="text" ng-model="form.name" placeholder="Type Name">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">Email: </span>
+					<input type="email" ng-model="form.mail" placeholder="Type Email">
+				</label>
+			</div>
+			<div class="list">
+				<label class="item item-input">
+					<span class="input-label">Passward: </span>
+					<input type="password" ng-model="form.arg" placeholder="Type Password">
+				</label>
+				<label class="item item-input">
+					<span class="input-label">Confirm: </span>
+					<input type="password" ng-model="form.password" placeholder="Type Password Again">
+				</label>
+				<button class="item button button-block button-positive"
+					ng-click="submit.click()">
+					{{submit.title}}
+				</button>
 			</div>
 	</ion-content>
 </div>

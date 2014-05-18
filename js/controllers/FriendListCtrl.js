@@ -16,7 +16,7 @@ app.controller('FriendListCtrl', function($scope, FKManager, $window, ServerAPI)
 	$scope.search = "";
 	$scope.leftButtons = [{
 		type: 'button-positive',
-		content: "新增朋友",
+		content: "<i class='icon ion-plus-round'></i>",
 		tap: function(){
 			$window.location = "#/add";
 		},
@@ -24,7 +24,7 @@ app.controller('FriendListCtrl', function($scope, FKManager, $window, ServerAPI)
 
 	$scope.rightButtons = [{
 		type: 'button-positive',
-		content: "重新整理",
+		content: "<i class='icon ion-refresh'></i>",
 		tap: function(){
 			ServerAPI.listFriends();
 		},
@@ -43,4 +43,8 @@ app.controller('FriendListCtrl', function($scope, FKManager, $window, ServerAPI)
 	$scope.moveTo = function(phone){
 		$window.location = "#/FInfo/" + phone;
 	};
+
+	$scope.showCounter = function(friend){
+		return friend.counter && friend.counter != 0;
+	}
 });

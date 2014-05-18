@@ -32,6 +32,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			templateUrl: 'templates/inputInfo.html',
 			controller: 'LoginCtrl'
 		})
+		.state('editInputInfo', {
+			url: '/editInputInfo',
+			templateUrl: 'templates/inputInfo.html',
+			controller: 'LoginCtrl'
+		})
 		.state('setting', {
 			url: '/setting',
 			templateUrl: 'templates/setting.html',
@@ -92,7 +97,7 @@ app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ioni
 	var version = "FKTalk v2.0";
 	console.log(version);
 	$rootScope.info = {
-		server: "http://192.168.1.101:8888",
+		server: "http://192.168.1.100:8888",
 		timeout: 15000,
 		gcmSenderId: '389225011519',
 		FBAppId: '270369976420378',

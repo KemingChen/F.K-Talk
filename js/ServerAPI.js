@@ -108,9 +108,14 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		});
 	}
 
-	function bind(data){
-		var http = toRequest("/bind", data, true);
+	function bind(type, arg){
+		var http = toRequest("/bind", {
+			type: type,
+			arg: arg,
+		}, true);
 		http.success(function(respnose, status) {
+			$rootScope.hideLoading();
+			
 			if(isError(respnose)){
 				Notification.alert(respnose.error, null, "發生錯誤", "朕知道了");
 			}
@@ -133,7 +138,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 					name: form.name, 
 					mail: form.mail,
 				});
-				$window.location = "#/tab/FList";
+				$window.history.back();
 			}
 			else{
 				Notification.alert(respnose.error, null, "發生錯誤", "朕知道了");
