@@ -58,6 +58,8 @@ app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager, N
 			var message = chat.message;
 			chat.timestamp = (new Date(chat.timestamp)).getTime();
 			var timestamp = chat.timestamp;
+			
+			FKManager.initMessage(chat);
 			FKManager.setIsRead(friend, chat);
 			friend.chats[messageId] = chat;
 			if(chat.sender == phone && messageId > maxSenderMsgId)

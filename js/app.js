@@ -137,7 +137,7 @@ app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ioni
 
 		var host = FKManager.getHost();
 		console.log("HOST: " + JSON.stringify(host));
-		if(host.type){
+		if(typeof host.type !== "undefined"){
 			$rootScope.showLoading("Auto Login...");
 
 			var fkLoginType = $rootScope.info.loginType;

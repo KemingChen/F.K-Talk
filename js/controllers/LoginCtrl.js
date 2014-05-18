@@ -16,7 +16,7 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 
 	function loginWithFacebook(){
 		console.log("Login With Facebook");
-		//$rootScope.showLoading("Login...");
+		$rootScope.showLoading("Login With Facebook...");
 		FacebookAPI.login(function(fbToken){
 			ServerAPI.login({
 				type: fkLoginType.Facebook,

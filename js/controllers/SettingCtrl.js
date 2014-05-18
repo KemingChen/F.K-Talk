@@ -7,7 +7,11 @@ app.controller('SettingCtrl', function($scope, $rootScope, ServerAPI, FacebookAP
 	$scope.FBBind = function(){
 		$rootScope.showLoading("綁定中...");
 		FacebookAPI.login(function(FBToken){
-			ServerAPI.bind($rootScope.info.loginType.Facebook, FBToken);
+			FacebookAPI.me(function(data){
+				ServerAPI.bind($rootScope.info.loginType.Facebook, data.id, function(){
+					$scope.$apply();
+				});
+			});
 		});
 	}
 

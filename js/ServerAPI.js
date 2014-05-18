@@ -108,7 +108,7 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 		});
 	}
 
-	function bind(type, arg){
+	function bind(type, arg, callback){
 		var http = toRequest("/bind", {
 			type: type,
 			arg: arg,
@@ -118,6 +118,17 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 			
 			if(isError(respnose)){
 				Notification.alert(respnose.error, null, "發生錯誤", "朕知道了");
+			}
+			else{
+				var fkLoginType = $rootScope.info.loginType;
+				if(type === fkLoginType.Facebook){
+					$rootScope.info.FBID = arg;
+				}
+				if(type === fkLoginType.Google){
+					$rootScope.info.googleID = arg;
+				}
+				if(callback)
+					callback();
 			}
 		});
 		http.error(function(data, status){

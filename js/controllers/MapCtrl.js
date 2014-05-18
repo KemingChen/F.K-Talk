@@ -59,7 +59,8 @@ app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation
 						directionsDisplay.setDirections(result);
 						$scope.distance.text = leg.distance.text;
 						$scope.duration.text = leg.duration.text;
-						
+						$scope.$apply();
+
 						var destinationMarker = new MarkerWithLabel({
 							position: new google.maps.LatLng(leg.end_location.k, leg.end_location.A),
 							labelContent: friend ? friend.name : "???",
@@ -75,7 +76,6 @@ app.controller('MapCtrl', function($scope, $rootScope, $stateParams, Geolocation
 						originMarker.setMap(map);
 						destinationMarker.setMap(map);
 						directionsDisplay.setMap(map);
-						$scope.$apply();
 					}
 				});
 			});
