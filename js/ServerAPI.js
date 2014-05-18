@@ -91,10 +91,21 @@ app.factory('ServerAPI', function($http, $rootScope, Notification, FKManager, $w
 			$rootScope.hideLoading();
 
 			if(!isError(respnose)){
-				FKManager.setHost({
-					type: form.type,
-					arg: form.arg,
-				});
+				if(form.type === $rootScope.info.loginType.FKTalk){
+					FKManager.setHost({
+						type: form.type,
+						arg: {
+							phone: form.phone,
+							password: form.arg,
+						},
+					});
+				}
+				else{
+					FKManager.setHost({
+						type: form.type,
+						arg: form.arg,
+					});
+				}
 				$rootScope.testLogin();
 			}
 			else{

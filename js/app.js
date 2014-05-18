@@ -97,7 +97,7 @@ app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ioni
 	var version = "FKTalk v2.0";
 	console.log(version);
 	$rootScope.info = {
-		server: "http://192.168.1.103:8888",
+		server: "http://140.124.181.7:8888",
 		timeout: 15000,
 		gcmSenderId: '389225011519',
 		FBAppId: '270369976420378',
