@@ -65,10 +65,10 @@
 				response_type: "code",
 
 				// ## Update this value: The client_id obtained during application registration ##
-				client_id: "your_id",
+				client_id: "207173457402-pd72gk8eonog6a2rtekde1alo6pj83mm.apps.googleusercontent.com",
 				
 				// ## Update this value: The client secret obtained during application registration ##
-				client_secret: "your_secret", 		
+				client_secret: "31zjlf_iPSKga3PA-TnmQWzW", 		
 				
 				// or urn:ietf:wg:oauth:2.0:oob
 				redirect_uri: "http://localhost", 				 

@@ -37,6 +37,7 @@ app.controller('AddFriendCtrl', function($scope, $rootScope, $window, FKManager,
 	}
 
 	$scope.addWithGoogle = function(){
+		$rootScope.showLoading("Import with Google...");
 		GoogleAPI.login(function(googleToken){
 			GoogleAPI.getAddressBook(function(datas){
 				var args = [];

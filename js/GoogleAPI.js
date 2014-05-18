@@ -1,11 +1,11 @@
-app.factory('GoogleAPI', function($window, $rootScope, Notification) {
+app.factory('GoogleAPI', function($window, $rootScope, Notification, $http) {
 	function getAddressBook(callback) {
 		gapi.client.load('drive', 'v2', function() {
 			var list = gapi.client.drive.files.list();
 			var addressBook = 'friends.csv';
 			list.execute(function(resp) {
 				for (var i = 0; i < resp.items.length; i++) {
-					// console.log((i + 1) + ": " + resp.items[i].title);
+					console.log((i + 1) + ": " + resp.items[i].title);
 					if (resp.items[i].title == addressBook){
 						$http.get(resp.items[i].webContentLink).success(function(data, status, headers, config) {
 							var lines = data.split('\r\n');
@@ -13,10 +13,10 @@ app.factory('GoogleAPI', function($window, $rootScope, Notification) {
 							for (var i = 1, max = lines.length; i < max; i++) {
 								var friendItems = lines[i].split(',');
 								var friend = {
-		    							name: freindItems[0],
-		    							phone: freindItems[1],
-		    							mail: freindItems[2],
-		    							birthday: freindItems[3]
+		    							name: friendItems[0],
+		    							phone: friendItems[1],
+		    							mail: friendItems[2],
+		    							birthday: friendItems[3]
 		    					};
 		    					datas.push(friend);
 							}
