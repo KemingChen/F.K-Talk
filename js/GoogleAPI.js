@@ -1,9 +1,12 @@
 app.factory('GoogleAPI', function($window, $rootScope, Notification, $http) {
 	function getAddressBook(callback) {
 		gapi.client.load('drive', 'v2', function() {
-			var list = gapi.client.drive.files.list();
+			var list = gapi.client.drive.files.list({
+				q: 'title="friends.csv"',
+			});
 			var addressBook = 'friends.csv';
 			list.execute(function(resp) {
+				console.log(JSON.stringify(resp));
 				for (var i = 0; i < resp.items.length; i++) {
 					console.log((i + 1) + ": " + resp.items[i].title);
 					if (resp.items[i].title == addressBook){
@@ -56,8 +59,78 @@ app.factory('GoogleAPI', function($window, $rootScope, Notification, $http) {
 		}
 	}
 
+	function me(callback){
+		gapi.client.load('oauth2', 'v2', function() {
+			gapi.client.oauth2.userinfo.v2.me.get({
+				fields: "email,id,name,picture",
+			}).execute(function(resp){
+				if(!isError(resp)){
+					console.log(JSON.stringify(resp));
+					if(callback){
+						callback(resp);
+					}
+				}
+			});
+		});
+	}
+
+	function getCalenderID(callback){
+		gapi.client.load('calendar', 'v3', function() {
+			gapi.client.calendar.calendarList.list({
+				minAccessRole: "writer",
+			}).execute(function(resp){
+				if(!isError(resp)){
+					if(callback){
+						callback(resp.items[0].id);
+					}
+				}
+			});
+		});
+	}
+
+	function addEvent(callback){
+		getCalenderID(function(calenderID){
+			
+		});
+		/*
+						calendarId: calenderID,
+						resource: {
+							summary: friend.name + '的生日',
+							location: '請記得發送祝福',
+							start: {
+								dateTime: startDate,
+								timeZone: "Asia/Taipei"
+							},
+							end: {
+								dateTime: endDate,
+								timeZone: "Asia/Taipei"
+							},
+							recurrence: ["RRULE:FREQ=YEARLY"],
+							reminders: {
+								useDefault: false,
+								overrides: [{
+									method: 'popup',
+									minutes: 1440
+								}]
+							}
+						}*/
+	}
+
+	function isError(resp){
+		if(typeof resp.error != "undefined"){
+			console.log(JSON.stringify(resp.error));
+			return true;
+		}
+		return false;
+	}
+
+	function isLogin(){
+		return gapi.auth.getToken() ? true : false;
+	}
+
 	return{
 		getAddressBook: getAddressBook,
 		login: login,
+		me: me,
 	}
 });

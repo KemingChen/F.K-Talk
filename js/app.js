@@ -94,7 +94,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 });
 
 app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, ServerAPI, PhoneGap, FacebookAPI) {
-	var version = "FKTalk v2.0";
+	var version = "FKTalk v2.1";
 	console.log(version);
 	$rootScope.info = {
 		server: "http://140.124.181.7:8888",

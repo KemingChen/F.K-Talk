@@ -28,6 +28,14 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 
 	function loginWithGoogle(){
 		console.log("Login With Google");
+		$rootScope.showLoading("Login With Google...");
+		GoogleAPI.login(function(googleToken){
+			ServerAPI.login({
+				type: fkLoginType.Google,
+				arg: googleToken,
+				gcmRegId: $rootScope.info.gcmRegId,
+			});
+		});
 	}
 
 	function loginWithFKTalk(){
@@ -97,6 +105,23 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 						type: fkLoginType.Facebook,
 						arg: data.id,
 					});
+				});
+			});
+		});
+	}
+
+	function registerWithGoogle(){
+		console.log("Register With Google");
+		$rootScope.showLoading("註冊中...");
+		GoogleAPI.login(function(){
+			GoogleAPI.me(function(data){
+				ServerAPI.signup({
+					photo: data.picture ? data.picture : "images/NoPhoto.jpg",
+					phone: phone,
+					name: data.name,
+					mail: data.email ? data.email : "FK" + phone + "@fktalk.csie.ntut.edu.tw",
+					type: fkLoginType.Google,
+					arg: data.id,
 				});
 			});
 		});
