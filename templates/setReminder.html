@@ -1,0 +1,19 @@
+<div>
+	<div class="bar bar-header bar-positive">
+		<h1 class="title">設定詢息延後提醒時間</h1>
+	</div>
+	<ion-content has-header="true" padding="true" class="fk-background">
+		<div class="list">
+			<label class="item item-radio" ng-repeat="time in chooseTime">
+				<input type="radio" name="group">
+				<div class="item-content">
+					{{time.tag}}
+				</div>
+				<i class="radio-icon ion-checkmark"></i>
+			</label>
+		</div>
+        <button class="button button-energized button-block">
+            <span class="fk-bloder">確定</span>
+        </button>
+	</ion-content>
+</div>

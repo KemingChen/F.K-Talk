@@ -138,4 +138,13 @@ app.controller('ChatCtrl', function($scope, $ionicScrollDelegate, $stateParams, 
 			}
 		});
 	}
+
+	$scope.AddReminder = function(chat){
+		Notification.confirm("確定要將此'" + chat.message + "'段話\n設定未來提醒嗎?", function(action){
+			console.log("confirm get button " + action + ";");
+			if(action == 2){
+				$window.location = "#/Reminder/" + chat.sender + "/" + chat.messageId;
+			}
+		}, "溫心提示", "No,Yes");
+	}
 });

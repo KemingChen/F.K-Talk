@@ -7,7 +7,7 @@
     <ion-content has-header="true" padding="true" class="fk-background">
         <div class="list" style="padding-bottom: 50px;">
             <div class="item item-divider item-text-wrap" ng-repeat="chat in friend.chats | orderObjectBy:'messageId'" style="{{chat.sender != friend.phone ? 'text-align: right;' : ''}}">
-                <div ng-click="clickMessage(chat)">
+                <div ng-click="clickMessage(chat)" ng-swipe-right="AddReminder(chat)">
                     <img ng-show="chat.sender == friend.phone" ng-src="{{friend.photo}}" style="height: 30px;" />
                     <i class="icon ion-location" ng-show="chat.type === 1"></i>
                     &nbsp;{{chat.message}}

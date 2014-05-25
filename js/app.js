@@ -1,4 +1,4 @@
-var app = angular.module("FKTalk", ['ionic', 'PhoneGap']);
+var app = angular.module("FKTalk", ['ionic', 'PhoneGap', 'ngTouch']);
 
 app.config(function($stateProvider, $urlRouterProvider) {
 	$stateProvider
@@ -75,6 +75,11 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			templateUrl: 'templates/map.html',
 			controller: 'MapCtrl'
 		})
+		.state('Reminder', {
+			url: '/Reminder/:phone/:messageId',
+			templateUrl: 'templates/setReminder.html',
+			controller: 'SetReminderCtrl'
+		})
 		.state('tab.RList', {
 			url: '/RList',
 			views: {
@@ -90,7 +95,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
 			controller: 'ChatCtrl'
 		});
 
-	// $urlRouterProvider.otherwise("/login");
+	// $urlRouterProvider.otherwise("/Reminder/0961276368/3");
 });
 
 app.run(function($rootScope, FKManager, $window, PushNotificationsFactory, $ionicLoading, MQTTActions, ServerAPI, PhoneGap, FacebookAPI) {

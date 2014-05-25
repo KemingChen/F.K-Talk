@@ -1,4 +1,6 @@
 app.factory('GoogleAPI', function($window, $rootScope, Notification, $http) {
+	var GoogleCalenderID = undefined;
+
 	function getAddressBook(callback) {
 		gapi.client.load('drive', 'v2', function() {
 			var list = gapi.client.drive.files.list({
@@ -75,14 +77,21 @@ app.factory('GoogleAPI', function($window, $rootScope, Notification, $http) {
 	}
 
 	function getCalenderID(callback){
+		if(GoogleCalenderID){
+			if(callback)
+				callback(GoogleCalenderID);
+			return;
+		}
 		gapi.client.load('calendar', 'v3', function() {
 			gapi.client.calendar.calendarList.list({
 				minAccessRole: "writer",
 			}).execute(function(resp){
 				if(!isError(resp)){
+					GoogleCalenderID = resp.items[0].id;
 					if(callback){
 						callback(resp.items[0].id);
 					}
+					return;
 				}
 			});
 		});

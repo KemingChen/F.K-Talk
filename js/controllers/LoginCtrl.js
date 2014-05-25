@@ -1,4 +1,4 @@
-app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI, $window, $stateParams, FacebookAPI, $timeout){
+app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI, $window, $stateParams, FacebookAPI, $timeout, GoogleAPI){
 	var fkLoginType = $rootScope.info.loginType;
 	var phone = $stateParams.phone;
 
@@ -12,6 +12,7 @@ app.controller('LoginCtrl', function($scope, $rootScope, Notification, ServerAPI
 	$scope.registerActions = {};
 	$scope.registerActions[fkLoginType.Facebook] = registerWithFacebook;
 	$scope.registerActions[fkLoginType.FKTalk] = registerWithFKTalk;
+	$scope.registerActions[fkLoginType.Google] = registerWithGoogle;
 
 
 	function loginWithFacebook(){
