@@ -97,32 +97,35 @@ app.factory('GoogleAPI', function($window, $rootScope, Notification, $http) {
 		});
 	}
 
-	function addEvent(callback){
+	function addEvent(data, callback){
 		getCalenderID(function(calenderID){
-			
+			gapi.client.calendar.events.insert({
+				calendarId: calenderID,
+				resource: {
+					summary: data.title,
+					location: data.message,
+					start: {
+						dateTime: data.startTime,
+						timeZone: "Asia/Taipei"
+					},
+					end: {
+						dateTime: data.endTime,
+						timeZone: "Asia/Taipei"
+					},
+					reminders: {
+						useDefault: false,
+						overrides: [{
+							method: 'popup',
+							minutes: 1440
+						}]
+					}
+				}
+			}).execute(function(resp) {
+				console.log(JSON.stringify(resp));
+				if(callback)
+					callback(resp);
+			});
 		});
-		/*
-						calendarId: calenderID,
-						resource: {
-							summary: friend.name + '的生日',
-							location: '請記得發送祝福',
-							start: {
-								dateTime: startDate,
-								timeZone: "Asia/Taipei"
-							},
-							end: {
-								dateTime: endDate,
-								timeZone: "Asia/Taipei"
-							},
-							recurrence: ["RRULE:FREQ=YEARLY"],
-							reminders: {
-								useDefault: false,
-								overrides: [{
-									method: 'popup',
-									minutes: 1440
-								}]
-							}
-						}*/
 	}
 
 	function isError(resp){
@@ -141,5 +144,6 @@ app.factory('GoogleAPI', function($window, $rootScope, Notification, $http) {
 		getAddressBook: getAddressBook,
 		login: login,
 		me: me,
+		addEvent: addEvent,
 	}
 });

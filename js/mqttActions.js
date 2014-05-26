@@ -1,4 +1,4 @@
-app.factory('MQTTActions', function($window, $rootScope, ServerAPI, FKManager, Notification) {
+app.factory('MQTTActions', function($window, ServerAPI, FKManager, Notification) {
 	function addMsg(data){
 		var friends = FKManager.friends;
 
