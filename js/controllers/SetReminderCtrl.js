@@ -11,7 +11,7 @@ app.controller('SetReminderCtrl', function($scope, $rootScope, $stateParams, FKM
 	$scope.chooseTime = [];
 	$scope.afterTime;
 	$scope.data = {
-		title: chat.sender == phone ? friend.name + " 提醒您 ~ " : "您曾經與 " + friend.name + "提及 ~",
+		title: chat.sender == phone ? friend.name + " 提醒您 ~ \n" + chat.message: "您曾經與 " + friend.name + "提及 ~ \n" + chat.message,
 		message: chat.message,
 	};
 
